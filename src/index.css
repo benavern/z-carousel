@@ -1,0 +1,153 @@
+:root {
+  --carousel-arrow-bg: rgb(26 26 26 / .25);
+  --carousel-arrow-bg-hover: rgb(26 26 26 / .5);
+  --carousel-arrow-shadow: 0 0 10px rgb(255 255 255 / .1);
+
+  --carousel-dot-bg-active: rgb(255 255 255 / .1);
+  --carousel-dot-bg-hover: rgb(255 255 255 / .25);
+
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --carousel-arrow-bg: rgb(255 255 255 / .3);
+    --carousel-arrow-shadow: 0 0 10px rgb(0 0 0 / .25);
+    --carousel-dot-bg: rgb(0 0 0 / .25);
+
+    color: #213547;
+    background-color: #ffffff;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100dvh;
+  text-align: center;
+}
+
+h1, h2 {
+  margin: 0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  /* pointer-events: none; */
+}
+
+z-carousel:not(:defined) {
+  display: none;
+}
+
+z-carousel {
+  width: 100dvw;
+  height: 100dvh;
+}
+
+z-carousel > img {
+  object-fit: cover;
+  height: 100%;
+}
+
+z-carousel::part(content) {
+  scroll-behavior: smooth;
+  align-items: center;
+  gap: 150px;
+}
+
+z-carousel::part(nav-btn) {
+  display: inline-flex;
+  border: none;
+  border-radius: 50%;
+  padding: 1em;
+  line-height: 1;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: var(--carousel-arrow-bg);
+  backdrop-filter: blur(5px);
+  box-shadow: var(--carousel-arrow-shadow);
+  transition-property: backdrop-filter;
+  transition-duration: .25s;
+}
+
+z-carousel::part(nav-btn):hover {
+  background-color: var(--carousel-arrow-bg-hover);
+  backdrop-filter: blur(5px);
+}
+
+z-carousel::part(nav-btn):focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+z-carousel::part(nav-btn nav-btn--prev) {
+  transform: translate(10px, -50%);
+}
+
+z-carousel::part(nav-btn nav-btn--next) {
+  transform: translate(-10px, -50%);
+}
+
+z-carousel::part(counter) {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding: 5px 10px;
+  border-top-right-radius: 5px;
+  backdrop-filter: blur(5px);
+  background: var(--carousel-arrow-bg);
+}
+
+z-carousel::part(dots) {
+  z-index: 1;
+  position: absolute;
+  bottom: 0;
+  width: calc(100%);
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  gap: 5px;
+}
+
+z-carousel::part(dots-item) {
+  display: inline-flex;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+  width: 2rem;
+  height:2rem;
+  border-radius: 50%;
+}
+
+z-carousel::part(dots-item):hover {
+  background-color: var(--carousel-dot-bg-hover);
+}
+
+z-carousel::part(dots-item dots-item--active) {
+  background-color: var(--carousel-dot-bg-active);
+}
+z-carousel::part(dots-item):hover,
+z-carousel::part(dots-item dots-item--active) {
+  backdrop-filter: blur(5px);
+}
