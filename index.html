@@ -5,34 +5,185 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>z-carousel</title>
     <link rel="stylesheet" href="./src/index.css" />
+    <link rel="stylesheet" href="./src/demo.css" />
     <script type="module" src="/src/z-carousel.ts"></script>
   </head>
 
   <body>
-    <z-carousel
-      current-slide-index="0"
-      infinit
-      navigation
-      counter
-      dots>
-      <div>
-        <h1>The view</h1>
-        <h2>You are about to see the future...</h2>
-
-        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Numquam, qui fugiat molestiae aliquam necessitatibus pariatur odit deserunt optio beatae perferendis veritatis, corrupti est tempore, minima iure! Dignissimos reiciendis voluptates obcaecati?</p>
-        <p>Maiores eos recusandae consequatur veniam id nihil, at molestias et ea autem ratione doloribus sed ex totam dolores facere unde in explicabo, eveniet saepe repellendus! Atque amet qui maxime quasi!</p>
-        <p>Voluptatibus ab veritatis porro rerum temporibus quia deleniti inventore perferendis officia doloremque quis, amet consequatur reprehenderit recusandae dolor, labore quibusdam numquam fugit sequi commodi, natus repellat eum corrupti! Quo, doloribus?</p>
+    <header>
+      <div class="container">
+        <h1>z-carousel demo</h1>
       </div>
-      <img src="https://picsum.photos/800/600?random=1">
-      <img src="https://picsum.photos/800/600?random=2">
-      <img src="https://picsum.photos/800/600?random=3">
-      <img src="https://picsum.photos/800/600?random=4">
-      <img src="https://picsum.photos/800/600?random=5">
-      <img src="https://picsum.photos/800/600?random=6">
-      <img src="https://picsum.photos/800/600?random=7">
-      <img src="https://picsum.photos/800/600?random=8">
-      <img src="https://picsum.photos/800/600?random=9">
-      <img src="https://picsum.photos/800/600?random=10">
-    </z-carousel>
+    </header>
+
+    <section id="Base">
+      <div class="container">
+        <h2>Base</h2>
+  
+        <figure>
+          <z-carousel>
+            <img src="https://picsum.photos/800/600?random=base-1">
+            <img src="https://picsum.photos/800/600?random=base-2">
+            <img src="https://picsum.photos/800/600?random=base-3">
+            <img src="https://picsum.photos/800/600?random=base-4">
+            <img src="https://picsum.photos/800/600?random=base-5">
+            <img src="https://picsum.photos/800/600?random=base-6">
+            <img src="https://picsum.photos/800/600?random=base-7">
+            <img src="https://picsum.photos/800/600?random=base-8">
+            <img src="https://picsum.photos/800/600?random=base-9">
+            <img src="https://picsum.photos/800/600?random=base-10">
+          </z-carousel>
+        </figure>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2>Navigation</h2>
+  
+        <figure>
+          <z-carousel navigation>
+            <img src="https://picsum.photos/800/600?random=nav-1">
+            <img src="https://picsum.photos/800/600?random=nav-2">
+            <img src="https://picsum.photos/800/600?random=nav-3">
+            <img src="https://picsum.photos/800/600?random=nav-4">
+            <img src="https://picsum.photos/800/600?random=nav-5">
+            <img src="https://picsum.photos/800/600?random=nav-6">
+            <img src="https://picsum.photos/800/600?random=nav-7">
+            <img src="https://picsum.photos/800/600?random=nav-8">
+            <img src="https://picsum.photos/800/600?random=nav-9">
+            <img src="https://picsum.photos/800/600?random=nav-10">
+          </z-carousel>
+        </figure>
+        
+        <hr>
+  
+        <p>
+          It is also possible to customize the content of the arrow buttons via the 
+          <code>slot="nav-prev"</code> and <code>slot="nav-next"</code> slots.
+        </p>
+  
+        <figure>
+          <z-carousel navigation>
+            <img src="https://picsum.photos/800/600?random=nav-slot-1">
+            <img src="https://picsum.photos/800/600?random=nav-slot-2">
+            <img src="https://picsum.photos/800/600?random=nav-slot-3">
+            <img src="https://picsum.photos/800/600?random=nav-slot-4">
+            <img src="https://picsum.photos/800/600?random=nav-slot-5">
+            <img src="https://picsum.photos/800/600?random=nav-slot-6">
+            <img src="https://picsum.photos/800/600?random=nav-slot-7">
+            <img src="https://picsum.photos/800/600?random=nav-slot-8">
+            <img src="https://picsum.photos/800/600?random=nav-slot-9">
+            <img src="https://picsum.photos/800/600?random=nav-slot-10">
+  
+            <span slot="nav-prev">
+              Before
+            </span>
+            
+            <span slot="nav-next">
+              After
+            </span>
+          </z-carousel>
+    
+          <figcaption>
+              <pre>&lt;span slot="nav-prev"&gt;
+  Before
+&lt;/span&gt;
+
+&lt;span slot="nav-next"&gt;
+  After
+&lt;/span&gt;</pre>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+    
+    <section>
+      <div class="container">
+        <h2>Counter</h2>
+  
+        <figure>
+          <z-carousel navigation counter>
+            <img src="https://picsum.photos/800/600?random=counter1">
+            <img src="https://picsum.photos/800/600?random=counter2">
+            <img src="https://picsum.photos/800/600?random=counter3">
+            <img src="https://picsum.photos/800/600?random=counter4">
+            <img src="https://picsum.photos/800/600?random=counter5">
+            <img src="https://picsum.photos/800/600?random=counter6">
+            <img src="https://picsum.photos/800/600?random=counter7">
+            <img src="https://picsum.photos/800/600?random=counter8">
+            <img src="https://picsum.photos/800/600?random=counter9">
+            <img src="https://picsum.photos/800/600?random=counter10">
+          </z-carousel>
+        </figure>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <figure>
+          <z-carousel navigation counter dots>
+            <img src="https://picsum.photos/800/600?random=dots1">
+            <img src="https://picsum.photos/800/600?random=dots2">
+            <img src="https://picsum.photos/800/600?random=dots3">
+            <img src="https://picsum.photos/800/600?random=dots4">
+            <img src="https://picsum.photos/800/600?random=dots5">
+            <img src="https://picsum.photos/800/600?random=dots6">
+            <img src="https://picsum.photos/800/600?random=dots7">
+            <img src="https://picsum.photos/800/600?random=dots8">
+            <img src="https://picsum.photos/800/600?random=dots9">
+            <img src="https://picsum.photos/800/600?random=dots10">
+          </z-carousel>
+    
+          <figcaption>Dots</figcaption>
+        </figure>
+      </div>
+    </section>
+    
+    <section>
+      <div class="container">
+        <figure>
+          <z-carousel navigation counter dots infinit>
+            <img src="https://picsum.photos/800/600?random=infinit1">
+            <img src="https://picsum.photos/800/600?random=infinit2">
+            <img src="https://picsum.photos/800/600?random=infinit3">
+            <img src="https://picsum.photos/800/600?random=infinit4">
+            <img src="https://picsum.photos/800/600?random=infinit5">
+            <img src="https://picsum.photos/800/600?random=infinit6">
+            <img src="https://picsum.photos/800/600?random=infinit7">
+            <img src="https://picsum.photos/800/600?random=infinit8">
+            <img src="https://picsum.photos/800/600?random=infinit9">
+            <img src="https://picsum.photos/800/600?random=infinit10">
+          </z-carousel>
+    
+          <figcaption>Infinit</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    
+    <section>
+      <div class="container">
+        <figure>
+          <z-carousel class="styled" navigation counter dots>
+            <img src="https://picsum.photos/800/600?random=styled1">
+            <img src="https://picsum.photos/800/600?random=styled2">
+            <img src="https://picsum.photos/800/600?random=styled3">
+            <img src="https://picsum.photos/800/600?random=styled4">
+            <img src="https://picsum.photos/800/600?random=styled5">
+            <img src="https://picsum.photos/800/600?random=styled6">
+            <img src="https://picsum.photos/800/600?random=styled7">
+            <img src="https://picsum.photos/800/600?random=styled8">
+            <img src="https://picsum.photos/800/600?random=styled9">
+            <img src="https://picsum.photos/800/600?random=styled10">
+          </z-carousel>
+    
+          <figcaption>
+            Styled 
+            <a href="./src/demo.css"> See CSS </a>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
   </body>
 </html>

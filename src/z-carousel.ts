@@ -133,10 +133,11 @@ export class ZCarousel extends LitElement {
 
   private _renderPrevArrow() {
     return when(
-      this.navigation && (this.infinit || !this._isFirstSlide),
+      this.navigation,
       () => html`
         <button
-          part="nav-btn nav-btn--prev"
+          ?disabled="${!this.infinit && this._isFirstSlide}"
+          part="nav-btn nav-btn--prev ${!this.infinit && this._isFirstSlide ? 'nav-btn--disabled' : ''}"
           class="carousel__btn carousel__nav carousel__nav--prev" 
           @click="${this.goToPrevious}"
           type="button">
@@ -151,10 +152,11 @@ export class ZCarousel extends LitElement {
 
   private _renderNextArrow() {
     return when(
-      this.navigation && (this.infinit || this._isLastSlide),
+      this.navigation,
       () => html`
       <button
-          part="nav-btn nav-btn--next"
+          ?disabled="${!this.infinit && this._isLastSlide}"
+          part="nav-btn nav-btn--next ${!this.infinit && this._isLastSlide ? 'nav-btn--disabled' : ''}"
           class="carousel__btn carousel__nav carousel__nav--next" 
           @click="${this.goToNext}"
           type="button">
@@ -198,7 +200,7 @@ export class ZCarousel extends LitElement {
                   data-index="${index}"
                   ?data-current="${index === this._currentSlideIndex}"
                   @click="${() => this.goToIndex(index)}">
-                  &#x25CF;
+                  &bull;
                 </button>
               `
             )}
@@ -272,11 +274,7 @@ export class ZCarousel extends LitElement {
 
     .carousel__btn {
       appearance: none;
-      font-family: inherit;
-      font-size: 100%;
-      line-height: inherit;
-      margin: 0;
-      text-transform: none;
+      font: inherit;
       background: none;
       border: none;
     }

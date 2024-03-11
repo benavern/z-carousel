@@ -1,0 +1,104 @@
+:root {
+    --carousel-arrow-bg: rgb(26 26 26 / .25);
+    --carousel-arrow-bg-hover: rgb(26 26 26 / .5);
+    --carousel-arrow-shadow: 0 0 1rem rgb(255 255 255 / .1);
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --carousel-arrow-bg: rgb(255 255 255 / .3);
+        --carousel-arrow-shadow: 0 0 1rem rgb(0 0 0 / .25);
+        --carousel-dot-bg: rgb(0 0 0 / .25);
+    }
+}
+
+z-carousel:not(:defined) {
+    display: none;
+}
+
+z-carousel.styled::part(content) {
+    /* scroll-behavior: smooth; */
+    align-items: center;
+    gap: 150px;
+}
+
+z-carousel.styled::part(nav-btn) {
+    display: inline-flex;
+    border: none;
+    border-radius: 50%;
+    padding: 1em;
+    line-height: 1;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    background-color: var(--carousel-arrow-bg);
+    backdrop-filter: blur(5px);
+    box-shadow: var(--carousel-arrow-shadow);
+    transition-property: background-color, backdrop-filter;
+    transition-duration: .25s;
+}
+
+z-carousel.styled::part(nav-btn):hover {
+    background-color: var(--carousel-arrow-bg-hover);
+    backdrop-filter: blur(5px);
+}
+
+z-carousel.styled::part(nav-btn):focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+}
+
+z-carousel.styled::part(nav-btn nav-btn--disabled) {
+    opacity: 5;
+    pointer-events: none;
+}
+
+z-carousel.styled::part(nav-btn nav-btn--prev) {
+    transform: translate(10px, -50%);
+}
+
+z-carousel.styled::part(nav-btn nav-btn--next) {
+    transform: translate(-10px, -50%);
+}
+
+z-carousel.styled::part(counter) {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding: 5px 10px;
+    border-top-right-radius: 5px;
+    backdrop-filter: blur(5px);
+    background: var(--carousel-arrow-bg);
+    pointer-events: none;
+}
+
+z-carousel.styled::part(dots) {
+    z-index: 1;
+    position: absolute;
+    bottom: 0;
+    left: 50px;
+    width: calc(100% - 100px);
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+z-carousel.styled::part(dots-item) {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 1;
+    padding: 5px;
+}
+
+z-carousel.styled::part(dots-item):hover {
+    color: var(--carousel-dot-hover-color);
+}
+
+z-carousel.styled::part(dots-item dots-item--active) {
+    color: var(--carousel-dot-active-color);
+}
+
+z-carousel.styled > img {
+    object-fit: cover;
+    height: 100%;
+}
