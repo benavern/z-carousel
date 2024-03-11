@@ -28,6 +28,9 @@ export class ZCarousel extends LitElement {
 
   @property({ type: Boolean })
   dots = false
+
+  @property({ attribute: 'per-page', type: Number })
+  perPage = 1;
   
   @queryAssignedElements()
   private readonly slideElements!: HTMLElement[];
@@ -75,11 +78,13 @@ export class ZCarousel extends LitElement {
     const scrollerEl = e.target as HTMLElement;
 
     const currentScroll = scrollerEl.scrollLeft;
-    const stepWidth = (scrollerEl.scrollWidth + parseInt(window.getComputedStyle(scrollerEl).gap, 10)) / this.slideElements.length;
+    const stepWidth = (this.perPage * (scrollerEl.scrollWidth + parseInt(window.getComputedStyle(scrollerEl).gap, 10))) / this.slideElements.length;
 
-    const newIndex = Math.round(currentScroll / stepWidth);
+    // const newIndex = Math.round(currentScroll / (stepWidth));
 
-    if (newIndex !== this.currentSlideIndex) this.currentSlideIndex = Math.floor(currentScroll / stepWidth);
+    console.log(currentScroll, stepWidth);
+
+    // if (newIndex !== this.currentSlideIndex) this.currentSlideIndex = Math.floor(currentScroll / (stepWidth * this.perPage));
   }
 
   private _showSlide(el: HTMLElement, behavior: ScrollBehavior = 'auto') {
@@ -95,11 +100,11 @@ export class ZCarousel extends LitElement {
   }
 
   goToPrevious() {
-    this.goToIndex(this.currentSlideIndex - 1);
+    this.goToIndex(this.currentSlideIndex - this.perPage);
   }
   
   goToNext() { 
-    this.goToIndex(this.currentSlideIndex + 1);
+    this.goToIndex(this.currentSlideIndex + this.perPage);
   }
 
   goToIndex (slideIndex: number = 0) {
@@ -112,7 +117,7 @@ export class ZCarousel extends LitElement {
 
   render() {
     return html`
-      <div class="carousel">
+      <div class="carousel" style="--per-page: ${this.perPage}">
         ${this._renderPrevArrow()}
 
         <div
@@ -244,6 +249,7 @@ export class ZCarousel extends LitElement {
       scrollbar-width: none;
       /* hide scrollbar on firefox */
       scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
     }
     
     /* hide scrollbar on chromium */
@@ -252,8 +258,8 @@ export class ZCarousel extends LitElement {
     }
 
     .carousel__content ::slotted(*) {
-      width: 100%;
-      flex: 0 0 100%;
+      width: calc(100% / var(--per-page, 1));
+      flex: 0 0 calc(100% / var(--per-page, 1));
       scroll-snap-align: start;
     }
 

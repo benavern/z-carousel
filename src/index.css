@@ -56,7 +56,7 @@ header {
 
 section {
   margin: 0;
-  padding: var(--spacing) 0;
+  padding: calc(4 * var(--spacing)) 0;
 }
 
 section:nth-child(even) {

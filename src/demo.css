@@ -17,7 +17,6 @@ z-carousel:not(:defined) {
 }
 
 z-carousel.styled::part(content) {
-    /* scroll-behavior: smooth; */
     align-items: center;
     gap: 150px;
 }
