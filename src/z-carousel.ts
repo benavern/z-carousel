@@ -248,8 +248,8 @@ export class ZCarousel extends LitElement {
     
     /* hide scrollbar on chromium */
     .carousel__content::-webkit-scrollbar {
-        display: none;
-      }
+      display: none;
+    }
 
     .carousel__content ::slotted(*) {
       width: 100%;
