@@ -2,6 +2,7 @@
   --clr-txt: #ededed;
   --clr-bg: #213547;
   --clr-bg-alt: #172935;
+  --clr-accent: #6480c5;
 
   --spacing: 0.625rem;
   --border-width: .125rem;
@@ -26,7 +27,8 @@
   :root {
     --clr-txt: #213547;
     --clr-bg: #ededed;
-    --clr-bg-alt: #cad1e9;
+    --clr-bg-alt: #e9ecf7;
+    --clr-accent: #3b4d7c;
   }
 }
 
@@ -70,6 +72,15 @@ hr {
   border-top: var(--border-width) solid currentColor;
 }
 
+a {
+  color: var(--clr-accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 p {
   margin: var(--spacing) 0;
 }
@@ -81,7 +92,7 @@ img {
 }
 
 figure {
-  border: var(--border-width) solid currentColor;
+  border: var(--border-width) solid var(--clr-accent);
   border-radius: var(--border-radius-lg);
   overflow: hidden;
   margin: var(--spacing) 0;

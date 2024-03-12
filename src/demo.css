@@ -19,9 +19,12 @@ z-carousel:not(:defined) {
 z-carousel.styled::part(content) {
     align-items: center;
     gap: 150px;
+    scroll-behavior: smooth;
 }
 
 z-carousel.styled::part(nav-btn) {
+    position: absolute;
+    top: 50%;
     display: inline-flex;
     border: none;
     border-radius: 50%;
@@ -52,10 +55,12 @@ z-carousel.styled::part(nav-btn nav-btn--disabled) {
 }
 
 z-carousel.styled::part(nav-btn nav-btn--prev) {
+    left: var(--spacing); 
     transform: translate(10px, -50%);
 }
 
 z-carousel.styled::part(nav-btn nav-btn--next) {
+    right: var(--spacing); 
     transform: translate(-10px, -50%);
 }
 

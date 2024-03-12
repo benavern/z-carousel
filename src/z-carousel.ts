@@ -7,7 +7,7 @@ import { map } from 'lit/directives/map.js';
 export class ZCarousel extends LitElement {
   /**
    * =========== Dom References
-  */
+   */
  @query('.carousel__content')
   private _contentEl!: ReactiveElement;
 
@@ -29,8 +29,8 @@ export class ZCarousel extends LitElement {
   @property({ type: Boolean })
   dots = false
 
-  @property({ attribute: 'per-page', type: Number })
-  perPage = 1;
+  @property({ type: Number })
+  step = 1;
   
   @queryAssignedElements()
   private readonly slideElements!: HTMLElement[];
@@ -59,7 +59,10 @@ export class ZCarousel extends LitElement {
   override firstUpdated() {
     this._updateCurrentSlide('instant');
 
+    // react to content scroll transition end
     this._contentEl.addEventListener('scrollend', (e) => this._onScrollEnd(e));
+
+    this._contentEl.addEventListener('keydown', (e) => this._onKeyDown(e));
   }
   
   override updated(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
@@ -75,24 +78,20 @@ export class ZCarousel extends LitElement {
   private _onScrollEnd(e: Event) {
     if (!this.slideElements.length) return;
 
-    const scrollerEl = e.target as HTMLElement;
+    // @Todo: event afterChange(neSlideIndex)
+  }
 
-    const currentScroll = scrollerEl.scrollLeft;
-    const stepWidth = (this.perPage * (scrollerEl.scrollWidth + parseInt(window.getComputedStyle(scrollerEl).gap, 10))) / this.slideElements.length;
-
-    // const newIndex = Math.round(currentScroll / (stepWidth));
-
-    console.log(currentScroll, stepWidth);
-
-    // if (newIndex !== this.currentSlideIndex) this.currentSlideIndex = Math.floor(currentScroll / (stepWidth * this.perPage));
+  private _onKeyDown(e: KeyboardEvent) {
+    if (e.key === 'ArrowLeft') this.goToPrevious();
+    if (e.key === 'ArrowRight') this.goToNext();
   }
 
   private _showSlide(el: HTMLElement, behavior: ScrollBehavior = 'auto') {
     // browser calculation would have been better but it makes the window scroll to the current element
     // this is not comfortable if an interval is set to loop over the carousel for example...
-    // el.scrollIntoView({ block: 'nearest', inline: "nearest", behavior }) 
+    // el.scrollIntoView({ block: 'nearest', inline: "nearest", behavior })
 
-    this._contentEl.scrollTo({ top: 0, left: el.offsetLeft, behavior });
+    this._contentEl.scrollTo({ left: el.offsetLeft, behavior });
   }
 
   private _updateCurrentSlide(behavior: ScrollBehavior = 'auto') {
@@ -100,14 +99,20 @@ export class ZCarousel extends LitElement {
   }
 
   goToPrevious() {
-    this.goToIndex(this.currentSlideIndex - this.perPage);
+    if (!this.infinit && this._isFirstSlide) return;
+    this.goToIndex(this.currentSlideIndex - this.step);
   }
   
-  goToNext() { 
-    this.goToIndex(this.currentSlideIndex + this.perPage);
+  goToNext() {
+    if (!this.infinit && this._isLastSlide) return;
+    this.goToIndex(this.currentSlideIndex + this.step);
   }
 
   goToIndex (slideIndex: number = 0) {
+    if(slideIndex === this.currentSlideIndex) return;
+
+    // @Todo: event beforerChange(neSlideIndex, oldIndex) [cancelable???]
+
     this.currentSlideIndex = slideIndex;
   }
 
@@ -117,15 +122,15 @@ export class ZCarousel extends LitElement {
 
   render() {
     return html`
-      <div class="carousel" style="--per-page: ${this.perPage}">
-        ${this._renderPrevArrow()}
-
+      <div class="carousel">
         <div
           class="carousel__content"
           part="content"
           tabindex="0">
           <slot></slot>
         </div>
+        
+        ${this._renderPrevArrow()}
 
         ${this._renderNextArrow()}
 
@@ -245,38 +250,27 @@ export class ZCarousel extends LitElement {
       height: 100%;
       display: flex;
       gap: 0;
-      overflow-x: auto;
-      scrollbar-width: none;
-      /* hide scrollbar on firefox */
-      scroll-snap-type: x mandatory;
-      scroll-behavior: smooth;
-    }
-    
-    /* hide scrollbar on chromium */
-    .carousel__content::-webkit-scrollbar {
-      display: none;
+      overflow-x: hidden;
     }
 
     .carousel__content ::slotted(*) {
-      width: calc(100% / var(--per-page, 1));
-      flex: 0 0 calc(100% / var(--per-page, 1));
-      scroll-snap-align: start;
+      flex: 1 0 100%;
     }
 
     .carousel__nav {
       z-index: 1;
-      position: absolute;
+      /* position: absolute;
       top: 50%;
-      transform: translateY(-50%);
+      transform: translateY(-50%); */
     }
 
-    .carousel__nav.carousel__nav--prev {
+    /* .carousel__nav.carousel__nav--prev {
       left: 0;
     }
 
     .carousel__nav.carousel__nav--next {
       right: 0;
-    }
+    } */
 
     .carousel__btn {
       appearance: none;
