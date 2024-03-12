@@ -6,12 +6,16 @@ import { map } from 'lit/directives/map.js';
 const debounce = (cb: Function, delay:number = 1000) => {
   let timer:number;
   return (...args:any[]) => {
-      clearTimeout(timer); // Clear of timeout if exist
+      clearTimeout(timer); 
       timer = setTimeout(() => {
-          cb(...args); // Return the callback
+          cb(...args);
       }, delay);
   };
 };
+
+const clamp = (nb: Number, { min = -Infinity, max = Infinity }) => {
+  return Math.max(min, Math.min(Number(nb) || min, max));
+}
 
 @customElement('z-carousel')
 export class ZCarousel extends LitElement {
@@ -88,23 +92,23 @@ export class ZCarousel extends LitElement {
    * =========== Lifecycle
    */
   override firstUpdated() {
-
-    // initialize scrollValue on init
+    this._safeAttributes();    // initialize scrollValue on init
     this.goToPage(this.currentPage, 'instant')
     
     // react to content scroll transition end
     this._contentEl.addEventListener('scrollend', () => this._onScrollEnd());
-
+    
     // react to element resize
     this._resizeObserver = new ResizeObserver(this._debouncedOnResize.bind(this))
     this._resizeObserver.observe(this._contentEl);
-
+    
     // navigation user events
     this._contentEl.addEventListener('keydown', (e) => this._onKeyDown(e));
     this._contentEl.addEventListener('wheel', (e) => this._onWheel(e));
   }
   
   override updated(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
+    this._safeAttributes();
     if (changedProperties.has('currentPage')) this._updateScroll();
 
     super.update(changedProperties);
@@ -119,6 +123,11 @@ export class ZCarousel extends LitElement {
   /*
    * =========== Methods
    */
+  private _safeAttributes() {
+    this.currentPage = clamp(this.currentPage, { min: 1, max: this._nbPages });
+    this.perPage = clamp(this.perPage, { min: 1, max: this._nbPages });
+    this.gap = clamp(this.gap, { min: 0 });
+  }
 
   private _onScrollEnd() {
     if (!this.slideElements.length) return;
