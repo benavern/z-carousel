@@ -205,6 +205,7 @@ export class ZCarousel extends LitElement {
               this.slideElements,
               (_slideEl: HTMLElement, index: number) => html`
                 <button
+                  ?disabled="${index === this._currentSlideIndex}"
                   part="dots-item ${index === this._currentSlideIndex ? 'dots-item--active' : ''}"
                   class="carousel__btn"
                   data-index="${index}"
@@ -259,18 +260,7 @@ export class ZCarousel extends LitElement {
 
     .carousel__nav {
       z-index: 1;
-      /* position: absolute;
-      top: 50%;
-      transform: translateY(-50%); */
     }
-
-    /* .carousel__nav.carousel__nav--prev {
-      left: 0;
-    }
-
-    .carousel__nav.carousel__nav--next {
-      right: 0;
-    } */
 
     .carousel__btn {
       appearance: none;
@@ -281,6 +271,10 @@ export class ZCarousel extends LitElement {
 
     .carousel__btn:hover {
       cursor: pointer;
+    }
+    
+    .carousel__btn:disabled {
+      cursor: not-allowed;
     }
   `
 }

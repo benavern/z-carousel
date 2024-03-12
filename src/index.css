@@ -47,13 +47,21 @@ body {
   min-height: 100dvh;
 }
 
-header {
+header{
   z-index: 10;
   position: sticky;
   top: 0;
+  color: var(--clr-accent);
+}
+
+header, footer{
   background-color: var(--clr-bg);
-  box-shadow: 0 0 1rem rgb(0 0 0 / 25);
-  padding-block: var(--spacing);
+  box-shadow: 0 0 1rem rgb(0 0 0 / .25);
+  padding-block: calc(2 * var(--spacing));
+}
+
+footer {
+  text-align: center;
 }
 
 section {
@@ -66,10 +74,10 @@ section:nth-child(even) {
 }
 
 hr {
-  width: max(0px, calc(100% - (2 * var(--spacing))));
-  margin: calc(3 * var(--spacing)) auto;
+  width: max(10rem, calc(100% - (40 * var(--spacing))));
+  margin: calc(6 * var(--spacing)) auto;
   border: none;
-  border-top: var(--border-width) solid currentColor;
+  border-top: var(--border-width) solid var(--clr-accent);
 }
 
 a {
@@ -95,7 +103,7 @@ figure {
   border: var(--border-width) solid var(--clr-accent);
   border-radius: var(--border-radius-lg);
   overflow: hidden;
-  margin: var(--spacing) 0;
+  margin: calc(2 * var(--spacing)) 0;
 }
 
 figure figcaption {
@@ -105,9 +113,8 @@ figure figcaption {
 code {
     display: inline-block;
     padding: .25rem .5rem;
-    background: #213847;
-    color: #ededed;
-    border: 1px solid currentColor;
+    background: var(--clr-accent);
+    color: var(--clr-bg);
     border-radius: var(--border-radius);
 }
 

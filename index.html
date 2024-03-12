@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -19,26 +19,30 @@
     <section id="Base">
       <div class="container">
         <h2>Base</h2>
+
+        <p>
+          Here is the raw component, You can add anything inside, Each root element will be considered as a slide unless you use one of the defined slots
+        </p>
   
         <figure>
           <z-carousel>
-            <img src="https://picsum.photos/800/600?random=base-1">
+            <img src="https://picsum.photos/960/540?random=base-1">
             <div>
-              <h1>Coucou!</h1>
+              <h3>Hello, World!</h3>
               <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aut aspernatur et cumque sint necessitatibus, aliquid velit qui nostrum. Neque, reprehenderit quidem doloribus iste id expedita reiciendis aut vel dolore ullam!</p>
               <p>Dignissimos, incidunt repellat veniam doloremque impedit iure aut rerum deserunt, inventore ratione sed ex, dolore et laboriosam voluptatum quos. Ab minima dicta beatae officiis ex voluptatum exercitationem quo corporis magnam!</p>
               <p>Exercitationem doloremque ipsum, veritatis, optio, voluptate laudantium culpa necessitatibus quae labore cupiditate sequi fugit perferendis nobis quasi assumenda! Culpa corporis enim eveniet quo provident cupiditate natus explicabo laudantium quos veritatis?</p>
               <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est optio voluptates error ab eum, placeat explicabo aspernatur vel, cupiditate accusantium nulla, illo earum aperiam assumenda quia. Cum, soluta. Incidunt, qui!</p>
             </div>
-            <img src="https://picsum.photos/800/600?random=base-2">
-            <img src="https://picsum.photos/800/600?random=base-3">
-            <img src="https://picsum.photos/800/600?random=base-4">
-            <img src="https://picsum.photos/800/600?random=base-5">
-            <img src="https://picsum.photos/800/600?random=base-6">
-            <img src="https://picsum.photos/800/600?random=base-7">
-            <img src="https://picsum.photos/800/600?random=base-8">
-            <img src="https://picsum.photos/800/600?random=base-9">
-            <img src="https://picsum.photos/800/600?random=base-10">
+            <img src="https://picsum.photos/960/540?random=base-2">
+            <img src="https://picsum.photos/960/540?random=base-3">
+            <img src="https://picsum.photos/960/540?random=base-4">
+            <img src="https://picsum.photos/960/540?random=base-5">
+            <img src="https://picsum.photos/960/540?random=base-6">
+            <img src="https://picsum.photos/960/540?random=base-7">
+            <img src="https://picsum.photos/960/540?random=base-8">
+            <img src="https://picsum.photos/960/540?random=base-9">
+            <img src="https://picsum.photos/960/540?random=base-10">
           </z-carousel>
         </figure>
       </div>
@@ -47,41 +51,48 @@
     <section>
       <div class="container">
         <h2>Navigation</h2>
+
+        <p>
+          You can add navigation buttons. When a navigation is possible, it can be clicked, otherwize, the button will be disabled.
+        </p>
   
         <figure>
           <z-carousel navigation>
-            <img src="https://picsum.photos/800/600?random=nav-1">
-            <img src="https://picsum.photos/800/600?random=nav-2">
-            <img src="https://picsum.photos/800/600?random=nav-3">
-            <img src="https://picsum.photos/800/600?random=nav-4">
-            <img src="https://picsum.photos/800/600?random=nav-5">
-            <img src="https://picsum.photos/800/600?random=nav-6">
-            <img src="https://picsum.photos/800/600?random=nav-7">
-            <img src="https://picsum.photos/800/600?random=nav-8">
-            <img src="https://picsum.photos/800/600?random=nav-9">
-            <img src="https://picsum.photos/800/600?random=nav-10">
+            <img src="https://picsum.photos/960/540?random=nav-1">
+            <img src="https://picsum.photos/960/540?random=nav-2">
+            <img src="https://picsum.photos/960/540?random=nav-3">
+            <img src="https://picsum.photos/960/540?random=nav-4">
+            <img src="https://picsum.photos/960/540?random=nav-5">
+            <img src="https://picsum.photos/960/540?random=nav-6">
+            <img src="https://picsum.photos/960/540?random=nav-7">
+            <img src="https://picsum.photos/960/540?random=nav-8">
+            <img src="https://picsum.photos/960/540?random=nav-9">
+            <img src="https://picsum.photos/960/540?random=nav-10">
           </z-carousel>
         </figure>
         
         <hr>
   
         <p>
-          It is also possible to customize the content of the arrow buttons via the 
-          <code>slot="nav-prev"</code> and <code>slot="nav-next"</code> slots.
+          By default, the navigation buttons are provided with html arrow entities. It is possible to customize the content of the navigation buttons.
+        </p>
+
+        <p>
+          Use <code>slot="nav-prev"</code> and <code>slot="nav-next"</code> slots to do so.
         </p>
   
         <figure>
           <z-carousel navigation>
-            <img src="https://picsum.photos/800/600?random=nav-slot-1">
-            <img src="https://picsum.photos/800/600?random=nav-slot-2">
-            <img src="https://picsum.photos/800/600?random=nav-slot-3">
-            <img src="https://picsum.photos/800/600?random=nav-slot-4">
-            <img src="https://picsum.photos/800/600?random=nav-slot-5">
-            <img src="https://picsum.photos/800/600?random=nav-slot-6">
-            <img src="https://picsum.photos/800/600?random=nav-slot-7">
-            <img src="https://picsum.photos/800/600?random=nav-slot-8">
-            <img src="https://picsum.photos/800/600?random=nav-slot-9">
-            <img src="https://picsum.photos/800/600?random=nav-slot-10">
+            <img src="https://picsum.photos/960/540?random=nav-slot-1">
+            <img src="https://picsum.photos/960/540?random=nav-slot-2">
+            <img src="https://picsum.photos/960/540?random=nav-slot-3">
+            <img src="https://picsum.photos/960/540?random=nav-slot-4">
+            <img src="https://picsum.photos/960/540?random=nav-slot-5">
+            <img src="https://picsum.photos/960/540?random=nav-slot-6">
+            <img src="https://picsum.photos/960/540?random=nav-slot-7">
+            <img src="https://picsum.photos/960/540?random=nav-slot-8">
+            <img src="https://picsum.photos/960/540?random=nav-slot-9">
+            <img src="https://picsum.photos/960/540?random=nav-slot-10">
   
             <span slot="nav-prev">
               Before
@@ -108,19 +119,23 @@
     <section>
       <div class="container">
         <h2>Counter</h2>
+
+        <p>
+          You can add a fraction counter, this will show the current slide number over the total slides number
+        </p>
   
         <figure>
           <z-carousel navigation counter>
-            <img src="https://picsum.photos/800/600?random=counter1">
-            <img src="https://picsum.photos/800/600?random=counter2">
-            <img src="https://picsum.photos/800/600?random=counter3">
-            <img src="https://picsum.photos/800/600?random=counter4">
-            <img src="https://picsum.photos/800/600?random=counter5">
-            <img src="https://picsum.photos/800/600?random=counter6">
-            <img src="https://picsum.photos/800/600?random=counter7">
-            <img src="https://picsum.photos/800/600?random=counter8">
-            <img src="https://picsum.photos/800/600?random=counter9">
-            <img src="https://picsum.photos/800/600?random=counter10">
+            <img src="https://picsum.photos/960/540?random=counter1">
+            <img src="https://picsum.photos/960/540?random=counter2">
+            <img src="https://picsum.photos/960/540?random=counter3">
+            <img src="https://picsum.photos/960/540?random=counter4">
+            <img src="https://picsum.photos/960/540?random=counter5">
+            <img src="https://picsum.photos/960/540?random=counter6">
+            <img src="https://picsum.photos/960/540?random=counter7">
+            <img src="https://picsum.photos/960/540?random=counter8">
+            <img src="https://picsum.photos/960/540?random=counter9">
+            <img src="https://picsum.photos/960/540?random=counter10">
           </z-carousel>
         </figure>
       </div>
@@ -130,18 +145,22 @@
       <div class="container">
         <h2>Dots</h2>
 
+        <p>
+          You can show dots for every slide available on the carousel, each dot but the current one is clickable.
+        </p>
+
         <figure>
           <z-carousel navigation counter dots>
-            <img src="https://picsum.photos/800/600?random=dots1">
-            <img src="https://picsum.photos/800/600?random=dots2">
-            <img src="https://picsum.photos/800/600?random=dots3">
-            <img src="https://picsum.photos/800/600?random=dots4">
-            <img src="https://picsum.photos/800/600?random=dots5">
-            <img src="https://picsum.photos/800/600?random=dots6">
-            <img src="https://picsum.photos/800/600?random=dots7">
-            <img src="https://picsum.photos/800/600?random=dots8">
-            <img src="https://picsum.photos/800/600?random=dots9">
-            <img src="https://picsum.photos/800/600?random=dots10">
+            <img src="https://picsum.photos/960/540?random=dots1">
+            <img src="https://picsum.photos/960/540?random=dots2">
+            <img src="https://picsum.photos/960/540?random=dots3">
+            <img src="https://picsum.photos/960/540?random=dots4">
+            <img src="https://picsum.photos/960/540?random=dots5">
+            <img src="https://picsum.photos/960/540?random=dots6">
+            <img src="https://picsum.photos/960/540?random=dots7">
+            <img src="https://picsum.photos/960/540?random=dots8">
+            <img src="https://picsum.photos/960/540?random=dots9">
+            <img src="https://picsum.photos/960/540?random=dots10">
           </z-carousel>
         </figure>
       </div>
@@ -151,39 +170,20 @@
       <div class="container">
         <h2>Infinit</h2>
 
+        <p>It is possible to cycle threw the carousel with the <code>infinit</code> attribute.</p>
+
         <figure>
           <z-carousel navigation counter dots infinit>
-            <img src="https://picsum.photos/800/600?random=infinit1">
-            <img src="https://picsum.photos/800/600?random=infinit2">
-            <img src="https://picsum.photos/800/600?random=infinit3">
-            <img src="https://picsum.photos/800/600?random=infinit4">
-            <img src="https://picsum.photos/800/600?random=infinit5">
-            <img src="https://picsum.photos/800/600?random=infinit6">
-            <img src="https://picsum.photos/800/600?random=infinit7">
-            <img src="https://picsum.photos/800/600?random=infinit8">
-            <img src="https://picsum.photos/800/600?random=infinit9">
-            <img src="https://picsum.photos/800/600?random=infinit10">
-          </z-carousel>
-        </figure>
-      </div>
-    </section>
-
-    <section>
-      <div class="container">
-        <h2>current slide index</h2>
-
-        <figure>
-          <z-carousel navigation counter current-slide-index="2">
-            <img src="https://picsum.photos/800/600?random=current-slide-index-1">
-            <img src="https://picsum.photos/800/600?random=current-slide-index-2">
-            <img src="https://picsum.photos/800/600?random=current-slide-index-3">
-            <img src="https://picsum.photos/800/600?random=current-slide-index-4">
-            <img src="https://picsum.photos/800/600?random=current-slide-index-5">
-            <img src="https://picsum.photos/800/600?random=current-slide-index-6">
-            <img src="https://picsum.photos/800/600?random=current-slide-index-7">
-            <img src="https://picsum.photos/800/600?random=current-slide-index-8">
-            <img src="https://picsum.photos/800/600?random=current-slide-index-9">
-            <img src="https://picsum.photos/800/600?random=current-slide-index-10">
+            <img src="https://picsum.photos/960/540?random=infinit1">
+            <img src="https://picsum.photos/960/540?random=infinit2">
+            <img src="https://picsum.photos/960/540?random=infinit3">
+            <img src="https://picsum.photos/960/540?random=infinit4">
+            <img src="https://picsum.photos/960/540?random=infinit5">
+            <img src="https://picsum.photos/960/540?random=infinit6">
+            <img src="https://picsum.photos/960/540?random=infinit7">
+            <img src="https://picsum.photos/960/540?random=infinit8">
+            <img src="https://picsum.photos/960/540?random=infinit9">
+            <img src="https://picsum.photos/960/540?random=infinit10">
           </z-carousel>
         </figure>
       </div>
@@ -193,17 +193,48 @@
       <div class="container">
         <h2>step</h2>
 
+        <p>You can decide the number of slides to go forward or backwards for each navigation action.</p>
+
         <figure>
           <z-carousel navigation counter step="2">
-            <img src="https://picsum.photos/800/600?random=step-1">
-            <img src="https://picsum.photos/800/600?random=step-2">
-            <img src="https://picsum.photos/800/600?random=step-3">
-            <img src="https://picsum.photos/800/600?random=step-4">
-            <img src="https://picsum.photos/800/600?random=step-5">
-            <img src="https://picsum.photos/800/600?random=step-6">
-            <img src="https://picsum.photos/800/600?random=step-7">
-            <img src="https://picsum.photos/800/600?random=step-8">
-            <img src="https://picsum.photos/800/600?random=step-9">
+            <img src="https://picsum.photos/960/540?random=step-1">
+            <img src="https://picsum.photos/960/540?random=step-2">
+            <img src="https://picsum.photos/960/540?random=step-3">
+            <img src="https://picsum.photos/960/540?random=step-4">
+            <img src="https://picsum.photos/960/540?random=step-5">
+            <img src="https://picsum.photos/960/540?random=step-6">
+            <img src="https://picsum.photos/960/540?random=step-7">
+            <img src="https://picsum.photos/960/540?random=step-8">
+            <img src="https://picsum.photos/960/540?random=step-9">
+          </z-carousel>
+        </figure>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2>current slide index</h2>
+
+        <p>
+          It is possible to make the carousel initalize on a given slide index.
+        </p>
+
+        <p>
+          This attribute will be updated over the navigation actions, you can update it too from outside.
+        </p>
+
+        <figure>
+          <z-carousel navigation counter current-slide-index="2">
+            <img src="https://picsum.photos/960/540?random=current-slide-index-1">
+            <img src="https://picsum.photos/960/540?random=current-slide-index-2">
+            <img src="https://picsum.photos/960/540?random=current-slide-index-3">
+            <img src="https://picsum.photos/960/540?random=current-slide-index-4">
+            <img src="https://picsum.photos/960/540?random=current-slide-index-5">
+            <img src="https://picsum.photos/960/540?random=current-slide-index-6">
+            <img src="https://picsum.photos/960/540?random=current-slide-index-7">
+            <img src="https://picsum.photos/960/540?random=current-slide-index-8">
+            <img src="https://picsum.photos/960/540?random=current-slide-index-9">
+            <img src="https://picsum.photos/960/540?random=current-slide-index-10">
           </z-carousel>
         </figure>
       </div>
@@ -213,17 +244,21 @@
       <div class="container">
         <h2>per page</h2>
 
+        <p>You can decide to display multiple slides per page.</p>
+
+        <p>This feature is interesting used with the <code>step</code> option</p>
+
         <figure>
           <z-carousel navigation counter per-page="2">
-            <img src="https://picsum.photos/800/600?random=per-page-1">
-            <img src="https://picsum.photos/800/600?random=per-page-2">
-            <img src="https://picsum.photos/800/600?random=per-page-3">
-            <img src="https://picsum.photos/800/600?random=per-page-4">
-            <img src="https://picsum.photos/800/600?random=per-page-5">
-            <img src="https://picsum.photos/800/600?random=per-page-6">
-            <img src="https://picsum.photos/800/600?random=per-page-7">
-            <img src="https://picsum.photos/800/600?random=per-page-8">
-            <img src="https://picsum.photos/800/600?random=per-page-9">
+            <img src="https://picsum.photos/960/540?random=per-page-1">
+            <img src="https://picsum.photos/960/540?random=per-page-2">
+            <img src="https://picsum.photos/960/540?random=per-page-3">
+            <img src="https://picsum.photos/960/540?random=per-page-4">
+            <img src="https://picsum.photos/960/540?random=per-page-5">
+            <img src="https://picsum.photos/960/540?random=per-page-6">
+            <img src="https://picsum.photos/960/540?random=per-page-7">
+            <img src="https://picsum.photos/960/540?random=per-page-8">
+            <img src="https://picsum.photos/960/540?random=per-page-9">
           </z-carousel>
         </figure>
       </div>
@@ -233,23 +268,29 @@
       <div class="container">
         <h2>Styled</h2>
 
-        <p><a href="./src/demo.css">See CSS</a></p>
+        <p>Here is an example of what you could achieve with this component and a little bit of css styling: <a href="./src/demo.css">See CSS</a></p>
 
         <figure>
           <z-carousel class="styled" navigation counter dots>
-            <img src="https://picsum.photos/800/600?random=styled-1">
-            <img src="https://picsum.photos/800/600?random=styled-2">
-            <img src="https://picsum.photos/800/600?random=styled-3">
-            <img src="https://picsum.photos/800/600?random=styled-4">
-            <img src="https://picsum.photos/800/600?random=styled-5">
-            <img src="https://picsum.photos/800/600?random=styled-6">
-            <img src="https://picsum.photos/800/600?random=styled-7">
-            <img src="https://picsum.photos/800/600?random=styled-8">
-            <img src="https://picsum.photos/800/600?random=styled-9">
-            <img src="https://picsum.photos/800/600?random=styled-10">
+            <img src="https://picsum.photos/960/540?random=styled-1">
+            <img src="https://picsum.photos/960/540?random=styled-2">
+            <img src="https://picsum.photos/960/540?random=styled-3">
+            <img src="https://picsum.photos/960/540?random=styled-4">
+            <img src="https://picsum.photos/960/540?random=styled-5">
+            <img src="https://picsum.photos/960/540?random=styled-6">
+            <img src="https://picsum.photos/960/540?random=styled-7">
+            <img src="https://picsum.photos/960/540?random=styled-8">
+            <img src="https://picsum.photos/960/540?random=styled-9">
+            <img src="https://picsum.photos/960/540?random=styled-10">
           </z-carousel>
         </figure>
       </div>
     </section>
+
+    <footer>
+      <div class="container">
+        &copy; <a href="https://benjamin.caradeuc.info">Benjamin Caradeuc</a> 2024
+      </div>
+    </footer>
   </body>
 </html>

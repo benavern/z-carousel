@@ -1,14 +1,14 @@
 :root {
     --carousel-arrow-bg: rgb(26 26 26 / .25);
     --carousel-arrow-bg-hover: rgb(26 26 26 / .5);
-    --carousel-arrow-shadow: 0 0 1rem rgb(255 255 255 / .1);
+    --carousel-arrow-shadow: 0 0 1rem rgb(255 255 255 / .25);
 }
 
 @media (prefers-color-scheme: light) {
     :root {
         --carousel-arrow-bg: rgb(255 255 255 / .3);
+        --carousel-arrow-bg-hover: rgb(255 255 255 / .5);
         --carousel-arrow-shadow: 0 0 1rem rgb(0 0 0 / .25);
-        --carousel-dot-bg: rgb(0 0 0 / .25);
     }
 }
 
@@ -37,7 +37,7 @@ z-carousel.styled::part(nav-btn) {
     backdrop-filter: blur(5px);
     box-shadow: var(--carousel-arrow-shadow);
     transition-property: background-color, backdrop-filter;
-    transition-duration: .25s;
+    transition-duration: .3s;
 }
 
 z-carousel.styled::part(nav-btn):hover {
@@ -91,15 +91,17 @@ z-carousel.styled::part(dots-item) {
     justify-content: center;
     align-items: center;
     line-height: 1;
-    padding: 5px;
+    padding: 10px;
+    transition: color .3s;
 }
 
 z-carousel.styled::part(dots-item):hover {
     color: var(--carousel-dot-hover-color);
 }
 
-z-carousel.styled::part(dots-item dots-item--active) {
-    color: var(--carousel-dot-active-color);
+z-carousel.styled::part(dots-item dots-item--active),
+z-carousel.styled::part(dots-item dots-item--active):hover {
+    color: var(--clr-accent);
 }
 
 z-carousel.styled > img {
