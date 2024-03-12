@@ -3,6 +3,16 @@ import { customElement, property, query, queryAssignedElements } from 'lit/decor
 import { when } from 'lit/directives/when.js';
 import { map } from 'lit/directives/map.js';
 
+const debounce = (cb: Function, delay:number = 1000) => {
+  let timer:number;
+  return (...args:any[]) => {
+      clearTimeout(timer); // Clear of timeout if exist
+      timer = setTimeout(() => {
+          cb(...args); // Return the callback
+      }, delay);
+  };
+};
+
 @customElement('z-carousel')
 export class ZCarousel extends LitElement {
   /**
@@ -37,6 +47,11 @@ export class ZCarousel extends LitElement {
   
   @queryAssignedElements()
   private readonly slideElements!: HTMLElement[];
+
+  /**
+   * =========== data
+   */
+  private _resizeObserver!: ResizeObserver;
 
   /*
    * =========== Computed
@@ -80,6 +95,10 @@ export class ZCarousel extends LitElement {
     // react to content scroll transition end
     this._contentEl.addEventListener('scrollend', () => this._onScrollEnd());
 
+    // react to element resize
+    this._resizeObserver = new ResizeObserver(this._debouncedOnResize.bind(this))
+    this._resizeObserver.observe(this._contentEl);
+
     // navigation user events
     this._contentEl.addEventListener('keydown', (e) => this._onKeyDown(e));
     this._contentEl.addEventListener('wheel', (e) => this._onWheel(e));
@@ -90,6 +109,12 @@ export class ZCarousel extends LitElement {
 
     super.update(changedProperties);
   }
+
+  disconnectedCallback(): void {
+      super.disconnectedCallback();
+
+      this._resizeObserver.disconnect();
+  }
   
   /*
    * =========== Methods
@@ -99,6 +124,11 @@ export class ZCarousel extends LitElement {
     if (!this.slideElements.length) return;
 
     // @Todo: event afterChange(neSlideIndex)
+  }
+
+  private _debouncedOnResize =  debounce(this._onResize.bind(this) , 200);
+  private _onResize() {
+    this._updateScroll('instant');
   }
 
   private _onKeyDown(e: KeyboardEvent) {
