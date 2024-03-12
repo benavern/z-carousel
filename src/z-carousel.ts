@@ -14,8 +14,8 @@ export class ZCarousel extends LitElement {
   /*
    * =========== Props
    */
-  @property({ attribute: 'current-slide-index', type: Number, reflect: true })
-  currentSlideIndex = 0;
+  @property({ attribute: 'current-page', type: Number })
+  currentPage = 1;
 
   @property({ type: Boolean })
   navigation = false;
@@ -24,13 +24,16 @@ export class ZCarousel extends LitElement {
   infinit = false;
 
   @property({ type: Boolean })
-  counter = false
+  pagination = false
 
   @property({ type: Boolean })
   dots = false
 
+  @property({ attribute: 'per-page', type: Number })
+  perPage = 1;
+
   @property({ type: Number })
-  step = 1;
+  gap = 0;
   
   @queryAssignedElements()
   private readonly slideElements!: HTMLElement[];
@@ -39,26 +42,41 @@ export class ZCarousel extends LitElement {
    * =========== Computed
    */
   @property({ attribute: false })
-  private get _currentSlideIndex() {
-    return ((this.currentSlideIndex % this.slideElements.length) + this.slideElements.length) % this.slideElements.length;
+  private get _nbPages() {
+    return Math.ceil(this.slideElements.length / this.perPage);
   }
-
+  
   @property({ attribute: false })
-  private get _isFirstSlide() {
-    return this._currentSlideIndex === 0;
+  private get _canGoPrevious() {
+    if (this.infinit) return true;
+
+    return this.currentPage > 1;
   }
-
+  
   @property({ attribute: false })
-  private get _isLastSlide() {
-    return this._currentSlideIndex === this.slideElements.length - 1;
+  private get _canGoNext() {
+    if (this.infinit) return true;
+
+    return this.currentPage < this._nbPages;
+  }
+  
+  @property({ attribute: false })
+  private get _nbShadowElements() {
+    const elementsOnLastPage = this.slideElements.length % this.perPage;
+    
+    if (elementsOnLastPage === 0) return 0;
+
+    return this.perPage - elementsOnLastPage;
   }
 
   /*
    * =========== Lifecycle
    */
   override firstUpdated() {
-    this._updateCurrentSlide('instant');
 
+    // initialize scrollValue on init
+    this.goToPage(this.currentPage, 'instant')
+    
     // react to content scroll transition end
     this._contentEl.addEventListener('scrollend', () => this._onScrollEnd());
 
@@ -68,7 +86,7 @@ export class ZCarousel extends LitElement {
   }
   
   override updated(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
-    if (changedProperties.has('currentSlideIndex')) this._updateCurrentSlide();
+    if (changedProperties.has('currentPage')) this._updateScroll();
 
     super.update(changedProperties);
   }
@@ -86,70 +104,79 @@ export class ZCarousel extends LitElement {
   private _onKeyDown(e: KeyboardEvent) {
     if (e.target !== this._contentEl) return;
     
-    if (e.key === 'ArrowLeft') this.goToPrevious();
-    if (e.key === 'ArrowRight') this.goToNext();
+    if (e.key === 'ArrowLeft') this.goToPreviousPage();
+    if (e.key === 'ArrowRight') this.goToNextPage();
   }
 
   private _onWheel(e: WheelEvent) {
     if (e.target !== this._contentEl && !this/*._contentEl.*/.contains(e.target as Node)) return;
 
-    if (e.deltaX < 0) this.goToPrevious();
-    if (e.deltaX > 0) this.goToNext();
+    if (e.deltaX < 0) this.goToPreviousPage();
+    if (e.deltaX > 0) this.goToNextPage();
   }
 
-  private _showSlide(el: HTMLElement, behavior: ScrollBehavior = 'auto') {
-    // browser calculation would have been better but it makes the window scroll to the current element
-    // this is not comfortable if an interval is set to loop over the carousel for example...
-    // el.scrollIntoView({ block: 'nearest', inline: "nearest", behavior })
+  private _updateScroll(behavior: ScrollBehavior = 'auto') {
+    const _currentSlideIndex = (this.currentPage - 1) * this.perPage;
 
-    this._contentEl.scrollTo({ left: el.offsetLeft, behavior });
+    this._contentEl.scrollTo({ left: this.slideElements[_currentSlideIndex].offsetLeft, behavior });
   }
 
-  private _updateCurrentSlide(behavior: ScrollBehavior = 'auto') {
-    this._showSlide(this.slideElements[this._currentSlideIndex], behavior)
-  }
+  goToPreviousPage(behavior: ScrollBehavior = 'auto') {
+    if (!this._canGoPrevious) return
 
-  goToPrevious() {
-    if (!this.infinit && this._isFirstSlide) return;
-    this.goToIndex(this.currentSlideIndex - this.step);
+    this.goToPage(this.currentPage === 1 ? this._nbPages : (this.currentPage - 1), behavior);
   }
   
-  goToNext() {
-    if (!this.infinit && this._isLastSlide) return;
-    this.goToIndex(this.currentSlideIndex + this.step);
+  goToNextPage(behavior: ScrollBehavior = 'auto') {
+    if (!this._canGoNext) return
+
+    this.goToPage(this.currentPage === this._nbPages ? 1 : (this.currentPage + 1), behavior);
   }
 
-  goToIndex (slideIndex: number = 0) {
-    if(slideIndex === this.currentSlideIndex) return;
-
-    // @Todo: event beforerChange(neSlideIndex, oldIndex) [cancelable???]
-
-    this.currentSlideIndex = slideIndex;
+  goToPage (pageNumber: number = 0, behavior: ScrollBehavior = 'auto') {
+    if (this.currentPage !== pageNumber) this.currentPage = pageNumber;
+    
+    this._updateScroll(behavior);
   }
 
   /**
    * =========== Template
    */
-
   render() {
     return html`
+      <style>
+        :host {
+          /* OVERRIDES the user set style */
+          --_z-carousel-gap: ${this.gap}px;
+          --_z-carousel-per-page: ${this.perPage};
+          --_z-carousel-item-width: calc((100% - (var(--_z-carousel-gap) * (var(--_z-carousel-per-page) - 1))) / var(--_z-carousel-per-page));
+        }
+      </style>
+
       <div class="carousel">
         <div
+          :style="--per-page: ${this.perPage}"
           class="carousel__content"
           part="content"
           tabindex="0">
           <slot></slot>
+
+          ${this._renderShadowElements()}
         </div>
         
         ${this._renderPrevArrow()}
 
         ${this._renderNextArrow()}
 
-        ${this._renderCounter()}
+        ${this._renderPagination()}
 
         ${this._renderDots()}
       </div>
     `
+  }
+
+  private _renderShadowElements() {
+    return Array.from({ length: this._nbShadowElements }, () => html`<div class="carousel__content__shadow-element"></div>`);
   }
 
   private _renderPrevArrow() {
@@ -157,10 +184,10 @@ export class ZCarousel extends LitElement {
       this.navigation,
       () => html`
         <button
-          ?disabled="${!this.infinit && this._isFirstSlide}"
-          part="nav-btn nav-btn--prev ${!this.infinit && this._isFirstSlide ? 'nav-btn--disabled' : ''}"
+          ?disabled="${!this._canGoPrevious}"
+          part="nav-btn nav-btn--prev ${!this._canGoPrevious ? 'nav-btn--disabled' : ''}"
           class="carousel__btn carousel__nav carousel__nav--prev" 
-          @click="${this.goToPrevious}"
+          @click="${() => this.goToPreviousPage()}"
           type="button">
           <slot name="nav-prev">
             &#x2BC7;
@@ -176,10 +203,10 @@ export class ZCarousel extends LitElement {
       this.navigation,
       () => html`
       <button
-          ?disabled="${!this.infinit && this._isLastSlide}"
-          part="nav-btn nav-btn--next ${!this.infinit && this._isLastSlide ? 'nav-btn--disabled' : ''}"
+          ?disabled="${!this._canGoNext}"
+          part="nav-btn nav-btn--next ${!this._canGoNext ? 'nav-btn--disabled' : ''}"
           class="carousel__btn carousel__nav carousel__nav--next" 
-          @click="${this.goToNext}"
+          @click="${() => this.goToNextPage()}"
           type="button">
           <slot name="nav-next">
             &#x2BC8;
@@ -190,14 +217,14 @@ export class ZCarousel extends LitElement {
     );
   }
 
-  private _renderCounter() {
+  private _renderPagination() {
     return when(
-      this.counter,
+      this.pagination,
       () => html`
         <div
-          part="counter"
-          class="carousel__counter">
-          ${this._currentSlideIndex + 1} / ${this.slideElements.length}
+          part="pagination"
+          class="carousel__pagination">
+          ${this.currentPage} / ${this._nbPages}
         </div>
       `,
       () => nothing
@@ -205,6 +232,7 @@ export class ZCarousel extends LitElement {
   }
 
   private _renderDots() {
+    // follow pagination instead of _currentIndex ?
     return when(
       this.dots,
       () => html`
@@ -213,15 +241,15 @@ export class ZCarousel extends LitElement {
           class="carousel__dots">
           <slot name="dots">
             ${map(
-              this.slideElements,
+              Array.from({ length: this._nbPages }) as HTMLElement[],
               (_slideEl: HTMLElement, index: number) => html`
                 <button
-                  ?disabled="${index === this._currentSlideIndex}"
-                  part="dots-item ${index === this._currentSlideIndex ? 'dots-item--active' : ''}"
+                  ?disabled="${(index + 1) === this.currentPage}"
+                  part="dots-item ${(index + 1) === this.currentPage ? 'dots-item--active' : ''}"
                   class="carousel__btn"
-                  data-index="${index}"
-                  ?data-current="${index === this._currentSlideIndex}"
-                  @click="${() => this.goToIndex(index)}">
+                  data-page="${(index + 1)}"
+                  ?data-current="${(index + 1) === this.currentPage}"
+                  @click="${() => this.goToPage(index + 1, 'auto')}">
                   &bull;
                 </button>
               `
@@ -242,8 +270,6 @@ export class ZCarousel extends LitElement {
       display: block;
       margin-inline: auto;
       max-width: 100%;
-      width: 100%;
-      height: 100%;
     }
 
     * {
@@ -260,13 +286,21 @@ export class ZCarousel extends LitElement {
       position: relative;
       width: 100%;
       height: 100%;
+      min-height: 1px; /* fix currentPage on initialisation so that  */
       display: flex;
-      gap: 0;
+      gap: var(--_z-carousel-gap, 0);
       overflow-x: hidden;
     }
 
-    .carousel__content ::slotted(*) {
-      flex: 1 0 100%;
+    .carousel__content ::slotted(*),
+    .carousel__content > * {
+      width: var(--_z-carousel-item-width, 100%);
+      flex: 1 0 var(--_z-carousel-item-width, 100%);
+    }
+
+    .carousel__content__shadow-element {
+      visibility: hidden;
+      pointer-events: none;
     }
 
     .carousel__nav {

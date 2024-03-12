@@ -23,17 +23,14 @@
         <p>
           Here is the raw component, You can add anything inside, Each root element will be considered as a slide unless you use one of the defined slots
         </p>
+
+        <p>
+          To interract, give focus to the component (tab through the document) and start using keyboard arrows.
+        </p>
   
         <figure>
           <z-carousel>
             <img src="https://picsum.photos/960/540?random=base-1">
-            <div>
-              <h3>Hello, World!</h3>
-              <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aut aspernatur et cumque sint necessitatibus, aliquid velit qui nostrum. Neque, reprehenderit quidem doloribus iste id expedita reiciendis aut vel dolore ullam!</p>
-              <p>Dignissimos, incidunt repellat veniam doloremque impedit iure aut rerum deserunt, inventore ratione sed ex, dolore et laboriosam voluptatum quos. Ab minima dicta beatae officiis ex voluptatum exercitationem quo corporis magnam!</p>
-              <p>Exercitationem doloremque ipsum, veritatis, optio, voluptate laudantium culpa necessitatibus quae labore cupiditate sequi fugit perferendis nobis quasi assumenda! Culpa corporis enim eveniet quo provident cupiditate natus explicabo laudantium quos veritatis?</p>
-              <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est optio voluptates error ab eum, placeat explicabo aspernatur vel, cupiditate accusantium nulla, illo earum aperiam assumenda quia. Cum, soluta. Incidunt, qui!</p>
-            </div>
             <img src="https://picsum.photos/960/540?random=base-2">
             <img src="https://picsum.photos/960/540?random=base-3">
             <img src="https://picsum.photos/960/540?random=base-4">
@@ -41,8 +38,6 @@
             <img src="https://picsum.photos/960/540?random=base-6">
             <img src="https://picsum.photos/960/540?random=base-7">
             <img src="https://picsum.photos/960/540?random=base-8">
-            <img src="https://picsum.photos/960/540?random=base-9">
-            <img src="https://picsum.photos/960/540?random=base-10">
           </z-carousel>
         </figure>
       </div>
@@ -66,19 +61,17 @@
             <img src="https://picsum.photos/960/540?random=nav-6">
             <img src="https://picsum.photos/960/540?random=nav-7">
             <img src="https://picsum.photos/960/540?random=nav-8">
-            <img src="https://picsum.photos/960/540?random=nav-9">
-            <img src="https://picsum.photos/960/540?random=nav-10">
           </z-carousel>
         </figure>
         
         <hr>
   
         <p>
-          By default, the navigation buttons are provided with html arrow entities. It is possible to customize the content of the navigation buttons.
+          By default, the navigation buttons are provided with html arrow entities <code>&amp;#x2BC7;</code> (&#x2BC7;) and <code>&amp;#x2BC8;</code> (&#x2BC8;).
         </p>
 
         <p>
-          Use <code>slot="nav-prev"</code> and <code>slot="nav-next"</code> slots to do so.
+          It is possible to customize the content of the navigation buttons by using the <code>slot="nav-prev"</code> and <code>slot="nav-next"</code> slots.
         </p>
   
         <figure>
@@ -91,8 +84,6 @@
             <img src="https://picsum.photos/960/540?random=nav-slot-6">
             <img src="https://picsum.photos/960/540?random=nav-slot-7">
             <img src="https://picsum.photos/960/540?random=nav-slot-8">
-            <img src="https://picsum.photos/960/540?random=nav-slot-9">
-            <img src="https://picsum.photos/960/540?random=nav-slot-10">
   
             <span slot="nav-prev">
               Before
@@ -118,24 +109,108 @@
     
     <section>
       <div class="container">
-        <h2>Counter</h2>
+        <h2>Infinit</h2>
+
+        <p>It is possible to cycle threw the carousel with the <code>infinit</code> attribute.</p>
+
+        <figure>
+          <z-carousel navigation infinit>
+            <img src="https://picsum.photos/960/540?random=infinit-1">
+            <img src="https://picsum.photos/960/540?random=infinit-2">
+            <img src="https://picsum.photos/960/540?random=infinit-3">
+            <img src="https://picsum.photos/960/540?random=infinit-4">
+            <img src="https://picsum.photos/960/540?random=infinit-5">
+            <img src="https://picsum.photos/960/540?random=infinit-6">
+            <img src="https://picsum.photos/960/540?random=infinit-7">
+            <img src="https://picsum.photos/960/540?random=infinit-8">
+          </z-carousel>
+        </figure>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2>Current page</h2>
 
         <p>
-          You can add a fraction counter, this will show the current slide number over the total slides number
+          It is possible initialize the carousel on a given page with the <code>current-page</code> attribute
         </p>
-  
+
         <figure>
-          <z-carousel navigation counter>
-            <img src="https://picsum.photos/960/540?random=counter1">
-            <img src="https://picsum.photos/960/540?random=counter2">
-            <img src="https://picsum.photos/960/540?random=counter3">
-            <img src="https://picsum.photos/960/540?random=counter4">
-            <img src="https://picsum.photos/960/540?random=counter5">
-            <img src="https://picsum.photos/960/540?random=counter6">
-            <img src="https://picsum.photos/960/540?random=counter7">
-            <img src="https://picsum.photos/960/540?random=counter8">
-            <img src="https://picsum.photos/960/540?random=counter9">
-            <img src="https://picsum.photos/960/540?random=counter10">
+          <z-carousel class="ooooh" navigation current-page="2">
+            <img src="https://picsum.photos/960/540?random=current-slide-index-1">
+            <img src="https://picsum.photos/960/540?random=current-slide-index-2">
+            <img src="https://picsum.photos/960/540?random=current-slide-index-3">
+            <img src="https://picsum.photos/960/540?random=current-slide-index-4">
+            <img src="https://picsum.photos/960/540?random=current-slide-index-5">
+            <img src="https://picsum.photos/960/540?random=current-slide-index-6">
+            <img src="https://picsum.photos/960/540?random=current-slide-index-7">
+            <img src="https://picsum.photos/960/540?random=current-slide-index-8">
+          </z-carousel>
+        </figure>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2>Multiple items per page</h2>
+
+        <p>You can decide to display multiple slides per page.</p>
+
+        <figure>
+          <z-carousel navigation per-page="3">
+            <img src="https://picsum.photos/320/180?random=per-page-1">
+            <img src="https://picsum.photos/320/180?random=per-page-2">
+            <img src="https://picsum.photos/320/180?random=per-page-3">
+            <img src="https://picsum.photos/320/180?random=per-page-4">
+            <img src="https://picsum.photos/320/180?random=per-page-5">
+            <img src="https://picsum.photos/320/180?random=per-page-6">
+            <img src="https://picsum.photos/320/180?random=per-page-7">
+            <img src="https://picsum.photos/320/180?random=per-page-8">
+          </z-carousel>
+        </figure>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2>Pagination</h2>
+
+        <p>
+          You can add a fraction counter for pagination, this will show the current page number over the total pages number
+        </p>
+
+        <figure>
+          <z-carousel navigation pagination per-page="3">
+            <img src="https://picsum.photos/960/540?random=pagination-1">
+            <img src="https://picsum.photos/960/540?random=pagination-2">
+            <img src="https://picsum.photos/960/540?random=pagination-3">
+            <img src="https://picsum.photos/960/540?random=pagination-4">
+            <img src="https://picsum.photos/960/540?random=pagination-5">
+            <img src="https://picsum.photos/960/540?random=pagination-6">
+            <img src="https://picsum.photos/960/540?random=pagination-7">
+            <img src="https://picsum.photos/960/540?random=pagination-8">
+          </z-carousel>
+        </figure>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2>Gap</h2>
+
+        <p>You can add a little bit of space betwin the slides by using the <code>gap</code> property.</p>
+
+        <figure>
+          <z-carousel navigation pagination per-page="3" gap="20">
+            <img src="https://picsum.photos/320/180?random=per-page-1">
+            <img src="https://picsum.photos/320/180?random=per-page-2">
+            <img src="https://picsum.photos/320/180?random=per-page-3">
+            <img src="https://picsum.photos/320/180?random=per-page-4">
+            <img src="https://picsum.photos/320/180?random=per-page-5">
+            <img src="https://picsum.photos/320/180?random=per-page-6">
+            <img src="https://picsum.photos/320/180?random=per-page-7">
+            <img src="https://picsum.photos/320/180?random=per-page-8">
           </z-carousel>
         </figure>
       </div>
@@ -146,119 +221,19 @@
         <h2>Dots</h2>
 
         <p>
-          You can show dots for every slide available on the carousel, each dot but the current one is clickable.
+          You can show dots for every page, each dot but the current one is clickable and will slide the carousel to the corresponding page when clicked.
         </p>
 
         <figure>
-          <z-carousel navigation counter dots>
-            <img src="https://picsum.photos/960/540?random=dots1">
-            <img src="https://picsum.photos/960/540?random=dots2">
-            <img src="https://picsum.photos/960/540?random=dots3">
-            <img src="https://picsum.photos/960/540?random=dots4">
-            <img src="https://picsum.photos/960/540?random=dots5">
-            <img src="https://picsum.photos/960/540?random=dots6">
-            <img src="https://picsum.photos/960/540?random=dots7">
-            <img src="https://picsum.photos/960/540?random=dots8">
-            <img src="https://picsum.photos/960/540?random=dots9">
-            <img src="https://picsum.photos/960/540?random=dots10">
-          </z-carousel>
-        </figure>
-      </div>
-    </section>
-    
-    <section>
-      <div class="container">
-        <h2>Infinit</h2>
-
-        <p>It is possible to cycle threw the carousel with the <code>infinit</code> attribute.</p>
-
-        <figure>
-          <z-carousel navigation counter dots infinit>
-            <img src="https://picsum.photos/960/540?random=infinit1">
-            <img src="https://picsum.photos/960/540?random=infinit2">
-            <img src="https://picsum.photos/960/540?random=infinit3">
-            <img src="https://picsum.photos/960/540?random=infinit4">
-            <img src="https://picsum.photos/960/540?random=infinit5">
-            <img src="https://picsum.photos/960/540?random=infinit6">
-            <img src="https://picsum.photos/960/540?random=infinit7">
-            <img src="https://picsum.photos/960/540?random=infinit8">
-            <img src="https://picsum.photos/960/540?random=infinit9">
-            <img src="https://picsum.photos/960/540?random=infinit10">
-          </z-carousel>
-        </figure>
-      </div>
-    </section>
-
-    <section>
-      <div class="container">
-        <h2>step</h2>
-
-        <p>You can decide the number of slides to go forward or backwards for each navigation action.</p>
-
-        <figure>
-          <z-carousel navigation counter step="2">
-            <img src="https://picsum.photos/960/540?random=step-1">
-            <img src="https://picsum.photos/960/540?random=step-2">
-            <img src="https://picsum.photos/960/540?random=step-3">
-            <img src="https://picsum.photos/960/540?random=step-4">
-            <img src="https://picsum.photos/960/540?random=step-5">
-            <img src="https://picsum.photos/960/540?random=step-6">
-            <img src="https://picsum.photos/960/540?random=step-7">
-            <img src="https://picsum.photos/960/540?random=step-8">
-            <img src="https://picsum.photos/960/540?random=step-9">
-          </z-carousel>
-        </figure>
-      </div>
-    </section>
-
-    <section>
-      <div class="container">
-        <h2>current slide index</h2>
-
-        <p>
-          It is possible to make the carousel initalize on a given slide index.
-        </p>
-
-        <p>
-          This attribute will be updated over the navigation actions, you can update it too from outside.
-        </p>
-
-        <figure>
-          <z-carousel navigation counter current-slide-index="2">
-            <img src="https://picsum.photos/960/540?random=current-slide-index-1">
-            <img src="https://picsum.photos/960/540?random=current-slide-index-2">
-            <img src="https://picsum.photos/960/540?random=current-slide-index-3">
-            <img src="https://picsum.photos/960/540?random=current-slide-index-4">
-            <img src="https://picsum.photos/960/540?random=current-slide-index-5">
-            <img src="https://picsum.photos/960/540?random=current-slide-index-6">
-            <img src="https://picsum.photos/960/540?random=current-slide-index-7">
-            <img src="https://picsum.photos/960/540?random=current-slide-index-8">
-            <img src="https://picsum.photos/960/540?random=current-slide-index-9">
-            <img src="https://picsum.photos/960/540?random=current-slide-index-10">
-          </z-carousel>
-        </figure>
-      </div>
-    </section>
-
-    <section>
-      <div class="container">
-        <h2>per page</h2>
-
-        <p>You can decide to display multiple slides per page.</p>
-
-        <p>This feature is interesting used with the <code>step</code> option</p>
-
-        <figure>
-          <z-carousel navigation counter per-page="2">
-            <img src="https://picsum.photos/960/540?random=per-page-1">
-            <img src="https://picsum.photos/960/540?random=per-page-2">
-            <img src="https://picsum.photos/960/540?random=per-page-3">
-            <img src="https://picsum.photos/960/540?random=per-page-4">
-            <img src="https://picsum.photos/960/540?random=per-page-5">
-            <img src="https://picsum.photos/960/540?random=per-page-6">
-            <img src="https://picsum.photos/960/540?random=per-page-7">
-            <img src="https://picsum.photos/960/540?random=per-page-8">
-            <img src="https://picsum.photos/960/540?random=per-page-9">
+          <z-carousel navigation pagination dots>
+            <img src="https://picsum.photos/960/540?random=dots-1">
+            <img src="https://picsum.photos/960/540?random=dots-2">
+            <img src="https://picsum.photos/960/540?random=dots-3">
+            <img src="https://picsum.photos/960/540?random=dots-4">
+            <img src="https://picsum.photos/960/540?random=dots-5">
+            <img src="https://picsum.photos/960/540?random=dots-6">
+            <img src="https://picsum.photos/960/540?random=dots-7">
+            <img src="https://picsum.photos/960/540?random=dots-8">
           </z-carousel>
         </figure>
       </div>
@@ -271,7 +246,7 @@
         <p>Here is an example of what you could achieve with this component and a little bit of css styling: <a href="./src/demo.css">See CSS</a></p>
 
         <figure>
-          <z-carousel class="styled" navigation counter dots>
+          <z-carousel class="styled" navigation pagination per-page="2" gap="20" dots>
             <img src="https://picsum.photos/960/540?random=styled-1">
             <img src="https://picsum.photos/960/540?random=styled-2">
             <img src="https://picsum.photos/960/540?random=styled-3">
@@ -280,9 +255,16 @@
             <img src="https://picsum.photos/960/540?random=styled-6">
             <img src="https://picsum.photos/960/540?random=styled-7">
             <img src="https://picsum.photos/960/540?random=styled-8">
-            <img src="https://picsum.photos/960/540?random=styled-9">
-            <img src="https://picsum.photos/960/540?random=styled-10">
           </z-carousel>
+
+          <figcaption>
+            <p>You can style some ::part() elements of the component</p>
+            <pre>::part(content)
+::part(nav-btn [nav-btn--prev nav-btn--next nav-btn--disabled])
+::part(pagination)
+::part(dots)
+::part(dots-item dots-item--active)</pre>
+          </figcaption>
         </figure>
       </div>
     </section>

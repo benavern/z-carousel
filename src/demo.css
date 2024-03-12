@@ -16,9 +16,16 @@ z-carousel:not(:defined) {
     display: none;
 }
 
+z-carousel.styled {
+    box-sizing: border-box;
+    background-color: var(--clr-accent);
+    border: 20px solid var(--clr-accent);
+    margin: 10px;
+    border-radius: 10px;
+}
+
 z-carousel.styled::part(content) {
     align-items: center;
-    gap: 150px;
     scroll-behavior: smooth;
 }
 
@@ -46,12 +53,13 @@ z-carousel.styled::part(nav-btn):hover {
 }
 
 z-carousel.styled::part(nav-btn):focus-visible {
-    outline: 4px auto -webkit-focus-ring-color;
+    outline: var(--border-width) auto var(--clr-accent);
 }
 
 z-carousel.styled::part(nav-btn nav-btn--disabled) {
     opacity: 5;
     pointer-events: none;
+    box-shadow: none;
 }
 
 z-carousel.styled::part(nav-btn nav-btn--prev) {
@@ -64,7 +72,7 @@ z-carousel.styled::part(nav-btn nav-btn--next) {
     transform: translate(-10px, -50%);
 }
 
-z-carousel.styled::part(counter) {
+z-carousel.styled::part(pagination) {
     position: absolute;
     left: 0;
     bottom: 0;
@@ -78,12 +86,19 @@ z-carousel.styled::part(counter) {
 z-carousel.styled::part(dots) {
     z-index: 1;
     position: absolute;
-    bottom: 0;
-    left: 50px;
-    width: calc(100% - 100px);
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: calc(100% - 100px);
     display: flex;
     justify-content: center;
-    padding: 10px;
+    align-items: baseline;
+    line-height: 1;
+    padding: 0 10px;
+    background: var(--carousel-arrow-bg);
+    box-shadow: var(--carousel-arrow-shadow);
+    backdrop-filter: blur(5px);
+    border-radius: 9999px;
 }
 
 z-carousel.styled::part(dots-item) {
@@ -91,12 +106,17 @@ z-carousel.styled::part(dots-item) {
     justify-content: center;
     align-items: center;
     line-height: 1;
-    padding: 10px;
+    padding: 0 5px;
     transition: color .3s;
 }
 
 z-carousel.styled::part(dots-item):hover {
     color: var(--carousel-dot-hover-color);
+    text-shadow: var(--carousel-arrow-shadow);
+}
+
+z-carousel.styled::part(dots-item dots-item--active) {
+    font-size: 2rem;
 }
 
 z-carousel.styled::part(dots-item dots-item--active),
