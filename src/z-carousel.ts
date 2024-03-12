@@ -60,9 +60,11 @@ export class ZCarousel extends LitElement {
     this._updateCurrentSlide('instant');
 
     // react to content scroll transition end
-    this._contentEl.addEventListener('scrollend', (e) => this._onScrollEnd(e));
+    this._contentEl.addEventListener('scrollend', () => this._onScrollEnd());
 
+    // navigation user events
     this._contentEl.addEventListener('keydown', (e) => this._onKeyDown(e));
+    this._contentEl.addEventListener('wheel', (e) => this._onWheel(e));
   }
   
   override updated(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
@@ -75,15 +77,24 @@ export class ZCarousel extends LitElement {
    * =========== Methods
    */
 
-  private _onScrollEnd(e: Event) {
+  private _onScrollEnd() {
     if (!this.slideElements.length) return;
 
     // @Todo: event afterChange(neSlideIndex)
   }
 
   private _onKeyDown(e: KeyboardEvent) {
+    if (e.target !== this._contentEl) return;
+    
     if (e.key === 'ArrowLeft') this.goToPrevious();
     if (e.key === 'ArrowRight') this.goToNext();
+  }
+
+  private _onWheel(e: WheelEvent) {
+    if (e.target !== this._contentEl && !this/*._contentEl.*/.contains(e.target as Node)) return;
+
+    if (e.deltaX < 0) this.goToPrevious();
+    if (e.deltaX > 0) this.goToNext();
   }
 
   private _showSlide(el: HTMLElement, behavior: ScrollBehavior = 'auto') {
