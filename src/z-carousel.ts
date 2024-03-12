@@ -52,6 +52,13 @@ export class ZCarousel extends LitElement {
   @queryAssignedElements()
   private readonly slideElements!: HTMLElement[];
 
+  private _touch = {
+    initialX : 0,
+    startX: 0,
+    moveX: 0,
+    validated: false,
+  };
+
   /**
    * =========== data
    */
@@ -105,6 +112,9 @@ export class ZCarousel extends LitElement {
     // navigation user events
     this._contentEl.addEventListener('keydown', (e) => this._onKeyDown(e));
     this._contentEl.addEventListener('wheel', (e) => this._onWheel(e));
+    this._contentEl.addEventListener('touchstart', (e) => this._onTouchStart(e));
+    this._contentEl.addEventListener('touchmove', (e) => this._onTouchMove(e));
+    this._contentEl.addEventListener('touchend', () => this._onTouchEnd());
   }
   
   override updated(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
@@ -152,6 +162,40 @@ export class ZCarousel extends LitElement {
 
     if (e.deltaX < 0) this.goToPreviousPage();
     if (e.deltaX > 0) this.goToNextPage();
+  }
+
+  private _onTouchStart(e: TouchEvent) {
+    this._touch.startX = e.touches[0].screenX;
+    this._touch.initialX = this._contentEl.scrollLeft;
+  }
+
+  private _onTouchMove(e: TouchEvent) {
+    this._touch.moveX = e.touches[0].screenX;
+    const deltaX = this._touch.moveX - this._touch.startX;
+
+    // start scrolling the carousel only when touch validated
+    if (deltaX > 50 || deltaX < -50) this._touch.validated = true;
+
+    if (this._touch.validated) this._contentEl.scrollTo({ left: this._touch.initialX - deltaX });
+  }
+
+  private _onTouchEnd() {
+    const deltaX = this._touch.moveX - this._touch.startX;
+    const touchAreaWidth = this._contentEl.clientWidth;
+
+    // if translated a third the width of the area, go to direction page otherwize only reset the scroll
+    if (deltaX > (touchAreaWidth / 3)) {
+      this.goToPreviousPage();
+    } else if (deltaX < -(touchAreaWidth / 3)) {
+      this.goToNextPage();
+    } else {
+      this._updateScroll();
+    }
+    // Reset touch values
+    this._touch.startX = 0;
+    this._touch.moveX = 0;
+    this._touch.initialX = 0;
+    this._touch.validated = false;
   }
 
   private _updateScroll(behavior: ScrollBehavior = 'auto') {
