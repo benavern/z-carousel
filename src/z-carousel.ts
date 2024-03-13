@@ -190,7 +190,7 @@ export class ZCarousel extends LitElement {
     // start scrolling the carousel only when touch validated
     if (Math.abs(deltaX) > 50) this._touch.validated = true;
 
-    if (this._touch.validated) this._contentEl.scrollTo({ left: this._touch.initialX - deltaX });
+    if (this._touch.validated) this._contentEl.scrollTo({ left: this._touch.initialX - deltaX, behavior: 'instant' });
   }
 
   private _onTouchEnd() {
@@ -230,7 +230,7 @@ export class ZCarousel extends LitElement {
       if (Math.abs(deltaX) > 50) this._mouse.validated = true; 
 
       if (this._mouse.validated) {
-        this._contentEl.scrollLeft = this._mouse.initialX - deltaX;
+        this._contentEl.scroll({ left: this._mouse.initialX - deltaX, behavior: 'instant' });
       }
     }
   }
