@@ -16,7 +16,7 @@
       </div>
     </header>
 
-    <section id="Base">
+    <section>
       <div class="container">
         <h2>Base</h2>
 
@@ -26,6 +26,10 @@
 
         <p>
           To interract, give focus to the component (tab through the document) and start using keyboard arrows.
+        </p>
+
+        <p>
+          On mobile, you can swipe from page to page.
         </p>
   
         <figure>
@@ -38,6 +42,29 @@
             <img src="https://picsum.photos/960/540?random=base-6">
             <img src="https://picsum.photos/960/540?random=base-7">
             <img src="https://picsum.photos/960/540?random=base-8">
+          </z-carousel>
+        </figure>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2>Draggable</h2>
+
+        <p>
+          You use the <code>draggable</code> attribute to enable swiping on non-touch devices.
+        </p>
+  
+        <figure>
+          <z-carousel draggable>
+            <img src="https://picsum.photos/960/540?random=draggable-1">
+            <img src="https://picsum.photos/960/540?random=draggable-2">
+            <img src="https://picsum.photos/960/540?random=draggable-3">
+            <img src="https://picsum.photos/960/540?random=draggable-4">
+            <img src="https://picsum.photos/960/540?random=draggable-5">
+            <img src="https://picsum.photos/960/540?random=draggable-6">
+            <img src="https://picsum.photos/960/540?random=draggable-7">
+            <img src="https://picsum.photos/960/540?random=draggable-8">
           </z-carousel>
         </figure>
       </div>
@@ -246,7 +273,7 @@
         <p>Here is an example of what you could achieve with this component and a little bit of css styling: <a href="./src/demo.css">See CSS</a></p>
 
         <figure>
-          <z-carousel class="styled" navigation pagination per-page="2" gap="20" dots>
+          <z-carousel class="styled" navigation pagination per-page="2" gap="20" dots draggable>
             <img src="https://picsum.photos/960/540?random=styled-1">
             <img src="https://picsum.photos/960/540?random=styled-2">
             <img src="https://picsum.photos/960/540?random=styled-3">

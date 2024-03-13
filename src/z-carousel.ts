@@ -48,6 +48,9 @@ export class ZCarousel extends LitElement {
 
   @property({ type: Number })
   gap = 0;
+
+  @property({ type: Boolean })
+  draggable = false;
   
   @queryAssignedElements()
   private readonly slideElements!: HTMLElement[];
@@ -57,6 +60,14 @@ export class ZCarousel extends LitElement {
     startX: 0,
     moveX: 0,
     validated: false,
+  };
+
+  private _mouse = {
+    startX: 0,
+    moveX: 0,
+    initialX: 0,
+    validated: false,
+    isDragging: false,
   };
 
   /**
@@ -115,6 +126,9 @@ export class ZCarousel extends LitElement {
     this._contentEl.addEventListener('touchstart', (e) => this._onTouchStart(e));
     this._contentEl.addEventListener('touchmove', (e) => this._onTouchMove(e));
     this._contentEl.addEventListener('touchend', () => this._onTouchEnd());
+    this._contentEl.addEventListener('mousedown', (e) => this._onMouseDown(e as MouseEvent), {capture: true});
+    this._contentEl.addEventListener('mousemove', (e) => this._onMouseMove(e));
+    this._contentEl.addEventListener('mouseup', () => this._onMouseUp());
   }
   
   override updated(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
@@ -165,16 +179,16 @@ export class ZCarousel extends LitElement {
   }
 
   private _onTouchStart(e: TouchEvent) {
-    this._touch.startX = e.touches[0].screenX;
+    this._touch.startX = e.touches[0].clientX;
     this._touch.initialX = this._contentEl.scrollLeft;
   }
 
   private _onTouchMove(e: TouchEvent) {
-    this._touch.moveX = e.touches[0].screenX;
+    this._touch.moveX = e.touches[0].clientX;
     const deltaX = this._touch.moveX - this._touch.startX;
 
     // start scrolling the carousel only when touch validated
-    if (deltaX > 50 || deltaX < -50) this._touch.validated = true;
+    if (Math.abs(deltaX) > 50) this._touch.validated = true;
 
     if (this._touch.validated) this._contentEl.scrollTo({ left: this._touch.initialX - deltaX });
   }
@@ -189,13 +203,57 @@ export class ZCarousel extends LitElement {
     } else if (deltaX < -(touchAreaWidth / 3)) {
       this.goToNextPage();
     } else {
-      this._updateScroll();
+      this._updateScroll('instant');
     }
     // Reset touch values
     this._touch.startX = 0;
     this._touch.moveX = 0;
     this._touch.initialX = 0;
     this._touch.validated = false;
+  }
+
+  private _onMouseDown(e: MouseEvent) {
+    if (!this.draggable) return;
+
+    this._mouse.startX = e.screenX;
+    this._mouse.initialX = this._contentEl.scrollLeft;
+    this._mouse.isDragging = true;
+  }
+
+  private _onMouseMove(e: MouseEvent) {
+    if (!this.draggable) return;
+
+    if(this._mouse.isDragging) {
+      this._mouse.moveX = e.screenX
+      const deltaX = this._mouse.moveX - this._mouse.startX;
+
+      if (Math.abs(deltaX) > 50) this._mouse.validated = true; 
+
+      if (this._mouse.validated) {
+        this._contentEl.scrollLeft = this._mouse.initialX - deltaX;
+      }
+    }
+  }
+
+  private _onMouseUp() {
+    if (!this.draggable) return;
+
+    const deltaX = this._mouse.moveX - this._mouse.startX;
+    const dragAreaWidth = this._contentEl.clientWidth;
+
+    if (deltaX > (dragAreaWidth / 3)) {
+      this.goToPreviousPage();
+    } else if (deltaX < -(dragAreaWidth / 3)) {
+      this.goToNextPage();
+    } else {
+      this._updateScroll();
+    }
+
+    // reset mouse values
+    this._mouse.startX = 0;
+    this._mouse.moveX = 0;
+    this._mouse.validated = false;
+    this._mouse.isDragging = false;
   }
 
   private _updateScroll(behavior: ScrollBehavior = 'auto') {
@@ -238,7 +296,6 @@ export class ZCarousel extends LitElement {
 
       <div class="carousel">
         <div
-          :style="--per-page: ${this.perPage}"
           class="carousel__content"
           part="content"
           tabindex="0">
