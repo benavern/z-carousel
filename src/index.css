@@ -60,6 +60,12 @@ header, footer{
   padding-block: calc(2 * var(--spacing));
 }
 
+header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 footer {
   text-align: center;
 }
