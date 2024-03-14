@@ -1,17 +1,20 @@
 {
   "name": "z-carousel",
-  "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "lit": "^3.1.2"
+    "build:docs": "tsc && vite build --config vite.config.docs.js",
+    "build:lib": "tsc && vite build --config vite.config.lib.js",
+    "preview": "vite preview --config vite.config.docs.js",
+    "prepublishOnly": "npm run build:lib"
   },
   "devDependencies": {
+    "lit": "^3.1.2",
     "typescript": "^5.2.2",
     "vite": "^5.1.4"
   }
