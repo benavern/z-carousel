@@ -33,9 +33,12 @@ z-carousel.styled::part(nav-btn) {
     position: absolute;
     top: 50%;
     display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 3rem;
+    height: 3rem;
     border: none;
     border-radius: 50%;
-    padding: 1em;
     line-height: 1;
     font-size: 1em;
     font-weight: 500;

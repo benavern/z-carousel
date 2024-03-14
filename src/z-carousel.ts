@@ -194,16 +194,18 @@ export class ZCarousel extends LitElement {
   }
 
   private _onTouchEnd() {
-    const deltaX = this._touch.moveX - this._touch.startX;
-    const touchAreaWidth = this._contentEl.clientWidth;
-
-    // if translated a third the width of the area, go to direction page otherwize only reset the scroll
-    if (deltaX > (touchAreaWidth / 3)) {
-      this.goToPreviousPage();
-    } else if (deltaX < -(touchAreaWidth / 3)) {
-      this.goToNextPage();
-    } else {
-      this._updateScroll('instant');
+    if (this._touch.validated) {
+      const deltaX = this._touch.moveX - this._touch.startX;
+      const touchAreaWidth = this._contentEl.clientWidth;
+  
+      // if translated a third the width of the area, go to direction page otherwize only reset the scroll
+      if (deltaX > (touchAreaWidth / 3)) {
+        this.goToPreviousPage();
+      } else if (deltaX < -(touchAreaWidth / 3)) {
+        this.goToNextPage();
+      } else {
+        this._updateScroll('instant');
+      }
     }
     // Reset touch values
     this._touch.startX = 0;
@@ -238,15 +240,17 @@ export class ZCarousel extends LitElement {
   private _onMouseUp() {
     if (!this.draggable) return;
 
-    const deltaX = this._mouse.moveX - this._mouse.startX;
-    const dragAreaWidth = this._contentEl.clientWidth;
-
-    if (deltaX > (dragAreaWidth / 3)) {
-      this.goToPreviousPage();
-    } else if (deltaX < -(dragAreaWidth / 3)) {
-      this.goToNextPage();
-    } else {
-      this._updateScroll();
+    if (this._mouse.validated) {
+      const deltaX = this._mouse.moveX - this._mouse.startX;
+      const dragAreaWidth = this._contentEl.clientWidth;
+  
+      if (deltaX > (dragAreaWidth / 3)) {
+        this.goToPreviousPage();
+      } else if (deltaX < -(dragAreaWidth / 3)) {
+        this.goToNextPage();
+      } else {
+        this._updateScroll();
+      }
     }
 
     // reset mouse values
@@ -330,7 +334,7 @@ export class ZCarousel extends LitElement {
           @click="${() => this.goToPreviousPage()}"
           type="button">
           <slot name="nav-prev">
-            &#x2BC7;
+            &lsaquo;
           </slot>
         </button>
       `,
@@ -349,7 +353,7 @@ export class ZCarousel extends LitElement {
           @click="${() => this.goToNextPage()}"
           type="button">
           <slot name="nav-next">
-            &#x2BC8;
+            &rsaquo;
           </slot>
         </button>
       `,
