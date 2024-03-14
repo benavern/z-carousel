@@ -116,24 +116,18 @@ figure figcaption {
   border-top: var(--border-width) solid var(--clr-accent);
 }
 
+figcaption pre[class*="language-"] {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+}
+
 code {
     display: inline-block;
     padding: .25rem .5rem;
     background: var(--clr-accent);
     color: var(--clr-bg);
     border-radius: var(--border-radius);
-}
-
-pre {
-  display: block;
-  text-align: start;
-  line-height: 2;
-  padding: var(--spacing) calc(2 * var(--spacing));
-  background: #000;
-  color: #eee;
-  white-space: pre;
-  margin: 0;
-  overflow-x: auto;
 }
 
 .container {
