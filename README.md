@@ -10,6 +10,6 @@ The last and only carousel component you'll need.
 * touch & mouse ready
 * native on major browsers
 
-[DEMO AND DOC](https://z-carousel.netlify.app/)
+[DEMO AND DOC](https://z-carousel.caradeuc.info/)
 
 Made with [LitElement](https://lit.dev/)
