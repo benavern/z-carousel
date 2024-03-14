@@ -1,0 +1,5 @@
+docs/
+src/
+index.html
+tsconfig.json
+vite.config.*.js
