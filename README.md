@@ -11,6 +11,6 @@ The last and only carousel component you'll need.
 
 [DEMO AND DOC](https://z-carousel.caradeuc.info/)
 
-[npm](https://www.npmjs.com/package/z-carousel-wc)
+[npm](https://www.npmjs.com/package/@benavern/z-carousel)
 
 Made with [LitElement](https://lit.dev/)
