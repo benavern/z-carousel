@@ -1,411 +1,439 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>z-carousel</title>
     <link rel="stylesheet" href="./src/index.css" />
     <link rel="stylesheet" href="./src/demo.css" />
-    <script type="module" src="/src/z-carousel.ts"></script>
+    <script type="module" src="./src/index.ts"></script>
     <link href="https://unpkg.com/prismjs@1/themes/prism-twilight.min.css" rel="stylesheet" />
     <script src="https://unpkg.com/prismjs@1/components/prism-core.min.js" defer></script>
-	  <script src="https://unpkg.com/prismjs@1/plugins/autoloader/prism-autoloader.min.js" defer></script>
-  </head>
-  
-  <body>
+    <script src="https://unpkg.com/prismjs@1/plugins/autoloader/prism-autoloader.min.js" defer></script>
+</head>
+
+<body>
     <header>
-      <div class="container">
-        <h1>
-          <span class="logo">z-carousel</span>
-          demo
-        </h1>
-        
-        <a 
-          href="https://github.com/benavern/z-carousel" 
-          title="github" 
-          target="_blank"
-          class="gh-logo">
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            width="30"
-            height="30"
-            viewBox="0 0 96 96">
-            <path 
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                fill="currentColor"
-                d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z"/>
-          </svg>
-        </a>
-      </div>
+        <div class="container">
+            <h1>
+                <span class="logo">z-carousel</span>
+                demo
+            </h1>
+
+            <div class="ext-links">
+                <a href="https://github.com/benavern/z-carousel" title="github" target="_blank" class="ext-logo">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32px" height="32px" viewBox="0 0 96 96">
+                        <path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor"
+                            d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z" />
+                    </svg>
+                </a>
+
+                <a href="https://www.npmjs.com/package/@benavern/z-carousel" title="npm" target="_blank"
+                    class="ext-logo">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32px" height="32px" viewBox="0 0 32 32"
+                        fill="currentColor">
+                        <path
+                            d="M7.415 7.656l17.291 0.024-0.011 17.29h-4.329l0.012-12.974h-4.319l-0.010 12.964h-8.656zM3.207 1.004c-0.002 0-0.003 0-0.005 0-1.214 0-2.198 0.984-2.198 2.198 0 0.002 0 0.004 0 0.006v-0 25.585c0 0.002 0 0.003 0 0.005 0 1.214 0.984 2.198 2.198 2.198 0.002 0 0.004 0 0.006 0h25.585c0.002 0 0.003 0 0.005 0 1.214 0 2.198-0.984 2.198-2.198 0-0.002 0-0.004 0-0.006v0-25.585c0-0.002 0-0.003 0-0.005 0-1.214-0.984-2.198-2.198-2.198-0.002 0-0.004 0-0.006 0h0z" />
+                    </svg>
+                </a>
+            </div>
+
+        </div>
     </header>
-    
+
     <section>
-      <div class="container">
-        <h2>Get started</h2>
+        <div class="container">
+            <h2 id="get-started">Get started</h2>
 
-        <p>
-          <code>z-carousel</code> is available on npm, published as <code>@benavern/z-carousel</code>.
-        </p>
-        
-        <br>
-        
-        <h3>npm</h3>
-        
-        <pre><code class="language-bash">npm i @benavern/z-carousel</code></pre>
+            <p>
+                <code>z-carousel</code> is available on npm, published as <code>@benavern/z-carousel</code>.
+            </p>
 
-        <p>Then you can use it in your scripts like so in your js/ts module files: </p>
+            <br>
 
-        <pre><code class="language-ts">import '@benaverb/z-carousel';</code></pre>
+            <h3>npm</h3>
 
-        <hr>
-        
-        <h3>CDN</h3>        
-        
-        <pre><code class="language-html">&lt;script type="module" src="https://unpkg.com/@benavern/z-carousel"&gt;&lt;/script&gt;</code></pre>
+            <p>The component is available <a href="https://www.npmjs.com/package/@benavern/z-carousel">here on npm</a>,
+                you can install it via this command:</p>
 
-        <hr>
+            <pre><code class="language-bash">npm i @benavern/z-carousel</code></pre>
 
-        <h3>Have fun</h3>
+            <p>Then you can use it in your scripts like so in your js/ts module files: </p>
 
-        <pre><code class="language-html">&lt;z-carousel&gt;
-  &lt;img src="https://picsum.photos/960/540?random=base-1"&gt;
-  &lt;img src="https://picsum.photos/960/540?random=base-2"&gt;
-&lt;z-carousel&gt;</code></pre>
+            <pre><code class="language-ts">import '@benavern/z-carousel';</code></pre>
 
-        <br>
+            <hr>
 
-        <pre><code class="language-html">&lt;z-carousel&gt;
+            <h3>CDN</h3>
+
+            <pre><code class="language-html">&lt;script type="module" src="https://unpkg.com/@benavern/z-carousel"&gt;&lt;/script&gt;</code></pre>
+
+            <hr>
+
+            <h3>Have fun</h3>
+
+            <p>For example you can use it to display a slider of images</p>
+
+            <pre><code class="language-html">&lt;z-carousel&gt;
+  &lt;img src="https://picsum.photos/960/540?random=1"&gt;
+
+  &lt;img src="https://picsum.photos/960/540?random=2"&gt;
+&lt;/z-carousel&gt;</code></pre>
+
+            <z-carousel>
+                <img src="https://picsum.photos/960/540?random=1">
+
+                <img src="https://picsum.photos/960/540?random=2">
+            </z-carousel>
+
+            <p>Any HTML will work</p>
+
+            <pre><code class="language-html">&lt;z-carousel&gt;
   &lt;p&gt;
-    Hello, World,
+    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Inventore vel recusandae quae accusamus, dolore facilis maxime laboriosam quod provident magni in voluptates unde ex. Eveniet ex a expedita numquam soluta?
   &lt;/p&gt;
+
   &lt;p&gt;
-    Know that you can put anything inside the carousel!
+    Earum voluptas eius modi consequatur debitis omnis excepturi enim dolorum aut eos. Illum consequatur, commodi, temporibus doloribus unde laboriosam quam adipisci cum, obcaecati incidunt animi dolore quo accusantium possimus voluptatem?
   &lt;/p&gt;
-&lt;z-carousel&gt;</code></pre>
-      </div>
+&lt;/z-carousel&gt;</code></pre>
+
+            <z-carousel>
+                <p>
+                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Inventore vel recusandae quae accusamus,
+                    dolore facilis maxime laboriosam quod provident magni in voluptates unde ex. Eveniet ex a expedita
+                    numquam soluta?
+                </p>
+
+                <p>
+                    Earum voluptas eius modi consequatur debitis omnis excepturi enim dolorum aut eos. Illum
+                    consequatur, commodi, temporibus doloribus unde laboriosam quam adipisci cum, obcaecati incidunt
+                    animi dolore quo accusantium possimus voluptatem?
+                </p>
+            </z-carousel>
+        </div>
     </section>
 
     <section>
-      <div class="container">
-        <h2>Base</h2>
+        <div class="container">
+            <h2 id="base">Base</h2>
 
-        <p>
-          Here is the raw component, you can add anything inside. Each root element will be considered as a slide unless you use one of the defined slots
-        </p>
+            <p>
+                Here is the raw component, you can add anything inside. Each root element will be considered as a slide
+                unless you use one of the defined slots.
+            </p>
 
-        <p>
-          To interact with it on (non-touch) desktop, give focus to the component (tab through the document) and start using keyboard arrows.
-        </p>
+            <p>
+                To interact with the carousel on (non-touch) desktop, give focus to the component (tab through the
+                document) and start using keyboard arrows.
+            </p>
 
-        <p>
-          You can also scroll horizontaly with your mouse if it can do it.
-        </p>
+            <p>
+                You can also scroll horizontaly with your mouse if it can do it.
+            </p>
 
-        <p>
-          On mobile, you can swipe with your finger from page to page.
-        </p>
-  
-        <figure>
-          <z-carousel>
-            <img src="https://picsum.photos/960/540?random=base-1">
-            <img src="https://picsum.photos/960/540?random=base-2">
-            <img src="https://picsum.photos/960/540?random=base-3">
-            <img src="https://picsum.photos/960/540?random=base-4">
-            <img src="https://picsum.photos/960/540?random=base-5">
-            <img src="https://picsum.photos/960/540?random=base-6">
-            <img src="https://picsum.photos/960/540?random=base-7">
-            <img src="https://picsum.photos/960/540?random=base-8">
-          </z-carousel>
-        </figure>
-      </div>
+            <p>
+                On mobile, you can swipe with your finger from page to page.
+            </p>
+
+            <figure>
+                <z-carousel>
+                    <img src="https://picsum.photos/960/540?random=base-1">
+                    <img src="https://picsum.photos/960/540?random=base-2">
+                    <img src="https://picsum.photos/960/540?random=base-3">
+                    <img src="https://picsum.photos/960/540?random=base-4">
+                    <img src="https://picsum.photos/960/540?random=base-5">
+                    <img src="https://picsum.photos/960/540?random=base-6">
+                    <img src="https://picsum.photos/960/540?random=base-7">
+                    <img src="https://picsum.photos/960/540?random=base-8">
+                </z-carousel>
+            </figure>
+        </div>
     </section>
 
     <section>
-      <div class="container">
-        <h2>Drag</h2>
+        <div class="container">
+            <h2 id="drag">Drag</h2>
 
-        <p>
-          You use the <code>drag</code> attribute to enable swiping on non-touch devices.
-        </p>
-  
-        <figure>
-          <z-carousel drag>
-            <img src="https://picsum.photos/960/540?random=drag-1">
-            <img src="https://picsum.photos/960/540?random=drag-2">
-            <img src="https://picsum.photos/960/540?random=drag-3">
-            <img src="https://picsum.photos/960/540?random=drag-4">
-            <img src="https://picsum.photos/960/540?random=drag-5">
-            <img src="https://picsum.photos/960/540?random=drag-6">
-            <img src="https://picsum.photos/960/540?random=drag-7">
-            <img src="https://picsum.photos/960/540?random=drag-8">
-          </z-carousel>
-        </figure>
-      </div>
+            <p>
+                You can use the <code>drag</code> attribute to enable swiping on non-touch devices.
+            </p>
+
+            <p>
+                This should not do anything on touch devices as it already is touch friendly
+            </p>
+
+            <figure>
+                <z-carousel drag>
+                    <img src="https://picsum.photos/960/540?random=drag-1">
+                    <img src="https://picsum.photos/960/540?random=drag-2">
+                    <img src="https://picsum.photos/960/540?random=drag-3">
+                    <img src="https://picsum.photos/960/540?random=drag-4">
+                    <img src="https://picsum.photos/960/540?random=drag-5">
+                    <img src="https://picsum.photos/960/540?random=drag-6">
+                    <img src="https://picsum.photos/960/540?random=drag-7">
+                    <img src="https://picsum.photos/960/540?random=drag-8">
+                </z-carousel>
+            </figure>
+        </div>
     </section>
 
     <section>
-      <div class="container">
-        <h2>Navigation</h2>
+        <div class="container">
+            <h2 id="navigation">Navigation</h2>
 
-        <p>
-          You can add navigation buttons. When a navigation is possible, it can be clicked, otherwize, the button will be disabled.
-        </p>
-  
-        <figure>
-          <z-carousel navigation>
-            <img src="https://picsum.photos/960/540?random=nav-1">
-            <img src="https://picsum.photos/960/540?random=nav-2">
-            <img src="https://picsum.photos/960/540?random=nav-3">
-            <img src="https://picsum.photos/960/540?random=nav-4">
-            <img src="https://picsum.photos/960/540?random=nav-5">
-            <img src="https://picsum.photos/960/540?random=nav-6">
-            <img src="https://picsum.photos/960/540?random=nav-7">
-            <img src="https://picsum.photos/960/540?random=nav-8">
-          </z-carousel>
-        </figure>
-        
-        <hr>
-  
-        <p>
-          By default, the navigation buttons are provided with html arrow entities <code>&amp;lsaquo;</code> (&lsaquo;) and <code>&amp;rsaquo;</code> (&rsaquo;).
-        </p>
+            <p>
+                You can add navigation buttons. When a navigation is possible, it can be clicked, otherwize, the button
+                will be disabled.
+            </p>
 
-        <p>
-          It is possible to customize the content of the navigation buttons by using the <code>slot="nav-prev"</code> and <code>slot="nav-next"</code> slots.
-        </p>
-  
-        <figure>
-          <z-carousel navigation>
-            <img src="https://picsum.photos/960/540?random=nav-slot-1">
-            <img src="https://picsum.photos/960/540?random=nav-slot-2">
-            <img src="https://picsum.photos/960/540?random=nav-slot-3">
-            <img src="https://picsum.photos/960/540?random=nav-slot-4">
-            <img src="https://picsum.photos/960/540?random=nav-slot-5">
-            <img src="https://picsum.photos/960/540?random=nav-slot-6">
-            <img src="https://picsum.photos/960/540?random=nav-slot-7">
-            <img src="https://picsum.photos/960/540?random=nav-slot-8">
-  
-            <span slot="nav-prev">
-              Before
-            </span>
-            
-            <span slot="nav-next">
-              After
-            </span>
-          </z-carousel>
-    
-          <figcaption>
-              <pre><code class="language-html">&lt;span slot="nav-prev"&gt;
+            <figure>
+                <z-carousel navigation>
+                    <img src="https://picsum.photos/960/540?random=nav-1">
+                    <img src="https://picsum.photos/960/540?random=nav-2">
+                    <img src="https://picsum.photos/960/540?random=nav-3">
+                    <img src="https://picsum.photos/960/540?random=nav-4">
+                    <img src="https://picsum.photos/960/540?random=nav-5">
+                    <img src="https://picsum.photos/960/540?random=nav-6">
+                    <img src="https://picsum.photos/960/540?random=nav-7">
+                    <img src="https://picsum.photos/960/540?random=nav-8">
+                </z-carousel>
+            </figure>
+
+            <hr>
+
+            <p>
+                By default, the navigation buttons are provided with html arrow entities <code>&amp;lsaquo;</code>
+                (&lsaquo;) and <code>&amp;rsaquo;</code> (&rsaquo;).
+            </p>
+
+            <p>
+                It is possible to customize the content of the navigation buttons by using the
+                <code>slot="nav-prev"</code> and <code>slot="nav-next"</code> slots.
+            </p>
+
+            <figure>
+                <z-carousel navigation>
+                    <img src="https://picsum.photos/960/540?random=nav-slot-1">
+                    <img src="https://picsum.photos/960/540?random=nav-slot-2">
+                    <img src="https://picsum.photos/960/540?random=nav-slot-3">
+                    <img src="https://picsum.photos/960/540?random=nav-slot-4">
+                    <img src="https://picsum.photos/960/540?random=nav-slot-5">
+                    <img src="https://picsum.photos/960/540?random=nav-slot-6">
+                    <img src="https://picsum.photos/960/540?random=nav-slot-7">
+                    <img src="https://picsum.photos/960/540?random=nav-slot-8">
+
+                    <span slot="nav-prev">
+                        Before
+                    </span>
+
+                    <span slot="nav-next">
+                        After
+                    </span>
+                </z-carousel>
+
+                <figcaption>
+                    <pre><code class="language-html">&lt;span slot="nav-prev"&gt;
   Before
 &lt;/span&gt;
 
 &lt;span slot="nav-next"&gt;
   After
 &lt;/span&gt;</code></pre>
-          </figcaption>
-        </figure>
-      </div>
-    </section>
-    
-    <section>
-      <div class="container">
-        <h2>Infinit</h2>
-
-        <p>It is possible to cycle threw the carousel with the <code>infinit</code> attribute.</p>
-
-        <figure>
-          <z-carousel navigation infinit>
-            <img src="https://picsum.photos/960/540?random=infinit-1">
-            <img src="https://picsum.photos/960/540?random=infinit-2">
-            <img src="https://picsum.photos/960/540?random=infinit-3">
-            <img src="https://picsum.photos/960/540?random=infinit-4">
-            <img src="https://picsum.photos/960/540?random=infinit-5">
-            <img src="https://picsum.photos/960/540?random=infinit-6">
-            <img src="https://picsum.photos/960/540?random=infinit-7">
-            <img src="https://picsum.photos/960/540?random=infinit-8">
-          </z-carousel>
-        </figure>
-      </div>
+                </figcaption>
+            </figure>
+        </div>
     </section>
 
     <section>
-      <div class="container">
-        <h2>Current page</h2>
+        <div class="container">
+            <h2 id="infinit">Infinit</h2>
 
-        <p>
-          It is possible initialize the carousel on a given page with the <code>current-page</code> attribute
-        </p>
+            <p>It is possible to cycle threw the carousel with the <code>infinit</code> attribute.</p>
 
-        <figure>
-          <z-carousel class="ooooh" navigation current-page="2">
-            <img src="https://picsum.photos/960/540?random=current-slide-index-1">
-            <img src="https://picsum.photos/960/540?random=current-slide-index-2">
-            <img src="https://picsum.photos/960/540?random=current-slide-index-3">
-            <img src="https://picsum.photos/960/540?random=current-slide-index-4">
-            <img src="https://picsum.photos/960/540?random=current-slide-index-5">
-            <img src="https://picsum.photos/960/540?random=current-slide-index-6">
-            <img src="https://picsum.photos/960/540?random=current-slide-index-7">
-            <img src="https://picsum.photos/960/540?random=current-slide-index-8">
-          </z-carousel>
-        </figure>
-      </div>
+            <figure>
+                <z-carousel navigation infinit>
+                    <img src="https://picsum.photos/960/540?random=infinit-1">
+                    <img src="https://picsum.photos/960/540?random=infinit-2">
+                    <img src="https://picsum.photos/960/540?random=infinit-3">
+                    <img src="https://picsum.photos/960/540?random=infinit-4">
+                    <img src="https://picsum.photos/960/540?random=infinit-5">
+                    <img src="https://picsum.photos/960/540?random=infinit-6">
+                    <img src="https://picsum.photos/960/540?random=infinit-7">
+                    <img src="https://picsum.photos/960/540?random=infinit-8">
+                </z-carousel>
+            </figure>
+        </div>
     </section>
 
     <section>
-      <div class="container">
-        <h2>Multiple items per page</h2>
+        <div class="container">
+            <h2 id="current-page">Current page</h2>
 
-        <p>You can decide to display multiple slides per page.</p>
+            <p>
+                It is possible initialize the carousel on a given page with the <code>current-page</code> attribute
+            </p>
 
-        <figure>
-          <z-carousel navigation per-page="3">
-            <img src="https://picsum.photos/320/180?random=per-page-1">
-            <img src="https://picsum.photos/320/180?random=per-page-2">
-            <img src="https://picsum.photos/320/180?random=per-page-3">
-            <img src="https://picsum.photos/320/180?random=per-page-4">
-            <img src="https://picsum.photos/320/180?random=per-page-5">
-            <img src="https://picsum.photos/320/180?random=per-page-6">
-            <img src="https://picsum.photos/320/180?random=per-page-7">
-            <img src="https://picsum.photos/320/180?random=per-page-8">
-          </z-carousel>
-        </figure>
-      </div>
+            <figure>
+                <z-carousel class="ooooh" navigation current-page="2">
+                    <img src="https://picsum.photos/960/540?random=current-slide-index-1">
+                    <img src="https://picsum.photos/960/540?random=current-slide-index-2">
+                    <img src="https://picsum.photos/960/540?random=current-slide-index-3">
+                    <img src="https://picsum.photos/960/540?random=current-slide-index-4">
+                    <img src="https://picsum.photos/960/540?random=current-slide-index-5">
+                    <img src="https://picsum.photos/960/540?random=current-slide-index-6">
+                    <img src="https://picsum.photos/960/540?random=current-slide-index-7">
+                    <img src="https://picsum.photos/960/540?random=current-slide-index-8">
+                </z-carousel>
+            </figure>
+        </div>
     </section>
 
     <section>
-      <div class="container">
-        <h2>Pagination</h2>
+        <div class="container">
+            <h2 id="per-page">Multiple items per page</h2>
 
-        <p>
-          You can add a fraction counter for pagination, this will show the current page number over the total pages number
-        </p>
+            <p>You can decide to display multiple slides per page.</p>
 
-        <figure>
-          <z-carousel navigation pagination per-page="3">
-            <img src="https://picsum.photos/960/540?random=pagination-1">
-            <img src="https://picsum.photos/960/540?random=pagination-2">
-            <img src="https://picsum.photos/960/540?random=pagination-3">
-            <img src="https://picsum.photos/960/540?random=pagination-4">
-            <img src="https://picsum.photos/960/540?random=pagination-5">
-            <img src="https://picsum.photos/960/540?random=pagination-6">
-            <img src="https://picsum.photos/960/540?random=pagination-7">
-            <img src="https://picsum.photos/960/540?random=pagination-8">
-          </z-carousel>
-        </figure>
-      </div>
+            <figure>
+                <z-carousel navigation per-page="3">
+                    <img src="https://picsum.photos/320/180?random=per-page-1">
+                    <img src="https://picsum.photos/320/180?random=per-page-2">
+                    <img src="https://picsum.photos/320/180?random=per-page-3">
+                    <img src="https://picsum.photos/320/180?random=per-page-4">
+                    <img src="https://picsum.photos/320/180?random=per-page-5">
+                    <img src="https://picsum.photos/320/180?random=per-page-6">
+                    <img src="https://picsum.photos/320/180?random=per-page-7">
+                    <img src="https://picsum.photos/320/180?random=per-page-8">
+                </z-carousel>
+            </figure>
+        </div>
     </section>
 
     <section>
-      <div class="container">
-        <h2>Gap</h2>
+        <div class="container">
+            <h2 id="pagination">Pagination</h2>
 
-        <p>You can add a little bit of space betwin the slides by using the <code>gap</code> property.</p>
+            <p>
+                You can add a fraction counter for pagination, this will show the current page number over the total
+                pages number
+            </p>
 
-        <figure>
-          <z-carousel navigation pagination per-page="3" gap="20">
-            <img src="https://picsum.photos/320/180?random=per-page-1">
-            <img src="https://picsum.photos/320/180?random=per-page-2">
-            <img src="https://picsum.photos/320/180?random=per-page-3">
-            <img src="https://picsum.photos/320/180?random=per-page-4">
-            <img src="https://picsum.photos/320/180?random=per-page-5">
-            <img src="https://picsum.photos/320/180?random=per-page-6">
-            <img src="https://picsum.photos/320/180?random=per-page-7">
-            <img src="https://picsum.photos/320/180?random=per-page-8">
-          </z-carousel>
-        </figure>
-      </div>
+            <figure>
+                <z-carousel navigation pagination per-page="3">
+                    <img src="https://picsum.photos/960/540?random=pagination-1">
+                    <img src="https://picsum.photos/960/540?random=pagination-2">
+                    <img src="https://picsum.photos/960/540?random=pagination-3">
+                    <img src="https://picsum.photos/960/540?random=pagination-4">
+                    <img src="https://picsum.photos/960/540?random=pagination-5">
+                    <img src="https://picsum.photos/960/540?random=pagination-6">
+                    <img src="https://picsum.photos/960/540?random=pagination-7">
+                    <img src="https://picsum.photos/960/540?random=pagination-8">
+                </z-carousel>
+            </figure>
+        </div>
     </section>
 
     <section>
-      <div class="container">
-        <h2>Dots</h2>
+        <div class="container">
+            <h2 id="gap">Gap</h2>
 
-        <p>
-          You can show dots for every page, each dot has the page number as text in it.
-        </p>
+            <p>You can add a little bit of space betwin the slides by using the <code>gap</code> property.</p>
 
-        <p>
-          The current one is not clickable and the others will slide the carousel to the corresponding page when clicked.
-        </p>
-
-        <figure>
-          <z-carousel navigation pagination dots>
-            <img src="https://picsum.photos/960/540?random=dots-1">
-            <img src="https://picsum.photos/960/540?random=dots-2">
-            <img src="https://picsum.photos/960/540?random=dots-3">
-            <img src="https://picsum.photos/960/540?random=dots-4">
-            <img src="https://picsum.photos/960/540?random=dots-5">
-            <img src="https://picsum.photos/960/540?random=dots-6">
-            <img src="https://picsum.photos/960/540?random=dots-7">
-            <img src="https://picsum.photos/960/540?random=dots-8">
-          </z-carousel>
-        </figure>
-      </div>
+            <figure>
+                <z-carousel navigation pagination per-page="3" gap="20">
+                    <img src="https://picsum.photos/320/180?random=per-page-1">
+                    <img src="https://picsum.photos/320/180?random=per-page-2">
+                    <img src="https://picsum.photos/320/180?random=per-page-3">
+                    <img src="https://picsum.photos/320/180?random=per-page-4">
+                    <img src="https://picsum.photos/320/180?random=per-page-5">
+                    <img src="https://picsum.photos/320/180?random=per-page-6">
+                    <img src="https://picsum.photos/320/180?random=per-page-7">
+                    <img src="https://picsum.photos/320/180?random=per-page-8">
+                </z-carousel>
+            </figure>
+        </div>
     </section>
 
     <section>
-      <div class="container">
-        <h2>Styled</h2>
+        <div class="container">
+            <h2 id="dots">Dots</h2>
 
-        <p>
-          Here is an example of what you could achieve with this component and a little bit of css styling: <a href="./src/demo.css">See CSS</a>
-        </p>
+            <p>
+                You can show dots for every page, each dot has the page number as text in it.
+            </p>
 
-        <figure>
-          <z-carousel class="styled" navigation pagination per-page="2" gap="20" dots drag>
-            <img src="https://picsum.photos/960/540?random=styled-1">
-            <img src="https://picsum.photos/960/540?random=styled-2">
-            <img src="https://picsum.photos/960/540?random=styled-3">
-            <img src="https://picsum.photos/960/540?random=styled-4">
-            <img src="https://picsum.photos/960/540?random=styled-5">
-            <img src="https://picsum.photos/960/540?random=styled-6">
-            <img src="https://picsum.photos/960/540?random=styled-7">
-            <img src="https://picsum.photos/960/540?random=styled-8">
+            <p>
+                The current one is not clickable and the others will slide the carousel to the corresponding page when
+                clicked.
+            </p>
 
-            <svg 
-              slot="nav-prev"
-              xmlns="http://www.w3.org/2000/svg" 
-              width="24px" 
-              height="24px" 
-              viewBox="0 0 24 24">
-                <path d="M6 12H18M6 12L11 7M6 12L11 17"
-                  stroke="currentColor"
-                  stroke-width="2" 
-                  stroke-linecap="round" 
-                  stroke-linejoin="round"/>
-            </svg>
-            
-            <svg 
-              slot="nav-next"
-              xmlns="http://www.w3.org/2000/svg" 
-              width="24px" 
-              height="24px" 
-              viewBox="0 0 24 24">
-                <path d="M6 12H18M18 12L13 7M18 12L13 17"
-                  stroke="currentColor"
-                  stroke-width="2" 
-                  stroke-linecap="round" 
-                  stroke-linejoin="round"/>
-            </svg>
-          </z-carousel>
+            <figure>
+                <z-carousel navigation pagination dots>
+                    <img src="https://picsum.photos/960/540?random=dots-1">
+                    <img src="https://picsum.photos/960/540?random=dots-2">
+                    <img src="https://picsum.photos/960/540?random=dots-3">
+                    <img src="https://picsum.photos/960/540?random=dots-4">
+                    <img src="https://picsum.photos/960/540?random=dots-5">
+                    <img src="https://picsum.photos/960/540?random=dots-6">
+                    <img src="https://picsum.photos/960/540?random=dots-7">
+                    <img src="https://picsum.photos/960/540?random=dots-8">
+                </z-carousel>
+            </figure>
+        </div>
+    </section>
 
-          <figcaption>
-            <p>You can style some <code>::part()</code> elements of the component</p>
-            <pre><code class="language-css">::part(content)
+    <section>
+        <div class="container">
+            <h2 id="full-demo">Full demo</h2>
+
+            <p>
+                Here is an example of what you could achieve with this component and a little bit of css styling: <a
+                    href="https://github.com/benavern/z-carousel/blob/main/src/demo.css">See CSS</a>
+            </p>
+
+            <figure>
+                <z-carousel class="styled" navigation pagination per-page="2" gap="20" dots drag>
+                    <img src="https://picsum.photos/960/540?random=styled-1">
+                    <img src="https://picsum.photos/960/540?random=styled-2">
+                    <img src="https://picsum.photos/960/540?random=styled-3">
+                    <img src="https://picsum.photos/960/540?random=styled-4">
+                    <img src="https://picsum.photos/960/540?random=styled-5">
+                    <img src="https://picsum.photos/960/540?random=styled-6">
+                    <img src="https://picsum.photos/960/540?random=styled-7">
+                    <img src="https://picsum.photos/960/540?random=styled-8">
+
+                    <svg slot="nav-prev" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
+                        viewBox="0 0 24 24">
+                        <path d="M6 12H18M6 12L11 7M6 12L11 17" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+
+                    <svg slot="nav-next" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
+                        viewBox="0 0 24 24">
+                        <path d="M6 12H18M18 12L13 7M18 12L13 17" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </z-carousel>
+
+                <figcaption>
+                    <p>You can style some <code>::part()</code> elements of the component</p>
+                    <pre><code class="language-css">::part(content)
 ::part(nav-btn /* nav-btn--prev nav-btn--next nav-btn--disabled */)
 ::part(pagination)
 ::part(dots)
 ::part(dots-item /* dots-item--active */)</code></pre>
-          </figcaption>
-        </figure>
-      </div>
+                </figcaption>
+            </figure>
+        </div>
     </section>
 
     <footer>
-      <div class="container">
-        &copy; <a href="https://benjamin.caradeuc.info">Benjamin Caradeuc</a> 2024
-      </div>
+        <div class="container">
+            &copy; <a href="https://benjamin.caradeuc.info">Benjamin Caradeuc</a> 2024
+        </div>
     </footer>
-  </body>
+</body>
+
 </html>

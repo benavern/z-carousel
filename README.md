@@ -2,7 +2,7 @@
 
 The last and only carousel component you'll need.
 
-* no dependancy 
+* no dependancy
 * easily stylable
 * configurable
 * touch & mouse drag ready

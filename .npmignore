@@ -1,5 +1,6 @@
-docs/
 src/
+docs/
+public/
 index.html
 tsconfig.json
 vite.config.*.js
