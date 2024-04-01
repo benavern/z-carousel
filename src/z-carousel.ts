@@ -50,7 +50,7 @@ export class ZCarousel extends LitElement {
   gap = 0;
 
   @property({ type: Boolean })
-  draggable = false;
+  drag = false;
   
   @queryAssignedElements()
   private readonly slideElements!: HTMLElement[];
@@ -215,7 +215,7 @@ export class ZCarousel extends LitElement {
   }
 
   private _onMouseDown(e: MouseEvent) {
-    if (!this.draggable) return;
+    if (!this.drag) return;
 
     this._mouse.startX = e.screenX;
     this._mouse.initialX = this._contentEl.scrollLeft;
@@ -223,7 +223,7 @@ export class ZCarousel extends LitElement {
   }
 
   private _onMouseMove(e: MouseEvent) {
-    if (!this.draggable) return;
+    if (!this.drag) return;
 
     if(this._mouse.isDragging) {
       this._mouse.moveX = e.screenX
@@ -238,7 +238,7 @@ export class ZCarousel extends LitElement {
   }
 
   private _onMouseUp() {
-    if (!this.draggable) return;
+    if (!this.drag) return;
 
     if (this._mouse.validated) {
       const deltaX = this._mouse.moveX - this._mouse.startX;
@@ -394,7 +394,8 @@ export class ZCarousel extends LitElement {
                   data-page="${(index + 1)}"
                   ?data-current="${(index + 1) === this.currentPage}"
                   @click="${() => this.goToPage(index + 1, 'auto')}">
-                  &bull;
+                  <!-- &bull; -->
+                  ${index + 1}
                 </button>
               `
             )}

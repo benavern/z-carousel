@@ -18,9 +18,6 @@ z-carousel:not(:defined) {
 
 z-carousel.styled {
     box-sizing: border-box;
-    background-color: var(--clr-accent);
-    border: 20px solid var(--clr-accent);
-    margin: 10px;
     border-radius: 10px;
 }
 
@@ -37,12 +34,9 @@ z-carousel.styled::part(nav-btn) {
     align-items: center;
     width: 3rem;
     height: 3rem;
+    padding: 0;
     border: none;
     border-radius: 50%;
-    line-height: 1;
-    font-size: 1em;
-    font-weight: 500;
-    font-family: inherit;
     background-color: var(--carousel-arrow-bg);
     backdrop-filter: blur(5px);
     box-shadow: var(--carousel-arrow-shadow);
@@ -60,7 +54,7 @@ z-carousel.styled::part(nav-btn):focus-visible {
 }
 
 z-carousel.styled::part(nav-btn nav-btn--disabled) {
-    opacity: 5;
+    opacity: .5;
     pointer-events: none;
     box-shadow: none;
 }
@@ -95,6 +89,7 @@ z-carousel.styled::part(dots) {
     max-width: calc(100% - 100px);
     display: flex;
     justify-content: center;
+    align-items: center;
     line-height: 1;
     padding: 0 10px;
     background: var(--carousel-arrow-bg);
@@ -107,18 +102,24 @@ z-carousel.styled::part(dots-item) {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    line-height: 1;
-    padding: 0 5px;
+    padding: 10px 5px;
     transition: color .3s;
+    font-size: 0;
+    line-height: 0;
 }
 
-z-carousel.styled::part(dots-item):hover {
-    color: var(--carousel-dot-hover-color);
-    text-shadow: var(--carousel-arrow-shadow);
+z-carousel.styled::part(dots-item)::before {
+    content: '';
+    width: .5rem;
+    height: .5rem;
+    background-color: currentColor;
+    border-radius: 50%;
 }
 
-z-carousel.styled::part(dots-item dots-item--active) {
-    font-size: 2rem;
+z-carousel.styled::part(dots-item dots-item--active)::before {
+    width: 1rem;
+    height: 1rem;
+    box-shadow: var(--carousel-arrow-shadow);
 }
 
 z-carousel.styled::part(dots-item dots-item--active),

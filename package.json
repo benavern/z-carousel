@@ -2,7 +2,8 @@
   "name": "z-carousel-wc",
   "version": "0.0.2",
   "type": "module",
-  "main": "dist/index.js",
+  "main": "dist/z-carousel-wc.js",
+  "module": "dist/z-carousel-wc.js",
   "files": [
     "dist"
   ],

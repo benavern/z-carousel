@@ -5,8 +5,7 @@ export default defineConfig({
     outDir: 'dist',
     lib: {
       entry: 'src/z-carousel.ts',
-      name: 'z-carousel',
-      fileName: 'index',
+      formats: ['es'],
     },
   },
 });

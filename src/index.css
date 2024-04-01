@@ -51,13 +51,25 @@ header{
   z-index: 10;
   position: sticky;
   top: 0;
-  color: var(--clr-accent);
 }
 
 header, footer{
   background-color: var(--clr-bg);
   box-shadow: 0 0 1rem rgb(0 0 0 / .25);
   padding-block: calc(2 * var(--spacing));
+}
+
+header .logo {
+  color: var(--clr-accent);
+}
+
+header .gh-logo {
+  color: inherit;
+  transition: .3s color;
+}
+
+header .gh-logo:hover {
+  color: var(--clr-accent);
 }
 
 header .container {
@@ -116,10 +128,14 @@ figure figcaption {
   border-top: var(--border-width) solid var(--clr-accent);
 }
 
-figcaption pre[class*="language-"] {
+figure figcaption pre[class*="language-"] {
   margin: 0;
   border: none;
   border-radius: 0;
+}
+
+figure figcaption p {
+  padding-inline: var(--spacing);
 }
 
 code {
@@ -134,4 +150,8 @@ code {
   width: max(0px, calc(100% - (2 * var(--spacing))));
   max-width: 60rem;
   margin-inline: auto;
+}
+
+pre[class*="language-"] {
+  border: none!important;
 }
