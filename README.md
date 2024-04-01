@@ -1,15 +1,16 @@
 # z-carousel
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/03c525d6-47e6-4a86-9d9e-8b809d7b03c1/deploy-status)](https://app.netlify.com/sites/z-carousel/deploys)
-
 The last and only carousel component you'll need.
 
 * no dependancy 
-* easyly stylable
+* easily stylable
 * configurable
-* touch & mouse ready
+* touch & mouse drag ready
 * native on major browsers
+* usable with any js framework
 
 [DEMO AND DOC](https://z-carousel.caradeuc.info/)
+
+[npm](https://www.npmjs.com/package/z-carousel-wc)
 
 Made with [LitElement](https://lit.dev/)
