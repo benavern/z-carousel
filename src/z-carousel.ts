@@ -1,5 +1,5 @@
 import { LitElement, PropertyValueMap, ReactiveElement, css, html, nothing } from 'lit';
-import { customElement, property, query, queryAssignedElements } from 'lit/decorators.js';
+import { customElement, eventOptions, property, query, queryAssignedElements } from 'lit/decorators.js';
 import { when } from 'lit/directives/when.js';
 import { map } from 'lit/directives/map.js';
 
@@ -113,22 +113,10 @@ export class ZCarousel extends LitElement {
         this._safeAttributes();    // initialize scrollValue on init
         this.goToPage(this.currentPage, 'instant')
 
-        // react to content scroll transition end
-        this._contentEl.addEventListener('scrollend', () => this._onScrollEnd());
-
         // react to element resize
         this._resizeObserver = new ResizeObserver(this._debouncedOnResize.bind(this))
         this._resizeObserver.observe(this._contentEl);
 
-        // navigation user events
-        this._contentEl.addEventListener('keydown', (e) => this._onKeyDown(e));
-        this._contentEl.addEventListener('wheel', (e) => this._onWheel(e));
-        this._contentEl.addEventListener('touchstart', (e) => this._onTouchStart(e));
-        this._contentEl.addEventListener('touchmove', (e) => this._onTouchMove(e));
-        this._contentEl.addEventListener('touchend', () => this._onTouchEnd());
-        this._contentEl.addEventListener('mousedown', (e) => this._onMouseDown(e as MouseEvent), { capture: true });
-        this._contentEl.addEventListener('mousemove', (e) => this._onMouseMove(e));
-        this._contentEl.addEventListener('mouseup', () => this._onMouseUp());
     }
 
     override updated(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
@@ -151,12 +139,6 @@ export class ZCarousel extends LitElement {
         this.currentPage = clamp(this.currentPage, { min: 1, max: this._nbPages });
         this.perPage = clamp(this.perPage, { min: 1, max: this.slideElements.length });
         this.gap = clamp(this.gap, { min: 0 });
-    }
-
-    private _onScrollEnd() {
-        if (!this.slideElements.length) return;
-
-        // @Todo: event afterChange(neSlideIndex)
     }
 
     private _debouncedOnResize = debounce(this._onResize.bind(this), 200);
@@ -214,6 +196,7 @@ export class ZCarousel extends LitElement {
         this._touch.validated = false;
     }
 
+    @eventOptions({ capture: true })
     private _onMouseDown(e: MouseEvent) {
         if (!this.drag) return;
 
@@ -279,7 +262,21 @@ export class ZCarousel extends LitElement {
     }
 
     goToPage(pageNumber: number = 0, behavior: ScrollBehavior = 'auto') {
-        if (this.currentPage !== pageNumber) this.currentPage = pageNumber;
+        if (this.currentPage !== pageNumber) {
+            const evt = new CustomEvent('change', {
+                bubbles: true,
+                composed: true,
+                cancelable: true,
+                detail: {
+                    current: this.currentPage,
+                    next: pageNumber
+                }
+            });
+
+            this.dispatchEvent(evt);
+
+            if (!evt.defaultPrevented) this.currentPage = pageNumber;
+        }
 
         this._updateScroll(behavior);
     }
@@ -289,38 +286,46 @@ export class ZCarousel extends LitElement {
      */
     render() {
         return html`
-      <style>
-        :host {
-          /* OVERRIDES the user set style */
-          --_z-carousel-gap: ${this.gap}px;
-          --_z-carousel-per-page: ${this.perPage};
-          --_z-carousel-item-width: calc((100% - (var(--_z-carousel-gap) * (var(--_z-carousel-per-page) - 1))) / var(--_z-carousel-per-page));
-        }
-      </style>
+            <style>
+                :host {
+                    /* OVERRIDES the user set style */
+                    --_z-carousel-gap: ${this.gap}px;
+                    --_z-carousel-per-page: ${this.perPage};
+                    --_z-carousel-item-width: calc((100% - (var(--_z-carousel-gap) * (var(--_z-carousel-per-page) - 1))) / var(--_z-carousel-per-page));
+                }
+            </style>
 
-      <div
-        class="carousel"
-        role="toolbar">
-        <div
-          class="carousel__content"
-          part="content"
-          aria-live="polite"
-          role="listbox"
-          tabindex="0">
-          <slot></slot>
+            <div
+                class="carousel"
+                role="toolbar">
+                <div
+                    class="carousel__content"
+                    part="content"
+                    aria-live="polite"
+                    role="listbox"
+                    tabindex="0"
+                    @keydown="${this._onKeyDown}"
+                    @wheel="${this._onWheel}"
+                    @touchstart="${this._onTouchStart}"
+                    @touchmove="${this._onTouchMove}"
+                    @touchend="${this._onTouchEnd}"
+                    @mousedown="${this._onMouseDown}"
+                    @mousemove="${this._onMouseMove}"
+                    @mouseup="${this._onMouseUp}">
+                    <slot></slot>
 
-          ${this._renderShadowElements()}
-        </div>
+                    ${this._renderShadowElements()}
+                </div>
 
-        ${this._renderPrevArrow()}
+                ${this._renderPrevArrow()}
 
-        ${this._renderNextArrow()}
+                ${this._renderNextArrow()}
 
-        ${this._renderPagination()}
+                ${this._renderPagination()}
 
-        ${this._renderDots()}
-      </div>
-    `
+                ${this._renderDots()}
+            </div>
+        `
     }
 
     private _renderShadowElements() {
@@ -331,18 +336,18 @@ export class ZCarousel extends LitElement {
         return when(
             this.navigation,
             () => html`
-        <button
-          ?disabled="${!this._canGoPrevious}"
-          aria-hidden="${!this._canGoPrevious}"
-          part="nav-btn nav-btn--prev ${!this._canGoPrevious ? 'nav-btn--disabled' : ''}"
-          class="carousel__btn carousel__nav carousel__nav--prev"
-          @click="${() => this.goToPreviousPage()}"
-          type="button">
-          <slot name="nav-prev">
-            &lsaquo;
-          </slot>
-        </button>
-      `,
+                <button
+                    ?disabled="${!this._canGoPrevious}"
+                    aria-hidden="${!this._canGoPrevious}"
+                    part="nav-btn nav-btn--prev ${!this._canGoPrevious ? 'nav-btn--disabled' : ''}"
+                    class="carousel__btn carousel__nav carousel__nav--prev"
+                    @click="${() => this.goToPreviousPage()}"
+                    type="button">
+                    <slot name="nav-prev">
+                        &lsaquo;
+                    </slot>
+                </button>
+            `,
             () => nothing
         );
     }
@@ -351,18 +356,18 @@ export class ZCarousel extends LitElement {
         return when(
             this.navigation,
             () => html`
-      <button
-          ?disabled="${!this._canGoNext}"
-          aria-hidden="${!this._canGoNext}"
-          part="nav-btn nav-btn--next ${!this._canGoNext ? 'nav-btn--disabled' : ''}"
-          class="carousel__btn carousel__nav carousel__nav--next"
-          @click="${() => this.goToNextPage()}"
-          type="button">
-          <slot name="nav-next">
-            &rsaquo;
-          </slot>
-        </button>
-      `,
+                <button
+                    ?disabled="${!this._canGoNext}"
+                    aria-hidden="${!this._canGoNext}"
+                    part="nav-btn nav-btn--next ${!this._canGoNext ? 'nav-btn--disabled' : ''}"
+                    class="carousel__btn carousel__nav carousel__nav--next"
+                    @click="${() => this.goToNextPage()}"
+                    type="button">
+                    <slot name="nav-next">
+                        &rsaquo;
+                    </slot>
+                </button>
+            `,
             () => nothing
         );
     }
@@ -371,14 +376,14 @@ export class ZCarousel extends LitElement {
         return when(
             this.pagination,
             () => html`
-        <div
-          aria-live="polite"
-          aria-atomic="true"
-          part="pagination"
-          class="carousel__pagination">
-          ${this.currentPage} / ${this._nbPages}
-        </div>
-      `,
+                <div
+                    aria-live="polite"
+                    aria-atomic="true"
+                    part="pagination"
+                    class="carousel__pagination">
+                    ${this.currentPage} / ${this._nbPages}
+                </div>
+            `,
             () => nothing
         );
     }
@@ -388,31 +393,31 @@ export class ZCarousel extends LitElement {
         return when(
             this.dots,
             () => html`
-        <div
-          part="dots"
-          role="listbox"
-          class="carousel__dots">
-            ${map(
-                Array.from({ length: this._nbPages }) as HTMLElement[],
-                (_slideEl: HTMLElement, index: number) => html`
-                <button
-                  ?disabled="${(index + 1) === this.currentPage}"
-                  aria-hidden="${(index + 1) !== this.currentPage}"
-                  aria-selected="${(index + 1) === this.currentPage}"
-                  type="button"
-                  role="button"
-                  part="dots-item ${(index + 1) === this.currentPage ? 'dots-item--active' : ''}"
-                  class="carousel__btn"
-                  data-page="${(index + 1)}"
-                  aria-controls="${(index + 1)}"
-                  ?data-current="${(index + 1) === this.currentPage}"
-                  @click="${() => this.goToPage(index + 1, 'auto')}">
-                  ${index + 1}
-                </button>
-              `
-            )}
-        </div>
-      `,
+                <div
+                part="dots"
+                role="listbox"
+                class="carousel__dots">
+                ${map(
+                    Array.from({ length: this._nbPages }) as HTMLElement[],
+                    (_slideEl: HTMLElement, index: number) => html`
+                        <button
+                            ?disabled="${(index + 1) === this.currentPage}"
+                            aria-hidden="${(index + 1) !== this.currentPage}"
+                            aria-selected="${(index + 1) === this.currentPage}"
+                            type="button"
+                            role="button"
+                            part="dots-item ${(index + 1) === this.currentPage ? 'dots-item--active' : ''}"
+                            class="carousel__btn"
+                            data-page="${(index + 1)}"
+                            aria-controls="${(index + 1)}"
+                            ?data-current="${(index + 1) === this.currentPage}"
+                            @click="${() => this.goToPage(index + 1, 'auto')}">
+                            ${index + 1}
+                        </button>
+                    `
+                    )}
+                </div>
+            `,
             () => nothing
         );
     }
@@ -421,63 +426,63 @@ export class ZCarousel extends LitElement {
      * =========== Style
      */
     static styles = css`
-    :host {
-      position: relative;
-      display: block;
-      margin-inline: auto;
-      max-width: 100%;
-    }
+        :host {
+            position: relative;
+            display: block;
+            margin-inline: auto;
+            max-width: 100%;
+        }
 
-    * {
-      box-sizing: border-box;
-    }
+        * {
+            box-sizing: border-box;
+        }
 
-    .carousel {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
+        .carousel {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
 
-    .carousel__content {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      min-height: 1px; /* fix currentPage on initialisation so that  */
-      display: flex;
-      gap: var(--_z-carousel-gap, 0);
-      overflow-x: hidden;
-    }
+        .carousel__content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 1px; /* fix currentPage on initialisation so that  */
+            display: flex;
+            gap: var(--_z-carousel-gap, 0);
+            overflow-x: hidden;
+        }
 
-    .carousel__content ::slotted(*),
-    .carousel__content > * {
-      width: var(--_z-carousel-item-width, 100%);
-      flex: 1 0 var(--_z-carousel-item-width, 100%);
-    }
+        .carousel__content ::slotted(*),
+        .carousel__content > * {
+            width: var(--_z-carousel-item-width, 100%);
+            flex: 1 0 var(--_z-carousel-item-width, 100%);
+        }
 
-    .carousel__content__shadow-element {
-      visibility: hidden;
-      pointer-events: none;
-    }
+        .carousel__content__shadow-element {
+            visibility: hidden;
+            pointer-events: none;
+        }
 
-    .carousel__nav {
-      z-index: 1;
-    }
+        .carousel__nav {
+            z-index: 1;
+        }
 
-    .carousel__btn {
-      appearance: none;
-      font: inherit;
-      background: none;
-      border: none;
-    }
+        .carousel__btn {
+            appearance: none;
+            font: inherit;
+            background: none;
+            border: none;
+        }
 
-    .carousel__btn:hover {
-      cursor: pointer;
-    }
+        .carousel__btn:hover {
+            cursor: pointer;
+        }
 
-    .carousel__btn:disabled {
-      cursor: not-allowed;
-    }
-  `
+        .carousel__btn:disabled {
+            cursor: not-allowed;
+        }
+    `
 }
 
 declare global {
