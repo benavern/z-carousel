@@ -52,6 +52,9 @@ export class ZCarousel extends LitElement {
     @property({ type: Boolean })
     drag = false;
 
+    @property({ type: Boolean })
+    disabled = false;
+
     @queryAssignedElements()
     private readonly slideElements!: HTMLElement[];
 
@@ -147,25 +150,29 @@ export class ZCarousel extends LitElement {
     }
 
     private _onKeyDown(e: KeyboardEvent) {
-        if (e.target !== this._contentEl) return;
+        if (this.disabled || e.target !== this._contentEl) return;
 
         if (e.key === 'ArrowLeft') this.goToPreviousPage();
         if (e.key === 'ArrowRight') this.goToNextPage();
     }
 
     private _onWheel(e: WheelEvent) {
-        if (e.target !== this._contentEl && !this/*._contentEl.*/.contains(e.target as Node)) return;
+        if (this.disabled || e.target !== this._contentEl && !this/*._contentEl.*/.contains(e.target as Node)) return;
 
         if (e.deltaX < 0) this.goToPreviousPage();
         if (e.deltaX > 0) this.goToNextPage();
     }
 
     private _onTouchStart(e: TouchEvent) {
+        if (this.disabled) return;
+
         this._touch.startX = e.touches[0].clientX;
         this._touch.initialX = this._contentEl.scrollLeft;
     }
 
     private _onTouchMove(e: TouchEvent) {
+        if (this.disabled) return;
+
         this._touch.moveX = e.touches[0].clientX;
         const deltaX = this._touch.moveX - this._touch.startX;
 
@@ -176,6 +183,8 @@ export class ZCarousel extends LitElement {
     }
 
     private _onTouchEnd() {
+        if (this.disabled) return;
+
         if (this._touch.validated) {
             const deltaX = this._touch.moveX - this._touch.startX;
             const touchAreaWidth = this._contentEl.clientWidth;
@@ -198,7 +207,7 @@ export class ZCarousel extends LitElement {
 
     @eventOptions({ capture: true })
     private _onMouseDown(e: MouseEvent) {
-        if (!this.drag) return;
+        if (this.disabled || !this.drag) return;
 
         this._mouse.startX = e.screenX;
         this._mouse.initialX = this._contentEl.scrollLeft;
@@ -206,7 +215,7 @@ export class ZCarousel extends LitElement {
     }
 
     private _onMouseMove(e: MouseEvent) {
-        if (!this.drag) return;
+        if (this.disabled || !this.drag) return;
 
         if (this._mouse.isDragging) {
             this._mouse.moveX = e.screenX
@@ -221,7 +230,7 @@ export class ZCarousel extends LitElement {
     }
 
     private _onMouseUp() {
-        if (!this.drag) return;
+        if (this.disabled || !this.drag) return;
 
         if (this._mouse.validated) {
             const deltaX = this._mouse.moveX - this._mouse.startX;
@@ -339,7 +348,7 @@ export class ZCarousel extends LitElement {
             this.navigation,
             () => html`
                 <button
-                    ?disabled="${!this._canGoPrevious}"
+                    ?disabled="${this.disabled || !this._canGoPrevious}"
                     aria-hidden="${!this._canGoPrevious}"
                     part="nav-btn nav-btn--prev ${!this._canGoPrevious ? 'nav-btn--disabled' : ''}"
                     class="carousel__btn carousel__nav carousel__nav--prev"
@@ -359,7 +368,7 @@ export class ZCarousel extends LitElement {
             this.navigation,
             () => html`
                 <button
-                    ?disabled="${!this._canGoNext}"
+                    ?disabled="${this.disabled || !this._canGoNext}"
                     aria-hidden="${!this._canGoNext}"
                     part="nav-btn nav-btn--next ${!this._canGoNext ? 'nav-btn--disabled' : ''}"
                     class="carousel__btn carousel__nav carousel__nav--next"
@@ -403,7 +412,7 @@ export class ZCarousel extends LitElement {
                     Array.from({ length: this._nbPages }) as HTMLElement[],
                     (_slideEl: HTMLElement, index: number) => html`
                         <button
-                            ?disabled="${(index + 1) === this.currentPage}"
+                            ?disabled="${this.disabled || (index + 1) === this.currentPage}"
                             aria-hidden="${(index + 1) !== this.currentPage}"
                             aria-selected="${(index + 1) === this.currentPage}"
                             type="button"

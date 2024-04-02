@@ -28,3 +28,12 @@ nav.innerHTML = /* html */`
 })
 
 document.body.querySelector('header')?.after(nav);
+
+document.querySelector('z-carousel#event-demo')?.addEventListener('change', (event) => {
+    console.log(event);
+
+    if ((event as CustomEvent).detail.next === 5) {
+        event.preventDefault();
+        alert('this action has been canceled!');
+    }
+});
