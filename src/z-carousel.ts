@@ -324,6 +324,8 @@ export class ZCarousel extends LitElement {
                 ${this._renderPagination()}
 
                 ${this._renderDots()}
+
+                <slot name="overlay"></slot>
             </div>
         `
     }
