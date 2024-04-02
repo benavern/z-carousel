@@ -149,7 +149,7 @@ export class ZCarousel extends LitElement {
      */
     private _safeAttributes() {
         this.currentPage = clamp(this.currentPage, { min: 1, max: this._nbPages });
-        this.perPage = clamp(this.perPage, { min: 1, max: this._nbPages });
+        this.perPage = clamp(this.perPage, { min: 1, max: this.slideElements.length });
         this.gap = clamp(this.gap, { min: 0 });
     }
 
