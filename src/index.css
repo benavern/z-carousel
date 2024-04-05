@@ -205,3 +205,20 @@ code {
 pre[class*="language-"] {
     border: none !important;
 }
+
+button {
+    display: inline-flex;
+    font-family: inherit;
+    font-size: inherit;
+    border: 1px solid var(--clr-accent);
+    border-radius: .25em;
+    background-color: transparent;
+    padding: .5em 1em;
+    box-shadow: 0 0 1em rgb(0 0 0 / .25);
+}
+
+button:hover {
+    cursor: pointer;
+    background-color: var(--clr-accent);
+    box-shadow: 0 0 1em rgb(0 0 0 / .5);
+}

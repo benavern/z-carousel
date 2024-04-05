@@ -29,6 +29,7 @@ nav.innerHTML = /* html */`
 
 document.body.querySelector('header')?.after(nav);
 
+// demo event
 document.querySelector('z-carousel#event-demo')?.addEventListener('change', (event) => {
     console.log(event);
 
@@ -37,3 +38,12 @@ document.querySelector('z-carousel#event-demo')?.addEventListener('change', (eve
         alert('this action has been canceled!');
     }
 });
+
+
+// demo disabled
+const disabledToggler = document.querySelector('button#disabled-demo-btn');
+const disabledCarousel = document.querySelector('z-carousel#disabled-demo');
+
+disabledToggler?.addEventListener('click', () => {
+    disabledCarousel?.toggleAttribute('disabled');
+})

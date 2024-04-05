@@ -350,9 +350,9 @@ export class ZCarousel extends LitElement {
                 <button
                     ?disabled="${this.disabled || !this._canGoPrevious}"
                     aria-hidden="${!this._canGoPrevious}"
-                    part="nav-btn nav-btn--prev ${!this._canGoPrevious ? 'nav-btn--disabled' : ''}"
+                    part="nav-btn nav-btn--prev ${(this.disabled || !this._canGoPrevious) ? 'nav-btn--disabled' : ''}"
                     class="carousel__btn carousel__nav carousel__nav--prev"
-                    @click="${() => this.goToPreviousPage()}"
+                    @click="${() => !this.disabled && this.goToPreviousPage()}"
                     type="button">
                     <slot name="nav-prev">
                         &lsaquo;
@@ -370,9 +370,9 @@ export class ZCarousel extends LitElement {
                 <button
                     ?disabled="${this.disabled || !this._canGoNext}"
                     aria-hidden="${!this._canGoNext}"
-                    part="nav-btn nav-btn--next ${!this._canGoNext ? 'nav-btn--disabled' : ''}"
+                    part="nav-btn nav-btn--next ${(this.disabled || !this._canGoNext) ? 'nav-btn--disabled' : ''}"
                     class="carousel__btn carousel__nav carousel__nav--next"
-                    @click="${() => this.goToNextPage()}"
+                    @click="${() => !this.disabled && this.goToNextPage()}"
                     type="button">
                     <slot name="nav-next">
                         &rsaquo;
