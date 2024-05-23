@@ -3,6 +3,9 @@ import { customElement, eventOptions, property, query, queryAssignedElements } f
 import { when } from 'lit/directives/when.js';
 import { map } from 'lit/directives/map.js';
 
+const MIN_SLIDING_VALIDATION = 25;
+const MIN_PAGE_CHANGE_VALIDATION = 50;
+
 const debounce = (cb: Function, delay: number = 1000) => {
     let timer: number;
     return (...args: any[]) => {
@@ -178,7 +181,7 @@ export class ZCarousel extends LitElement {
         const deltaX = this._touch.moveX - this._touch.startX;
 
         // start scrolling the carousel only when touch validated and the screen is not scrolling
-        if (Math.abs(deltaX) > 50) this._touch.validated = e.cancelable ;
+        if (Math.abs(deltaX) > MIN_SLIDING_VALIDATION) this._touch.validated = e.cancelable ;
 
         if (this._touch.validated) {
             e.preventDefault(); // prevent the page from scrolling when scrolling the carousel
@@ -191,12 +194,11 @@ export class ZCarousel extends LitElement {
 
         if (this._touch.validated) {
             const deltaX = this._touch.moveX - this._touch.startX;
-            const touchAreaWidth = this._contentEl.clientWidth;
 
-            // if translated a third the width of the area, go to direction page otherwize only reset the scroll
-            if (deltaX > (touchAreaWidth / 3)) {
+            // if translated at least, go to direction page otherwize only reset the scroll
+            if (deltaX > MIN_PAGE_CHANGE_VALIDATION) {
                 this.goToPreviousPage();
-            } else if (deltaX < -(touchAreaWidth / 3)) {
+            } else if (deltaX < -MIN_PAGE_CHANGE_VALIDATION) {
                 this.goToNextPage();
             } else {
                 this._updateScroll('instant');
@@ -225,7 +227,7 @@ export class ZCarousel extends LitElement {
             this._mouse.moveX = e.screenX;
             const deltaX = this._mouse.moveX - this._mouse.startX;
 
-            if (Math.abs(deltaX) > 50) this._mouse.validated = true;
+            if (Math.abs(deltaX) > MIN_SLIDING_VALIDATION) this._mouse.validated = true;
 
             if (this._mouse.validated) {
                 this._contentEl.scroll({ left: this._mouse.initialX - deltaX, behavior: 'instant' });
@@ -238,11 +240,10 @@ export class ZCarousel extends LitElement {
 
         if (this._mouse.validated) {
             const deltaX = this._mouse.moveX - this._mouse.startX;
-            const dragAreaWidth = this._contentEl.clientWidth;
 
-            if (deltaX > (dragAreaWidth / 3)) {
+            if (deltaX > MIN_PAGE_CHANGE_VALIDATION) {
                 this.goToPreviousPage();
-            } else if (deltaX < -(dragAreaWidth / 3)) {
+            } else if (deltaX < -MIN_PAGE_CHANGE_VALIDATION) {
                 this.goToNextPage();
             } else {
                 this._updateScroll();
