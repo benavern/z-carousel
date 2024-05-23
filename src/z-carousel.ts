@@ -112,14 +112,15 @@ export class ZCarousel extends LitElement {
     /*
      * =========== Lifecycle
      */
-    override firstUpdated() {
-        this._safeAttributes();    // initialize scrollValue on init
+    override firstUpdated(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
+        this._safeAttributes();
         this.goToPage(this.currentPage, 'instant');
 
         // react to element resize
         this._resizeObserver = new ResizeObserver(this._debouncedOnResize.bind(this));
         this._resizeObserver.observe(this._contentEl);
 
+        super.firstUpdated(changedProperties);
     }
 
     override updated(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
@@ -140,7 +141,7 @@ export class ZCarousel extends LitElement {
      */
     private _safeAttributes() {
         this.currentPage = clamp(this.currentPage, { min: 1, max: this._nbPages });
-        this.perPage = clamp(this.perPage, { min: 1, max: this.slideElements.length });
+        this.perPage = clamp(this.perPage, { min: 1 });
         this.gap = clamp(this.gap, { min: 0 });
     }
 
