@@ -38,10 +38,10 @@ export class ZCarousel extends LitElement {
     infinit = false;
 
     @property({ type: Boolean })
-    pagination = false
+    pagination = false;
 
     @property({ type: Boolean })
-    dots = false
+    dots = false;
 
     @property({ attribute: 'per-page', type: Number })
     perPage = 1;
@@ -114,10 +114,10 @@ export class ZCarousel extends LitElement {
      */
     override firstUpdated() {
         this._safeAttributes();    // initialize scrollValue on init
-        this.goToPage(this.currentPage, 'instant')
+        this.goToPage(this.currentPage, 'instant');
 
         // react to element resize
-        this._resizeObserver = new ResizeObserver(this._debouncedOnResize.bind(this))
+        this._resizeObserver = new ResizeObserver(this._debouncedOnResize.bind(this));
         this._resizeObserver.observe(this._contentEl);
 
     }
@@ -176,10 +176,13 @@ export class ZCarousel extends LitElement {
         this._touch.moveX = e.touches[0].clientX;
         const deltaX = this._touch.moveX - this._touch.startX;
 
-        // start scrolling the carousel only when touch validated
-        if (Math.abs(deltaX) > 50) this._touch.validated = true;
+        // start scrolling the carousel only when touch validated and the screen is not scrolling
+        if (Math.abs(deltaX) > 50) this._touch.validated = e.cancelable ;
 
-        if (this._touch.validated) this._contentEl.scrollTo({ left: this._touch.initialX - deltaX, behavior: 'instant' });
+        if (this._touch.validated) {
+            e.preventDefault(); // prevent the page from scrolling when scrolling the carousel
+            this._contentEl.scrollTo({ left: this._touch.initialX - deltaX, behavior: 'instant' });
+        }
     }
 
     private _onTouchEnd() {
@@ -218,7 +221,7 @@ export class ZCarousel extends LitElement {
         if (this.disabled || !this.drag) return;
 
         if (this._mouse.isDragging) {
-            this._mouse.moveX = e.screenX
+            this._mouse.moveX = e.screenX;
             const deltaX = this._mouse.moveX - this._mouse.startX;
 
             if (Math.abs(deltaX) > 50) this._mouse.validated = true;
@@ -259,13 +262,13 @@ export class ZCarousel extends LitElement {
     }
 
     goToPreviousPage(behavior: ScrollBehavior = 'auto') {
-        if (!this._canGoPrevious) return
+        if (!this._canGoPrevious) return;
 
         this.goToPage(this.currentPage === 1 ? this._nbPages : (this.currentPage - 1), behavior);
     }
 
     goToNextPage(behavior: ScrollBehavior = 'auto') {
-        if (!this._canGoNext) return
+        if (!this._canGoNext) return;
 
         this.goToPage(this.currentPage === this._nbPages ? 1 : (this.currentPage + 1), behavior);
     }
