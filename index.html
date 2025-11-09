@@ -510,7 +510,7 @@
 &lt;z-carousel navigation pagination dots drag id="disabled-demo"&gt; &lt;!--...--&gt; &lt;/z-carousel&gt;</code></pre>
 
                     <pre><code class="language-ts">const disabledToggler = document.querySelector('button#disabled-demo-btn');
-const disabledCarousel = document.querySelector('z-carousel#disabled-demo');
+const disabledCarousel = document.querySelector('z-carousel#disabled-demo') as ZCarousel | null;
 
 disabledToggler?.addEventListener('click', () => {
     disabledCarousel?.toggleAttribute('disabled');
@@ -546,10 +546,11 @@ disabledToggler?.addEventListener('click', () => {
 
                 <figcaption>
                     <pre><code class="language-html">&lt;z-carousel navigation pagination dots drag id="event-demo"&gt; &lt;!--...--&gt; &lt;/z-carousel&gt;</code></pre>
-                    <pre><code class="language-ts">document.querySelector('z-carousel#event-demo')?.addEventListener('change', (event) => {
+                    <pre><code class="language-ts">const eventDemoCarousel = document.querySelector('z-carousel#event-demo') as ZCarousel | null;
+eventDemoCarousel?.addEventListener(ZCarousel.events.change, (event) => {
     console.log(event);
 
-    if ((event as CustomEvent).detail.next === 5) {
+    if (event.detail.next === 5) {
         event.preventDefault();
         alert('this action has been canceled!');
     }
@@ -643,7 +644,7 @@ disabledToggler?.addEventListener('click', () => {
 
     <footer>
         <div class="container">
-            &copy; <a href="https://benjamin.caradeuc.info">Benjamin Caradeuc</a> 2024
+            &copy; <a href="https://benjamin.caradeuc.info">Benjamin Caradeuc</a> 1990 - 2025
         </div>
     </footer>
 </body>

@@ -1,32 +1,26 @@
 import { LitElement, type PropertyValueMap, css, html, nothing } from 'lit';
-import { customElement, eventOptions, property, query, queryAssignedElements } from 'lit/decorators.js';
+import { customElement, eventOptions, property, query, queryAssignedElements, state } from 'lit/decorators.js';
 import { when } from 'lit/directives/when.js';
 import { map } from 'lit/directives/map.js';
-
-const MIN_SLIDING_VALIDATION = 25;
-const MIN_PAGE_CHANGE_VALIDATION = 50;
-
-const debounce = (cb: Function, delay: number = 1000) => {
-    let timer: ReturnType<typeof setTimeout>;
-    return (...args: any[]) => {
-        clearTimeout(timer);
-        timer = setTimeout(() => {
-            cb(...args);
-        }, delay);
-    };
-};
-
-const clamp = (nb: number, { min = -Infinity, max = Infinity }) => {
-    return Math.max(min, Math.min(Number(nb) || min, max));
-}
+import { debounce, clamp } from './utils';
 
 export type ZCarouselChangeEvent = CustomEvent<{ current: number; next: number }>;
+
+interface ZCarouselEventMap extends HTMLElementEventMap {
+  [ZCarousel.events.change]: ZCarouselChangeEvent;
+}
 
 @customElement('z-carousel')
 export class ZCarousel extends LitElement {
     static events = {
         change: 'change',
     } as const;
+
+    addEventListener<K extends keyof ZCarouselEventMap>(
+        type: K,
+        listener: (this: ZCarousel, ev: ZCarouselEventMap[K]) => any,
+        options?: boolean | AddEventListenerOptions
+    ): void;
 
     /**
      * =========== Dom References
@@ -76,25 +70,13 @@ export class ZCarousel extends LitElement {
     @queryAssignedElements()
     private readonly slideElements!: HTMLElement[];
 
-    private _touch = {
-        initialX: 0,
-        startX: 0,
-        moveX: 0,
-        validated: false,
-    };
-
-    private _mouse = {
-        startX: 0,
-        moveX: 0,
-        initialX: 0,
-        validated: false,
-        isDragging: false,
-    };
-
     /**
      * =========== data
      */
     private _resizeObserver!: ResizeObserver;
+
+    @state()
+    private _isDragging = false;
 
     /*
      * =========== Computed
@@ -157,9 +139,6 @@ export class ZCarousel extends LitElement {
     }
 
     override updated(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
-        if (changedProperties.has('currentPage')) this._updateScroll();
-
-        // Mettre à jour les snap points quand perMove change
         if (changedProperties.has('perPage') || changedProperties.has('perMove') || changedProperties.has('slideElements')) {
             this._updateSnapPoints();
         }
@@ -176,120 +155,91 @@ export class ZCarousel extends LitElement {
     /*
      * =========== Methods
      */
-    private _debouncedOnResize = debounce(this._onResize.bind(this), 200);
+    private _debouncedOnResize = debounce(this._onResize.bind(this), 100);
     private _onResize() {
         this._updateScroll('instant');
     }
 
+    private _debouncedOnScroll = debounce(this._onScroll.bind(this), 100);
+    private _onScroll() {
+        const scrollLeft = this._contentEl.scrollLeft + this._offsetStart;
+
+        let closestIndex = 0;
+        let minDistance = Infinity;
+
+        for (let i = 0; i < this.slideElements.length; i += this._perMove) {
+            const el = this.slideElements[i];
+            const distance = Math.abs(el.offsetLeft - scrollLeft);
+
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestIndex = i;
+            }
+        }
+
+        const newPage = Math.floor(closestIndex / this._perMove) + 1;
+
+        if (newPage !== this._currentPage && newPage >= 1 && newPage <= this._nbPages) {
+            this.currentPage = newPage;
+        }
+    }
+
     private _onKeyDown(e: KeyboardEvent) {
-        if (this.disabled || e.target !== this._contentEl) return;
+        if (e.target !== this._contentEl) return;
 
-        // prevent the native scroll on key down
-        if(['ArrowLeft', 'ArrowRight'].includes(e.key)) e.preventDefault();
+        if(this.disabled) {
+            e.preventDefault();
+            return;
+        }
 
-        if (e.key === 'ArrowLeft') this.goToPreviousPage();
-        else if (e.key === 'ArrowRight') this.goToNextPage();
+        if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            this.goToPreviousPage();
+        } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            this.goToNextPage();
+        }
     }
 
     private _onWheel(e: WheelEvent) {
-        if (this.disabled || e.target !== this._contentEl && !this.contains(e.target as Node)) return;
-
-        // prevent the native scroll on whell horizontal scroll
+        // prevent native scroll on whell horizontal scroll
         if (e.deltaX !== 0) e.preventDefault();
+
+        if (this.disabled || e.target !== this._contentEl && !this.contains(e.target as Node)) return;
 
         if (e.deltaX < 0) this.goToPreviousPage();
         else if (e.deltaX > 0) this.goToNextPage();
     }
 
     private _onTouchStart(e: TouchEvent) {
-        if (this.disabled) return;
-
-        this._touch.startX = e.touches[0].clientX;
-        this._touch.initialX = this._contentEl.scrollLeft;
-    }
-
-    private _onTouchMove(e: TouchEvent) {
-        if (this.disabled) return;
-
-        this._touch.moveX = e.touches[0].clientX;
-        const deltaX = this._touch.moveX - this._touch.startX;
-
-        // start scrolling the carousel only when touch validated and the screen is not scrolling
-        if (Math.abs(deltaX) > MIN_SLIDING_VALIDATION) this._touch.validated = e.cancelable ;
-
-        if (this._touch.validated) {
-            e.preventDefault(); // prevent the page from scrolling when scrolling the carousel
-            this._contentEl.scrollTo({ left: this._touch.initialX - deltaX, behavior: 'instant' });
-        }
-    }
-
-    private _onTouchEnd() {
-        if (this.disabled) return;
-
-        if (this._touch.validated) {
-            const deltaX = this._touch.moveX - this._touch.startX;
-
-            // if translated at least, go to direction page otherwize only reset the scroll
-            if (deltaX > MIN_PAGE_CHANGE_VALIDATION) {
-                this.goToPreviousPage();
-            } else if (deltaX < -MIN_PAGE_CHANGE_VALIDATION) {
-                this.goToNextPage();
-            } else {
-                this._updateScroll('instant');
-            }
-        }
-
-        // Reset touch values
-        this._touch.startX = 0;
-        this._touch.moveX = 0;
-        this._touch.initialX = 0;
-        this._touch.validated = false;
+        // prevent native scroll on touch devices when disabled
+        if (this.disabled) e.preventDefault();
     }
 
     @eventOptions({ capture: true })
-    private _onMouseDown(e: MouseEvent) {
-        if (this.disabled || !this.drag) return;
+    private _onPointerDown(e: PointerEvent) {
+        if (this.disabled || !this.drag || e.pointerType !== 'mouse') return;
 
-        this._mouse.startX = e.screenX;
-        this._mouse.initialX = this._contentEl.scrollLeft;
-        this._mouse.isDragging = true;
+        this._isDragging = true;
     }
 
-    private _onMouseMove(e: MouseEvent) {
-        if (this.disabled || !this.drag) return;
+    private _onPointerMove(e: PointerEvent) {
+        if (!this._isDragging) return;
 
-        if (this._mouse.isDragging) {
-            this._mouse.moveX = e.screenX;
-            const deltaX = this._mouse.moveX - this._mouse.startX;
-
-            if (Math.abs(deltaX) > MIN_SLIDING_VALIDATION) this._mouse.validated = true;
-
-            if (this._mouse.validated) {
-                this._contentEl.scroll({ left: this._mouse.initialX - deltaX, behavior: 'instant' });
-            }
-        }
+        this._contentEl.scrollBy({
+            left: -e.movementX,
+            behavior: 'instant',
+        });
     }
 
-    private _onMouseUp() {
-        if (this.disabled || !this.drag) return;
+    private _onPointerUp() {
+        if (!this._isDragging) return;
 
-        if (this._mouse.validated) {
-            const deltaX = this._mouse.moveX - this._mouse.startX;
+        this._isDragging = false;
 
-            if (deltaX > MIN_PAGE_CHANGE_VALIDATION) {
-                this.goToPreviousPage();
-            } else if (deltaX < -MIN_PAGE_CHANGE_VALIDATION) {
-                this.goToNextPage();
-            } else {
-                this._updateScroll();
-            }
-        }
-
-        // reset mouse values
-        this._mouse.startX = 0;
-        this._mouse.moveX = 0;
-        this._mouse.validated = false;
-        this._mouse.isDragging = false;
+        // potential smooth pointer release
+        this._onScroll();
+        this._updateScroll('auto');
     }
 
     private _updateScroll(behavior: ScrollBehavior = 'auto') {
@@ -314,7 +264,7 @@ export class ZCarousel extends LitElement {
         this.goToPage(this._currentPage === this._nbPages ? 1 : (this._currentPage + 1), behavior);
     }
 
-    goToPage(pageNumber: number = 0, behavior: ScrollBehavior = 'auto') {
+    goToPage(pageNumber: number = 1, behavior: ScrollBehavior = 'auto') {
         if (this._currentPage !== pageNumber) {
             const evt: ZCarouselChangeEvent = new CustomEvent(ZCarousel.events.change, {
                 bubbles: true,
@@ -337,7 +287,6 @@ export class ZCarousel extends LitElement {
 
     private _updateSnapPoints() {
         this.slideElements.forEach((el, index) => {
-            // Snap sur chaque élément qui est un multiple de perMove
             if (index % this._perMove === 0) {
                 el.setAttribute('z-carousel-snap-point', '');
             } else {
@@ -369,15 +318,15 @@ export class ZCarousel extends LitElement {
                     part="content"
                     aria-live="polite"
                     role="listbox"
-                    tabindex="0"
+                    style=${this._isDragging ? 'scroll-snap-type: unset' : ''}
                     @keydown="${this._onKeyDown}"
                     @wheel="${this._onWheel}"
+                    @scroll="${this._debouncedOnScroll}"
                     @touchstart="${this._onTouchStart}"
-                    @touchmove="${this._onTouchMove}"
-                    @touchend="${this._onTouchEnd}"
-                    @mousedown="${this._onMouseDown}"
-                    @mousemove="${this._onMouseMove}"
-                    @mouseup="${this._onMouseUp}">
+                    @pointerdown="${this._onPointerDown}"
+                    @pointermove="${this._onPointerMove}"
+                    @pointerup="${this._onPointerUp}"
+                    @pointercancel="${this._onPointerUp}">
                     <slot></slot>
 
                     ${this._renderShadowElements()}
@@ -406,7 +355,6 @@ export class ZCarousel extends LitElement {
             () => html`
                 <button
                     ?disabled="${this.disabled || !this._canGoPrevious}"
-                    aria-hidden="${!this._canGoPrevious}"
                     part="nav-btn nav-btn--prev ${(this.disabled || !this._canGoPrevious) ? 'nav-btn--disabled' : ''}"
                     class="carousel__btn carousel__nav carousel__nav--prev"
                     @click="${() => !this.disabled && this.goToPreviousPage()}"
@@ -426,7 +374,6 @@ export class ZCarousel extends LitElement {
             () => html`
                 <button
                     ?disabled="${this.disabled || !this._canGoNext}"
-                    aria-hidden="${!this._canGoNext}"
                     part="nav-btn nav-btn--next ${(this.disabled || !this._canGoNext) ? 'nav-btn--disabled' : ''}"
                     class="carousel__btn carousel__nav carousel__nav--next"
                     @click="${() => !this.disabled && this.goToNextPage()}"
@@ -471,7 +418,7 @@ export class ZCarousel extends LitElement {
                             ?disabled="${this.disabled || (index + 1) === this._currentPage}"
                             aria-selected="${(index + 1) === this._currentPage}"
                             type="button"
-                            role="button"
+                            role="option"
                             part="dots-item ${(index + 1) === this._currentPage ? 'dots-item--active' : ''}"
                             class="carousel__btn"
                             data-page="${(index + 1)}"
@@ -524,9 +471,8 @@ export class ZCarousel extends LitElement {
             grid-auto-columns: calc((100% - (var(--_z-carousel-gap) * (var(--_z-carousel-per-page) - 1))) / var(--_z-carousel-per-page));
             grid-auto-rows: 100%;
             column-gap: var(--_z-carousel-gap, 0);
-            /* overflow: auto clip; // cant detect page change on touchmove :(
-            scrollbar-width: none; */
-            overflow-x: hidden;
+            overflow: auto clip;
+            scrollbar-width: none;
             scroll-snap-type: x mandatory;
             scroll-padding-inline: var(--_z-carousel-offset-start) var(--_z-carousel-offset-end);
             padding-inline: var(--_z-carousel-offset-start) var(--_z-carousel-offset-end);
