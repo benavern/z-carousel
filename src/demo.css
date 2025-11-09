@@ -23,9 +23,17 @@ z-carousel.styled {
     border-radius: 10px;
 }
 
+z-carousel > img {
+    aspect-ratio: 16 / 9;
+}
+
 z-carousel.styled::part(content) {
     align-items: center;
     scroll-behavior: smooth;
+}
+
+z-carousel.styled > img {
+    aspect-ratio: 4 / 3;
 }
 
 z-carousel.styled::part(nav-btn) {

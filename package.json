@@ -19,9 +19,9 @@
         "lint:ts": "tsc --noEmit"
     },
     "devDependencies": {
-        "lit": "^3.2.1",
-        "typescript": "^5.7.2",
-        "vite": "^5.4.11",
-        "vite-plugin-dts": "^4.3.0"
+        "lit": "^3.3.1",
+        "typescript": "^5.9.3",
+        "vite": "^7.2.2",
+        "vite-plugin-dts": "^4.5.4"
     }
 }
