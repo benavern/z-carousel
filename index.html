@@ -422,7 +422,7 @@
             <p>The attributes are <code>offset-start</code> and <code>offset-end</code>. Their values are pixels</p>
 
             <figure>
-                <z-carousel navigation pagination per-page="3" gap="20" offset-start="60" offset-end="60">
+                <z-carousel navigation pagination per-page="3" gap="10" offset-start="40" offset-end="40">
                     <img src="https://picsum.photos/320/180?random=offsets-1" loading="lazy">
                     <img src="https://picsum.photos/320/180?random=offsets-2" loading="lazy">
                     <img src="https://picsum.photos/320/180?random=offsets-3" loading="lazy">
@@ -434,7 +434,7 @@
                 </z-carousel>
 
                 <figcaption>
-                    <pre><code class="language-html">&lt;z-carousel navigation pagination per-page="3" gap="20" offset-start="60" offset-end="60"&gt; &lt;!--...--&gt; &lt;/z-carousel&gt;</code></pre>
+                    <pre><code class="language-html">&lt;z-carousel navigation pagination per-page="3" gap="10" offset-start="40" offset-end="40"&gt; &lt;!--...--&gt; &lt;/z-carousel&gt;</code></pre>
                 </figcaption>
             </figure>
         </div>
@@ -570,7 +570,17 @@ eventDemoCarousel?.addEventListener(ZCarousel.events.change, (event) => {
             </p>
 
             <figure>
-                <z-carousel class="styled" navigation pagination per-page="2" per-move="2" offset-start="120" offset-end="120" gap="20" dots drag>
+                <z-carousel
+                    class="styled"
+                    navigation
+                    pagination
+                    per-page="2"
+                    per-move="2"
+                    offset-start="40"
+                    offset-end="40"
+                    gap="10"
+                    dots
+                    drag>
                     <img src="https://picsum.photos/400/300?random=styled-1" loading="lazy">
                     <img src="https://picsum.photos/400/300?random=styled-2" loading="lazy">
                     <img src="https://picsum.photos/400/300?random=styled-3" loading="lazy">
@@ -599,9 +609,9 @@ eventDemoCarousel?.addEventListener(ZCarousel.events.change, (event) => {
     pagination
     per-page="2"
     per-move="2"
-    offset-start="120"
-    offset-end="120"
-    gap="20"
+    offset-start="40"
+    offset-end="40"
+    gap="10"
     dots
     drag&gt;
     &lt;img src="https://picsum.photos/400/300?random=styled-1" loading="lazy"&gt;
