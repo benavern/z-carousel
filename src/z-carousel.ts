@@ -6,9 +6,11 @@ import { debounce, clamp } from './utils';
 
 export type ZCarouselChangeEvent = CustomEvent<{ current: number; next: number }>;
 
-interface ZCarouselEventMap extends HTMLElementEventMap {
-  [ZCarousel.events.change]: ZCarouselChangeEvent;
+export interface ZCarouselEventMap extends HTMLElementEventMap {
+    [ZCarousel.events.change]: ZCarouselChangeEvent;
 }
+
+export type ZCarouselElement = ZCarousel & HTMLElement;
 
 @customElement('z-carousel')
 export class ZCarousel extends LitElement {
@@ -20,7 +22,9 @@ export class ZCarousel extends LitElement {
         type: K,
         listener: (this: ZCarousel, ev: ZCarouselEventMap[K]) => any,
         options?: boolean | AddEventListenerOptions
-    ): void;
+    ) {
+        super.addEventListener(type, listener as EventListenerOrEventListenerObject, options);
+    }
 
     /**
      * =========== Dom References

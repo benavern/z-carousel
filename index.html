@@ -509,8 +509,8 @@
 
 &lt;z-carousel navigation pagination dots drag id="disabled-demo"&gt; &lt;!--...--&gt; &lt;/z-carousel&gt;</code></pre>
 
-                    <pre><code class="language-ts">const disabledToggler = document.querySelector('button#disabled-demo-btn');
-const disabledCarousel = document.querySelector('z-carousel#disabled-demo') as ZCarousel | null;
+                    <pre><code class="language-ts">const disabledToggler = document.querySelector&lt;HTMLButtonElement&gt;('button#disabled-demo-btn');
+const disabledCarousel = document.querySelector&lt;ZCarouselElement&gt;('z-carousel#disabled-demo');
 
 disabledToggler?.addEventListener('click', () => {
     disabledCarousel?.toggleAttribute('disabled');
@@ -546,7 +546,7 @@ disabledToggler?.addEventListener('click', () => {
 
                 <figcaption>
                     <pre><code class="language-html">&lt;z-carousel navigation pagination dots drag id="event-demo"&gt; &lt;!--...--&gt; &lt;/z-carousel&gt;</code></pre>
-                    <pre><code class="language-ts">const eventDemoCarousel = document.querySelector('z-carousel#event-demo') as ZCarousel | null;
+                    <pre><code class="language-ts">const eventDemoCarousel = document.querySelector&lt;ZCarouselElement&gt;('z-carousel#event-demo');
 eventDemoCarousel?.addEventListener(ZCarousel.events.change, (event) => {
     console.log(event);
 

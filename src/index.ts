@@ -1,5 +1,5 @@
 import './z-carousel.ts'
-import { ZCarousel, ZCarouselChangeEvent } from './z-carousel.ts';
+import { ZCarousel, type ZCarouselElement } from './z-carousel.ts';
 
 // Add navigation in demo page.
 const navItems = document.querySelectorAll('section h2');
@@ -31,7 +31,7 @@ nav.innerHTML = /* html */`
 document.body.querySelector('header')?.after(nav);
 
 // demo event
-const eventDemoCarousel = document.querySelector('z-carousel#event-demo') as ZCarousel | null;
+const eventDemoCarousel = document.querySelector<ZCarouselElement>('z-carousel#event-demo');
 eventDemoCarousel?.addEventListener(ZCarousel.events.change, (event) => {
     console.log(event);
 
@@ -42,8 +42,8 @@ eventDemoCarousel?.addEventListener(ZCarousel.events.change, (event) => {
 });
 
 // demo disabled
-const disabledToggler = document.querySelector('button#disabled-demo-btn');
-const disabledCarousel = document.querySelector('z-carousel#disabled-demo') as ZCarousel | null;
+const disabledToggler = document.querySelector<HTMLButtonElement>('button#disabled-demo-btn');
+const disabledCarousel = document.querySelector<ZCarouselElement>('z-carousel#disabled-demo');
 
 disabledToggler?.addEventListener('click', () => {
     disabledCarousel?.toggleAttribute('disabled');
