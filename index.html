@@ -69,59 +69,16 @@
 
             <pre><code class="language-html">&lt;script type="module" src="https://unpkg.com/@benavern/z-carousel"&gt;&lt;/script&gt;</code></pre>
 
-            <hr>
-
-            <h3>Have fun</h3>
-
-            <p>For example you can use it to display a slider of images</p>
-
-            <pre><code class="language-html">&lt;z-carousel&gt;
-  &lt;img src="https://picsum.photos/960/540?random=1"&gt;
-
-  &lt;img src="https://picsum.photos/960/540?random=2"&gt;
-&lt;/z-carousel&gt;</code></pre>
-
-            <z-carousel>
-                <img src="https://picsum.photos/960/540?random=1" loading="lazy">
-
-                <img src="https://picsum.photos/960/540?random=2" loading="lazy">
-            </z-carousel>
-
-            <p>Any HTML will work</p>
-
-            <pre><code class="language-html">&lt;z-carousel&gt;
-  &lt;p&gt;
-    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Inventore vel recusandae quae accusamus, dolore facilis maxime laboriosam quod provident magni in voluptates unde ex. Eveniet ex a expedita numquam soluta?
-  &lt;/p&gt;
-
-  &lt;p&gt;
-    Earum voluptas eius modi consequatur debitis omnis excepturi enim dolorum aut eos. Illum consequatur, commodi, temporibus doloribus unde laboriosam quam adipisci cum, obcaecati incidunt animi dolore quo accusantium possimus voluptatem?
-  &lt;/p&gt;
-&lt;/z-carousel&gt;</code></pre>
-
-            <z-carousel>
-                <p>
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Inventore vel recusandae quae accusamus,
-                    dolore facilis maxime laboriosam quod provident magni in voluptates unde ex. Eveniet ex a expedita
-                    numquam soluta?
-                </p>
-
-                <p>
-                    Earum voluptas eius modi consequatur debitis omnis excepturi enim dolorum aut eos. Illum
-                    consequatur, commodi, temporibus doloribus unde laboriosam quam adipisci cum, obcaecati incidunt
-                    animi dolore quo accusantium possimus voluptatem?
-                </p>
-            </z-carousel>
         </div>
     </section>
 
     <section>
         <div class="container">
-            <h2 id="base">Base</h2>
+            <h2 id="hav-fun">Have fun</h2>
 
             <p>
-                Here is the raw component, you can add anything inside. Each root element will be considered as a slide
-                unless you use one of the defined slots.
+                You can add anything inside the component.
+                Each root element will be considered as a slide unless you use one of the defined slots.
             </p>
 
             <p>
@@ -137,17 +94,52 @@
                 On mobile, you can swipe with your finger from page to page.
             </p>
 
+            <p>For example you can use it to display a slider of images</p>
+
             <figure>
                 <z-carousel>
-                    <img src="https://picsum.photos/960/540?random=base-1" loading="lazy">
-                    <img src="https://picsum.photos/960/540?random=base-2" loading="lazy">
-                    <img src="https://picsum.photos/960/540?random=base-3" loading="lazy">
-                    <img src="https://picsum.photos/960/540?random=base-4" loading="lazy">
-                    <img src="https://picsum.photos/960/540?random=base-5" loading="lazy">
-                    <img src="https://picsum.photos/960/540?random=base-6" loading="lazy">
-                    <img src="https://picsum.photos/960/540?random=base-7" loading="lazy">
-                    <img src="https://picsum.photos/960/540?random=base-8" loading="lazy">
+                    <img src="https://picsum.photos/960/540?random=1" loading="lazy">
+
+                    <img src="https://picsum.photos/960/540?random=2" loading="lazy">
                 </z-carousel>
+
+                <figcaption>
+                    <pre><code class="language-html">&lt;z-carousel&gt;
+  &lt;img src="https://picsum.photos/960/540?random=1"&gt;
+
+  &lt;img src="https://picsum.photos/960/540?random=2"&gt;
+&lt;/z-carousel&gt;</code></pre>
+                </figcaption>
+            </figure>
+
+            <p>Any HTML will work</p>
+
+            <figure>
+                <z-carousel>
+                    <p>
+                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Inventore vel recusandae quae accusamus,
+                        dolore facilis maxime laboriosam quod provident magni in voluptates unde ex. Eveniet ex a expedita
+                        numquam soluta?
+                    </p>
+
+                    <p>
+                        Earum voluptas eius modi consequatur debitis omnis excepturi enim dolorum aut eos. Illum
+                        consequatur, commodi, temporibus doloribus unde laboriosam quam adipisci cum, obcaecati incidunt
+                        animi dolore quo accusantium possimus voluptatem?
+                    </p>
+                </z-carousel>
+
+                <figcaption>
+                    <pre><code class="language-html">&lt;z-carousel&gt;
+  &lt;p&gt;
+    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Inventore vel recusandae quae accusamus, dolore facilis maxime laboriosam quod provident magni in voluptates unde ex. Eveniet ex a expedita numquam soluta?
+  &lt;/p&gt;
+
+  &lt;p&gt;
+    Earum voluptas eius modi consequatur debitis omnis excepturi enim dolorum aut eos. Illum consequatur, commodi, temporibus doloribus unde laboriosam quam adipisci cum, obcaecati incidunt animi dolore quo accusantium possimus voluptatem?
+  &lt;/p&gt;
+&lt;/z-carousel&gt;</code></pre>
+                </figcaption>
             </figure>
         </div>
     </section>
@@ -175,6 +167,10 @@
                     <img src="https://picsum.photos/960/540?random=drag-7" loading="lazy">
                     <img src="https://picsum.photos/960/540?random=drag-8" loading="lazy">
                 </z-carousel>
+
+                <figcaption>
+                    <pre><code class="language-html">&lt;z-carousel drag&gt; &lt;!--...--&gt; &lt;/z-carousel&gt;</code></pre>
+                </figcaption>
             </figure>
         </div>
     </section>
@@ -199,6 +195,11 @@
                     <img src="https://picsum.photos/960/540?random=nav-7" loading="lazy">
                     <img src="https://picsum.photos/960/540?random=nav-8" loading="lazy">
                 </z-carousel>
+
+
+                <figcaption>
+                    <pre><code class="language-html">&lt;z-carousel navigation&gt; &lt;!--...--&gt; &lt;/z-carousel&gt;</code></pre>
+                </figcaption>
             </figure>
 
             <hr>
@@ -234,13 +235,17 @@
                 </z-carousel>
 
                 <figcaption>
-                    <pre><code class="language-html">&lt;span slot="nav-prev"&gt;
-  Before
-&lt;/span&gt;
+                    <pre><code class="language-html">&lt;z-carousel navigation&gt;
+    &lt;!--...--&gt;
 
-&lt;span slot="nav-next"&gt;
-  After
-&lt;/span&gt;</code></pre>
+    &lt;span slot="nav-prev"&gt;
+        Before
+    &lt;/span&gt;
+
+    &lt;span slot="nav-next"&gt;
+        After
+    &lt;/span&gt;
+&lt;/z-carousel&gt;</code></pre>
                 </figcaption>
             </figure>
         </div>
@@ -248,21 +253,25 @@
 
     <section>
         <div class="container">
-            <h2 id="infinit">Infinit</h2>
+            <h2 id="infinit">Loop</h2>
 
-            <p>It is possible to cycle threw the carousel with the <code>infinit</code> attribute.</p>
+            <p>It is possible to cycle threw the carousel with the <code>loop</code> attribute.</p>
 
             <figure>
-                <z-carousel navigation infinit>
-                    <img src="https://picsum.photos/960/540?random=infinit-1" loading="lazy">
-                    <img src="https://picsum.photos/960/540?random=infinit-2" loading="lazy">
-                    <img src="https://picsum.photos/960/540?random=infinit-3" loading="lazy">
-                    <img src="https://picsum.photos/960/540?random=infinit-4" loading="lazy">
-                    <img src="https://picsum.photos/960/540?random=infinit-5" loading="lazy">
-                    <img src="https://picsum.photos/960/540?random=infinit-6" loading="lazy">
-                    <img src="https://picsum.photos/960/540?random=infinit-7" loading="lazy">
-                    <img src="https://picsum.photos/960/540?random=infinit-8" loading="lazy">
+                <z-carousel navigation loop>
+                    <img src="https://picsum.photos/960/540?random=loop-1" loading="lazy">
+                    <img src="https://picsum.photos/960/540?random=loop-2" loading="lazy">
+                    <img src="https://picsum.photos/960/540?random=loop-3" loading="lazy">
+                    <img src="https://picsum.photos/960/540?random=loop-4" loading="lazy">
+                    <img src="https://picsum.photos/960/540?random=loop-5" loading="lazy">
+                    <img src="https://picsum.photos/960/540?random=loop-6" loading="lazy">
+                    <img src="https://picsum.photos/960/540?random=loop-7" loading="lazy">
+                    <img src="https://picsum.photos/960/540?random=loop-8" loading="lazy">
                 </z-carousel>
+
+                <figcaption>
+                    <pre><code class="language-html">&lt;z-carousel navigation loop&gt; &lt;!--...--&gt; &lt;/z-carousel&gt;</code></pre>
+                </figcaption>
             </figure>
         </div>
     </section>
@@ -286,6 +295,10 @@
                     <img src="https://picsum.photos/960/540?random=current-slide-index-7" loading="lazy">
                     <img src="https://picsum.photos/960/540?random=current-slide-index-8" loading="lazy">
                 </z-carousel>
+
+                <figcaption>
+                    <pre><code class="language-html">&lt;z-carousel navigation curent-page="2"&gt; &lt;!--...--&gt; &lt;/z-carousel&gt;</code></pre>
+                </figcaption>
             </figure>
         </div>
     </section>
@@ -307,6 +320,39 @@
                     <img src="https://picsum.photos/320/180?random=per-page-7" loading="lazy">
                     <img src="https://picsum.photos/320/180?random=per-page-8" loading="lazy">
                 </z-carousel>
+
+                <figcaption>
+                    <pre><code class="language-html">&lt;z-carousel navigation per-page="3"&gt; &lt;!--...--&gt; &lt;/z-carousel&gt;</code></pre>
+                </figcaption>
+            </figure>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <h2 id="per-move">Multiple items per move</h2>
+
+            <p>By default, each move will go by <code>per-page</code> items, you can customize the number of elements the carousel will move each time.</p>
+
+            <p>Default value is <code>per-page</code>, the value must be clamped between 1 and <code>per-page</code> value</p>
+
+            <p>In this example here are the values: <code>per-page="3" per-move="2"</code></p>
+
+            <figure>
+                <z-carousel navigation per-page="3" per-move="2">
+                    <img src="https://picsum.photos/320/180?random=per-move-1" loading="lazy">
+                    <img src="https://picsum.photos/320/180?random=per-move-2" loading="lazy">
+                    <img src="https://picsum.photos/320/180?random=per-move-3" loading="lazy">
+                    <img src="https://picsum.photos/320/180?random=per-move-4" loading="lazy">
+                    <img src="https://picsum.photos/320/180?random=per-move-5" loading="lazy">
+                    <img src="https://picsum.photos/320/180?random=per-move-6" loading="lazy">
+                    <img src="https://picsum.photos/320/180?random=per-move-7" loading="lazy">
+                    <img src="https://picsum.photos/320/180?random=per-move-8" loading="lazy">
+                </z-carousel>
+
+                <figcaption>
+                    <pre><code class="language-html">&lt;z-carousel navigation per-page="3" per-move="2"&gt; &lt;!--...--&gt; &lt;/z-carousel&gt;</code></pre>
+                </figcaption>
             </figure>
         </div>
     </section>
@@ -316,8 +362,11 @@
             <h2 id="pagination">Pagination</h2>
 
             <p>
-                You can add a fraction counter for pagination, this will show the current page number over the total
-                pages number
+                You can add a fraction counter for pagination, this will show the current page number over the total pages number.
+            </p>
+
+            <p>
+                the number of pages is dependant of the per-move value!
             </p>
 
             <figure>
@@ -331,6 +380,10 @@
                     <img src="https://picsum.photos/960/540?random=pagination-7" loading="lazy">
                     <img src="https://picsum.photos/960/540?random=pagination-8" loading="lazy">
                 </z-carousel>
+
+                <figcaption>
+                    <pre><code class="language-html">&lt;z-carousel navigation pagination per-page="3"&gt; &lt;!--...--&gt; &lt;/z-carousel&gt;</code></pre>
+                </figcaption>
             </figure>
         </div>
     </section>
@@ -339,7 +392,7 @@
         <div class="container">
             <h2 id="gap">Gap</h2>
 
-            <p>You can add a little bit of space betwin the slides by using the <code>gap</code> property.</p>
+            <p>You can add a little bit of space between the slides by using the <code>gap</code> property.</p>
 
             <figure>
                 <z-carousel navigation pagination per-page="3" gap="20">
@@ -352,6 +405,37 @@
                     <img src="https://picsum.photos/320/180?random=per-page-7" loading="lazy">
                     <img src="https://picsum.photos/320/180?random=per-page-8" loading="lazy">
                 </z-carousel>
+
+                <figcaption>
+                    <pre><code class="language-html">&lt;z-carousel navigation pagination per-page="3" gap="20"&gt; &lt;!--...--&gt; &lt;/z-carousel&gt;</code></pre>
+                </figcaption>
+            </figure>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <h2 id="offsets">Offsets</h2>
+
+            <p>You can add offsets on the start and end of the carousel, it will make a part of the previous and/of next elements visible.</p>
+
+            <p>The attributes are <code>offset-start</code> and <code>offset-end</code>. Their values are pixels</p>
+
+            <figure>
+                <z-carousel navigation pagination per-page="3" gap="10" offset-start="40" offset-end="40">
+                    <img src="https://picsum.photos/320/180?random=offsets-1" loading="lazy">
+                    <img src="https://picsum.photos/320/180?random=offsets-2" loading="lazy">
+                    <img src="https://picsum.photos/320/180?random=offsets-3" loading="lazy">
+                    <img src="https://picsum.photos/320/180?random=offsets-4" loading="lazy">
+                    <img src="https://picsum.photos/320/180?random=offsets-5" loading="lazy">
+                    <img src="https://picsum.photos/320/180?random=offsets-6" loading="lazy">
+                    <img src="https://picsum.photos/320/180?random=offsets-7" loading="lazy">
+                    <img src="https://picsum.photos/320/180?random=offsets-8" loading="lazy">
+                </z-carousel>
+
+                <figcaption>
+                    <pre><code class="language-html">&lt;z-carousel navigation pagination per-page="3" gap="10" offset-start="40" offset-end="40"&gt; &lt;!--...--&gt; &lt;/z-carousel&gt;</code></pre>
+                </figcaption>
             </figure>
         </div>
     </section>
@@ -380,6 +464,10 @@
                     <img src="https://picsum.photos/960/540?random=dots-7" loading="lazy">
                     <img src="https://picsum.photos/960/540?random=dots-8" loading="lazy">
                 </z-carousel>
+
+                <figcaption>
+                    <pre><code class="language-html">&lt;z-carousel navigation pagination dots&gt; &lt;!--...--&gt; &lt;/z-carousel&gt;</code></pre>
+                </figcaption>
             </figure>
         </div>
     </section>
@@ -413,6 +501,21 @@
                     <img src="https://picsum.photos/960/540?random=disabled-7" loading="lazy">
                     <img src="https://picsum.photos/960/540?random=disabled-8" loading="lazy">
                 </z-carousel>
+
+                <figcaption>
+                    <pre><code class="language-html">&lt;button id="disabled-demo-btn"&gt;
+    Toggle disabled
+&lt;/button&gt;
+
+&lt;z-carousel navigation pagination dots drag id="disabled-demo"&gt; &lt;!--...--&gt; &lt;/z-carousel&gt;</code></pre>
+
+                    <pre><code class="language-ts">const disabledToggler = document.querySelector&lt;HTMLButtonElement&gt;('button#disabled-demo-btn');
+const disabledCarousel = document.querySelector&lt;ZCarouselElement&gt;('z-carousel#disabled-demo');
+
+disabledToggler?.addEventListener('click', () => {
+    disabledCarousel?.toggleAttribute('disabled');
+})</code></pre>
+                </figcaption>
             </figure>
         </div>
     </section>
@@ -442,10 +545,12 @@
                 </z-carousel>
 
                 <figcaption>
-                    <pre><code class="language-ts">document.querySelector('z-carousel#event-demo')?.addEventListener('change', (event) => {
+                    <pre><code class="language-html">&lt;z-carousel navigation pagination dots drag id="event-demo"&gt; &lt;!--...--&gt; &lt;/z-carousel&gt;</code></pre>
+                    <pre><code class="language-ts">const eventDemoCarousel = document.querySelector&lt;ZCarouselElement&gt;('z-carousel#event-demo');
+eventDemoCarousel?.addEventListener(ZCarousel.events.change, (event) => {
     console.log(event);
 
-    if ((event as CustomEvent).detail.next === 5) {
+    if (event.detail.next === 5) {
         event.preventDefault();
         alert('this action has been canceled!');
     }
@@ -465,15 +570,25 @@
             </p>
 
             <figure>
-                <z-carousel class="styled" navigation pagination per-page="2" gap="20" dots drag>
-                    <img src="https://picsum.photos/960/540?random=styled-1" loading="lazy">
-                    <img src="https://picsum.photos/960/540?random=styled-2" loading="lazy">
-                    <img src="https://picsum.photos/960/540?random=styled-3" loading="lazy">
-                    <img src="https://picsum.photos/960/540?random=styled-4" loading="lazy">
-                    <img src="https://picsum.photos/960/540?random=styled-5" loading="lazy">
-                    <img src="https://picsum.photos/960/540?random=styled-6" loading="lazy">
-                    <img src="https://picsum.photos/960/540?random=styled-7" loading="lazy">
-                    <img src="https://picsum.photos/960/540?random=styled-8" loading="lazy">
+                <z-carousel
+                    class="styled"
+                    navigation
+                    pagination
+                    per-page="2"
+                    per-move="2"
+                    offset-start="40"
+                    offset-end="40"
+                    gap="10"
+                    dots
+                    drag>
+                    <img src="https://picsum.photos/400/300?random=styled-1" loading="lazy">
+                    <img src="https://picsum.photos/400/300?random=styled-2" loading="lazy">
+                    <img src="https://picsum.photos/400/300?random=styled-3" loading="lazy">
+                    <img src="https://picsum.photos/400/300?random=styled-4" loading="lazy">
+                    <img src="https://picsum.photos/400/300?random=styled-5" loading="lazy">
+                    <img src="https://picsum.photos/400/300?random=styled-6" loading="lazy">
+                    <img src="https://picsum.photos/400/300?random=styled-7" loading="lazy">
+                    <img src="https://picsum.photos/400/300?random=styled-8" loading="lazy">
 
                     <svg slot="nav-prev" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
                         viewBox="0 0 24 24">
@@ -489,12 +604,49 @@
                 </z-carousel>
 
                 <figcaption>
+                    <pre><code class="language-html">&lt;z-carousel
+    navigation
+    pagination
+    per-page="2"
+    per-move="2"
+    offset-start="40"
+    offset-end="40"
+    gap="10"
+    dots
+    drag&gt;
+    &lt;img src="https://picsum.photos/400/300?random=styled-1" loading="lazy"&gt;
+    &lt;img src="https://picsum.photos/400/300?random=styled-2" loading="lazy"&gt;
+    &lt;img src="https://picsum.photos/400/300?random=styled-3" loading="lazy"&gt;
+    &lt;img src="https://picsum.photos/400/300?random=styled-4" loading="lazy"&gt;
+    &lt;img src="https://picsum.photos/400/300?random=styled-5" loading="lazy"&gt;
+    &lt;img src="https://picsum.photos/400/300?random=styled-6" loading="lazy"&gt;
+    &lt;img src="https://picsum.photos/400/300?random=styled-7" loading="lazy"&gt;
+    &lt;img src="https://picsum.photos/400/300?random=styled-8" loading="lazy"&gt;
+
+    &lt;svg slot="nav-prev" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
+        viewBox="0 0 24 24"&gt;
+        &lt;path d="M6 12H18M6 12L11 7M6 12L11 17" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" /&gt;
+    &lt;/svg&gt;
+
+    &lt;svg slot="nav-next" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
+        viewBox="0 0 24 24"&gt;
+        &lt;path d="M6 12H18M18 12L13 7M18 12L13 17" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" /&gt;
+    &lt;/svg&gt;
+&lt;/z-carousel&gt;</code></pre>
+
                     <p>You can style some <code>::part()</code> elements of the component</p>
+
                     <pre><code class="language-css">::part(content)
 ::part(nav-btn /* nav-btn--prev nav-btn--next nav-btn--disabled */)
 ::part(pagination)
 ::part(dots)
 ::part(dots-item /* dots-item--active */)</code></pre>
+
+                    <p><strong>Tip</strong>: Add smooth transitions with</p>
+
+                    <pre><code class="language-css">z-carousel::part(content) { scroll-behavior: smooth; }</code></pre>
                 </figcaption>
             </figure>
         </div>
@@ -502,7 +654,7 @@
 
     <footer>
         <div class="container">
-            &copy; <a href="https://benjamin.caradeuc.info">Benjamin Caradeuc</a> 2024
+            &copy; <a href="https://benjamin.caradeuc.info">Benjamin Caradeuc</a> 1990 - 2025
         </div>
     </footer>
 </body>

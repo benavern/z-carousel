@@ -1,32 +1,36 @@
-import { LitElement, PropertyValueMap, ReactiveElement, css, html, nothing } from 'lit';
-import { customElement, eventOptions, property, query, queryAssignedElements } from 'lit/decorators.js';
+import { LitElement, type PropertyValueMap, css, html, nothing } from 'lit';
+import { customElement, eventOptions, property, query, queryAssignedElements, state } from 'lit/decorators.js';
 import { when } from 'lit/directives/when.js';
 import { map } from 'lit/directives/map.js';
+import { debounce, clamp } from './utils';
 
-const MIN_SLIDING_VALIDATION = 25;
-const MIN_PAGE_CHANGE_VALIDATION = 50;
+export type ZCarouselChangeEvent = CustomEvent<{ current: number; next: number }>;
 
-const debounce = (cb: Function, delay: number = 1000) => {
-    let timer: number;
-    return (...args: any[]) => {
-        clearTimeout(timer);
-        timer = setTimeout(() => {
-            cb(...args);
-        }, delay);
-    };
-};
-
-const clamp = (nb: Number, { min = -Infinity, max = Infinity }) => {
-    return Math.max(min, Math.min(Number(nb) || min, max));
+export interface ZCarouselEventMap extends HTMLElementEventMap {
+    [ZCarousel.events.change]: ZCarouselChangeEvent;
 }
+
+export type ZCarouselElement = ZCarousel & HTMLElement;
 
 @customElement('z-carousel')
 export class ZCarousel extends LitElement {
+    static events = {
+        change: 'change',
+    } as const;
+
+    addEventListener<K extends keyof ZCarouselEventMap>(
+        type: K,
+        listener: (this: ZCarousel, ev: ZCarouselEventMap[K]) => any,
+        options?: boolean | AddEventListenerOptions
+    ) {
+        super.addEventListener(type, listener as EventListenerOrEventListenerObject, options);
+    }
+
     /**
      * =========== Dom References
      */
     @query('.carousel__content')
-    private _contentEl!: ReactiveElement;
+    private _contentEl!: HTMLElement;
 
     /*
      * =========== Props
@@ -38,7 +42,7 @@ export class ZCarousel extends LitElement {
     navigation = false;
 
     @property({ type: Boolean })
-    infinit = false;
+    loop = false;
 
     @property({ type: Boolean })
     pagination = false;
@@ -49,8 +53,17 @@ export class ZCarousel extends LitElement {
     @property({ attribute: 'per-page', type: Number })
     perPage = 1;
 
+    @property({ attribute: 'per-move', type: Number })
+    perMove?: number;
+
     @property({ type: Number })
     gap = 0;
+
+    @property({ attribute: 'offset-start', type: Number })
+    offsetStart = 0;
+
+    @property({ attribute: 'offset-end', type: Number })
+    offsetEnd = 0;
 
     @property({ type: Boolean })
     drag = false;
@@ -61,63 +74,66 @@ export class ZCarousel extends LitElement {
     @queryAssignedElements()
     private readonly slideElements!: HTMLElement[];
 
-    private _touch = {
-        initialX: 0,
-        startX: 0,
-        moveX: 0,
-        validated: false,
-    };
-
-    private _mouse = {
-        startX: 0,
-        moveX: 0,
-        initialX: 0,
-        validated: false,
-        isDragging: false,
-    };
-
     /**
      * =========== data
      */
     private _resizeObserver!: ResizeObserver;
 
+    @state()
+    private _isDragging = false;
+
     /*
      * =========== Computed
      */
-    @property({ attribute: false })
+    private get _perPage() {
+        return clamp(this.perPage, { min: 1 });
+    }
+
+    private get _perMove() {
+        return !this.perMove ? this._perPage : clamp(this.perMove, { min: 1, max: this._perPage });
+    }
+
+    private get _gap() {
+        return clamp(this.gap, { min: 0 });
+    }
+
+    private get _offsetStart() {
+        return clamp(this.offsetStart, { min: 0 });
+    }
+
+    private get _offsetEnd() {
+        return clamp(this.offsetEnd, { min: 0 });
+    }
+
+    private get _currentPage() {
+        return clamp(this.currentPage, { min: 1, max: this._nbPages });
+    }
+
     private get _nbPages() {
-        return Math.ceil(this.slideElements.length / this.perPage);
+        return Math.ceil(this.slideElements.length / this._perMove);
     }
 
-    @property({ attribute: false })
     private get _canGoPrevious() {
-        if (this.infinit) return true;
-
-        return this.currentPage > 1;
+        if (this.loop) return true;
+        return this._currentPage > 1;
     }
 
-    @property({ attribute: false })
     private get _canGoNext() {
-        if (this.infinit) return true;
-
-        return this.currentPage < this._nbPages;
+        if (this.loop) return true;
+        return this._currentPage < this._nbPages;
     }
 
-    @property({ attribute: false })
     private get _nbShadowElements() {
-        const elementsOnLastPage = this.slideElements.length % this.perPage;
-
-        if (elementsOnLastPage === 0) return 0;
-
-        return this.perPage - elementsOnLastPage;
+        const lastViewStart = (this._nbPages - 1) * this._perMove;
+        const remaining = this.slideElements.length - lastViewStart;
+        return remaining < this._perPage ? this._perPage - remaining : 0;
     }
 
     /*
      * =========== Lifecycle
      */
     override firstUpdated(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
-        this._safeAttributes();
-        this.goToPage(this.currentPage, 'instant');
+        this.goToPage(this._currentPage, 'instant');
 
         // react to element resize
         this._resizeObserver = new ResizeObserver(this._debouncedOnResize.bind(this));
@@ -127,8 +143,9 @@ export class ZCarousel extends LitElement {
     }
 
     override updated(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
-        this._safeAttributes();
-        if (changedProperties.has('currentPage')) this._updateScroll();
+        if (changedProperties.has('perPage') || changedProperties.has('perMove') || changedProperties.has('slideElements')) {
+            this._updateSnapPoints();
+        }
 
         super.update(changedProperties);
     }
@@ -142,157 +159,144 @@ export class ZCarousel extends LitElement {
     /*
      * =========== Methods
      */
-    private _safeAttributes() {
-        this.currentPage = clamp(this.currentPage, { min: 1, max: this._nbPages });
-        this.perPage = clamp(this.perPage, { min: 1 });
-        this.gap = clamp(this.gap, { min: 0 });
-    }
-
-    private _debouncedOnResize = debounce(this._onResize.bind(this), 200);
+    private _debouncedOnResize = debounce(this._onResize.bind(this), 100);
     private _onResize() {
         this._updateScroll('instant');
     }
 
-    private _onKeyDown(e: KeyboardEvent) {
-        if (this.disabled || e.target !== this._contentEl) return;
+    private _debouncedOnScroll = debounce(this._onScroll.bind(this), 100);
+    private _onScroll() {
+        const scrollLeft = this._contentEl.scrollLeft + this._offsetStart;
 
-        if (e.key === 'ArrowLeft') this.goToPreviousPage();
-        if (e.key === 'ArrowRight') this.goToNextPage();
+        let closestIndex = 0;
+        let minDistance = Infinity;
+
+        for (let i = 0; i < this.slideElements.length; i += this._perMove) {
+            const el = this.slideElements[i];
+            const distance = Math.abs(el.offsetLeft - scrollLeft);
+
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestIndex = i;
+            }
+        }
+
+        const newPage = Math.floor(closestIndex / this._perMove) + 1;
+
+        if (newPage !== this._currentPage && newPage >= 1 && newPage <= this._nbPages) {
+            this.currentPage = newPage;
+        }
+    }
+
+    private _onKeyDown(e: KeyboardEvent) {
+        if (e.target !== this._contentEl) return;
+
+        if(this.disabled) {
+            e.preventDefault();
+            return;
+        }
+
+        if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            this.goToPreviousPage();
+        } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            this.goToNextPage();
+        }
     }
 
     private _onWheel(e: WheelEvent) {
-        if (this.disabled || e.target !== this._contentEl && !this/*._contentEl.*/.contains(e.target as Node)) return;
+        // prevent native scroll on whell horizontal scroll
+        if (e.deltaX !== 0) e.preventDefault();
+
+        if (this.disabled || e.target !== this._contentEl && !this.contains(e.target as Node)) return;
 
         if (e.deltaX < 0) this.goToPreviousPage();
-        if (e.deltaX > 0) this.goToNextPage();
+        else if (e.deltaX > 0) this.goToNextPage();
     }
 
     private _onTouchStart(e: TouchEvent) {
-        if (this.disabled) return;
-
-        this._touch.startX = e.touches[0].clientX;
-        this._touch.initialX = this._contentEl.scrollLeft;
-    }
-
-    private _onTouchMove(e: TouchEvent) {
-        if (this.disabled) return;
-
-        this._touch.moveX = e.touches[0].clientX;
-        const deltaX = this._touch.moveX - this._touch.startX;
-
-        // start scrolling the carousel only when touch validated and the screen is not scrolling
-        if (Math.abs(deltaX) > MIN_SLIDING_VALIDATION) this._touch.validated = e.cancelable ;
-
-        if (this._touch.validated) {
-            e.preventDefault(); // prevent the page from scrolling when scrolling the carousel
-            this._contentEl.scrollTo({ left: this._touch.initialX - deltaX, behavior: 'instant' });
-        }
-    }
-
-    private _onTouchEnd() {
-        if (this.disabled) return;
-
-        if (this._touch.validated) {
-            const deltaX = this._touch.moveX - this._touch.startX;
-
-            // if translated at least, go to direction page otherwize only reset the scroll
-            if (deltaX > MIN_PAGE_CHANGE_VALIDATION) {
-                this.goToPreviousPage();
-            } else if (deltaX < -MIN_PAGE_CHANGE_VALIDATION) {
-                this.goToNextPage();
-            } else {
-                this._updateScroll('instant');
-            }
-        }
-        // Reset touch values
-        this._touch.startX = 0;
-        this._touch.moveX = 0;
-        this._touch.initialX = 0;
-        this._touch.validated = false;
+        // prevent native scroll on touch devices when disabled
+        if (this.disabled) e.preventDefault();
     }
 
     @eventOptions({ capture: true })
-    private _onMouseDown(e: MouseEvent) {
-        if (this.disabled || !this.drag) return;
+    private _onPointerDown(e: PointerEvent) {
+        if (this.disabled || !this.drag || e.pointerType !== 'mouse') return;
 
-        this._mouse.startX = e.screenX;
-        this._mouse.initialX = this._contentEl.scrollLeft;
-        this._mouse.isDragging = true;
+        this._isDragging = true;
     }
 
-    private _onMouseMove(e: MouseEvent) {
-        if (this.disabled || !this.drag) return;
+    private _onPointerMove(e: PointerEvent) {
+        if (!this._isDragging) return;
 
-        if (this._mouse.isDragging) {
-            this._mouse.moveX = e.screenX;
-            const deltaX = this._mouse.moveX - this._mouse.startX;
-
-            if (Math.abs(deltaX) > MIN_SLIDING_VALIDATION) this._mouse.validated = true;
-
-            if (this._mouse.validated) {
-                this._contentEl.scroll({ left: this._mouse.initialX - deltaX, behavior: 'instant' });
-            }
-        }
+        this._contentEl.scrollBy({
+            left: -e.movementX,
+            behavior: 'instant',
+        });
     }
 
-    private _onMouseUp() {
-        if (this.disabled || !this.drag) return;
+    private _onPointerUp() {
+        if (!this._isDragging) return;
 
-        if (this._mouse.validated) {
-            const deltaX = this._mouse.moveX - this._mouse.startX;
+        this._isDragging = false;
 
-            if (deltaX > MIN_PAGE_CHANGE_VALIDATION) {
-                this.goToPreviousPage();
-            } else if (deltaX < -MIN_PAGE_CHANGE_VALIDATION) {
-                this.goToNextPage();
-            } else {
-                this._updateScroll();
-            }
-        }
-
-        // reset mouse values
-        this._mouse.startX = 0;
-        this._mouse.moveX = 0;
-        this._mouse.validated = false;
-        this._mouse.isDragging = false;
+        // potential smooth pointer release
+        this._onScroll();
+        this._updateScroll('auto');
     }
 
     private _updateScroll(behavior: ScrollBehavior = 'auto') {
-        const _currentSlideIndex = (this.currentPage - 1) * this.perPage;
+        const currentSlideIndex = (this._currentPage - 1) * this._perMove;
+        const targetElement = this.slideElements[currentSlideIndex];
 
-        this._contentEl.scrollTo({ left: this.slideElements[_currentSlideIndex].offsetLeft, behavior });
+        if (!targetElement) {
+            console.warn(`[ZCarousel]: cannot find slide element at index ${currentSlideIndex}`);
+            return;
+        }
+
+        this._contentEl.scrollTo({ left: targetElement.offsetLeft - this._offsetStart, behavior });
     }
 
     goToPreviousPage(behavior: ScrollBehavior = 'auto') {
         if (!this._canGoPrevious) return;
-
-        this.goToPage(this.currentPage === 1 ? this._nbPages : (this.currentPage - 1), behavior);
+        this.goToPage(this._currentPage === 1 ? this._nbPages : (this._currentPage - 1), behavior);
     }
 
     goToNextPage(behavior: ScrollBehavior = 'auto') {
         if (!this._canGoNext) return;
-
-        this.goToPage(this.currentPage === this._nbPages ? 1 : (this.currentPage + 1), behavior);
+        this.goToPage(this._currentPage === this._nbPages ? 1 : (this._currentPage + 1), behavior);
     }
 
-    goToPage(pageNumber: number = 0, behavior: ScrollBehavior = 'auto') {
-        if (this.currentPage !== pageNumber) {
-            const evt = new CustomEvent('change', {
+    goToPage(pageNumber: number = 1, behavior: ScrollBehavior = 'auto') {
+        if (this._currentPage !== pageNumber) {
+            const evt: ZCarouselChangeEvent = new CustomEvent(ZCarousel.events.change, {
                 bubbles: true,
                 composed: true,
                 cancelable: true,
                 detail: {
-                    current: this.currentPage,
+                    current: this._currentPage,
                     next: pageNumber
                 }
             });
 
             this.dispatchEvent(evt);
 
-            if (!evt.defaultPrevented) this.currentPage = pageNumber;
+            if (!evt.defaultPrevented) this.currentPage = pageNumber; // triggers update !
         }
 
         this._updateScroll(behavior);
+    }
+
+
+    private _updateSnapPoints() {
+        this.slideElements.forEach((el, index) => {
+            if (index % this._perMove === 0) {
+                el.setAttribute('z-carousel-snap-point', '');
+            } else {
+                el.removeAttribute('z-carousel-snap-point');
+            }
+        });
     }
 
     /**
@@ -303,9 +307,10 @@ export class ZCarousel extends LitElement {
             <style>
                 :host {
                     /* OVERRIDES the user set style */
-                    --_z-carousel-gap: ${this.gap}px;
-                    --_z-carousel-per-page: ${this.perPage};
-                    --_z-carousel-item-width: calc((100% - (var(--_z-carousel-gap) * (var(--_z-carousel-per-page) - 1))) / var(--_z-carousel-per-page));
+                    --_z-carousel-gap: ${this._gap}px;
+                    --_z-carousel-per-page: ${this._perPage};
+                    --_z-carousel-offset-start: ${this._offsetStart}px;
+                    --_z-carousel-offset-end: ${this._offsetEnd}px;
                 }
             </style>
 
@@ -317,15 +322,15 @@ export class ZCarousel extends LitElement {
                     part="content"
                     aria-live="polite"
                     role="listbox"
-                    tabindex="0"
+                    style=${this._isDragging ? 'scroll-snap-type: unset' : ''}
                     @keydown="${this._onKeyDown}"
                     @wheel="${this._onWheel}"
+                    @scroll="${this._debouncedOnScroll}"
                     @touchstart="${this._onTouchStart}"
-                    @touchmove="${this._onTouchMove}"
-                    @touchend="${this._onTouchEnd}"
-                    @mousedown="${this._onMouseDown}"
-                    @mousemove="${this._onMouseMove}"
-                    @mouseup="${this._onMouseUp}">
+                    @pointerdown="${this._onPointerDown}"
+                    @pointermove="${this._onPointerMove}"
+                    @pointerup="${this._onPointerUp}"
+                    @pointercancel="${this._onPointerUp}">
                     <slot></slot>
 
                     ${this._renderShadowElements()}
@@ -345,7 +350,7 @@ export class ZCarousel extends LitElement {
     }
 
     private _renderShadowElements() {
-        return Array.from({ length: this._nbShadowElements }, () => html`<div class="carousel__content__shadow-element"></div>`);
+        return Array.from({ length: this._nbShadowElements }, () => html`<div aria-hidden="true" class="carousel__content__shadow-element"></div>`);
     }
 
     private _renderPrevArrow() {
@@ -354,7 +359,6 @@ export class ZCarousel extends LitElement {
             () => html`
                 <button
                     ?disabled="${this.disabled || !this._canGoPrevious}"
-                    aria-hidden="${!this._canGoPrevious}"
                     part="nav-btn nav-btn--prev ${(this.disabled || !this._canGoPrevious) ? 'nav-btn--disabled' : ''}"
                     class="carousel__btn carousel__nav carousel__nav--prev"
                     @click="${() => !this.disabled && this.goToPreviousPage()}"
@@ -374,7 +378,6 @@ export class ZCarousel extends LitElement {
             () => html`
                 <button
                     ?disabled="${this.disabled || !this._canGoNext}"
-                    aria-hidden="${!this._canGoNext}"
                     part="nav-btn nav-btn--next ${(this.disabled || !this._canGoNext) ? 'nav-btn--disabled' : ''}"
                     class="carousel__btn carousel__nav carousel__nav--next"
                     @click="${() => !this.disabled && this.goToNextPage()}"
@@ -397,7 +400,7 @@ export class ZCarousel extends LitElement {
                     aria-atomic="true"
                     part="pagination"
                     class="carousel__pagination">
-                    ${this.currentPage} / ${this._nbPages}
+                    ${this._currentPage} / ${this._nbPages}
                 </div>
             `,
             () => nothing
@@ -405,7 +408,6 @@ export class ZCarousel extends LitElement {
     }
 
     private _renderDots() {
-        // follow pagination instead of _currentIndex ?
         return when(
             this.dots,
             () => html`
@@ -417,16 +419,15 @@ export class ZCarousel extends LitElement {
                     Array.from({ length: this._nbPages }) as HTMLElement[],
                     (_slideEl: HTMLElement, index: number) => html`
                         <button
-                            ?disabled="${this.disabled || (index + 1) === this.currentPage}"
-                            aria-hidden="${(index + 1) !== this.currentPage}"
-                            aria-selected="${(index + 1) === this.currentPage}"
+                            ?disabled="${this.disabled || (index + 1) === this._currentPage}"
+                            aria-selected="${(index + 1) === this._currentPage}"
                             type="button"
-                            role="button"
-                            part="dots-item ${(index + 1) === this.currentPage ? 'dots-item--active' : ''}"
+                            role="option"
+                            part="dots-item ${(index + 1) === this._currentPage ? 'dots-item--active' : ''}"
                             class="carousel__btn"
                             data-page="${(index + 1)}"
                             aria-controls="${(index + 1)}"
-                            ?data-current="${(index + 1) === this.currentPage}"
+                            ?data-current="${(index + 1) === this._currentPage}"
                             @click="${() => this.goToPage(index + 1, 'auto')}">
                             ${index + 1}
                         </button>
@@ -453,6 +454,11 @@ export class ZCarousel extends LitElement {
             box-sizing: border-box;
         }
 
+        ::slotted([z-carousel-snap-point]) {
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+        }
+
         .carousel {
             position: relative;
             width: 100%;
@@ -463,16 +469,17 @@ export class ZCarousel extends LitElement {
             position: relative;
             width: 100%;
             height: 100%;
-            min-height: 1px; /* fix currentPage on initialisation so that  */
-            display: flex;
-            gap: var(--_z-carousel-gap, 0);
-            overflow-x: hidden;
-        }
-
-        .carousel__content ::slotted(*),
-        .carousel__content > * {
-            width: var(--_z-carousel-item-width, 100%);
-            flex: 1 0 var(--_z-carousel-item-width, 100%);
+            min-height: 1px; /* fix currentPage on initialisation */
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: calc((100% - (var(--_z-carousel-gap) * (var(--_z-carousel-per-page) - 1))) / var(--_z-carousel-per-page));
+            grid-auto-rows: 100%;
+            column-gap: var(--_z-carousel-gap, 0);
+            overflow: auto clip;
+            scrollbar-width: none;
+            scroll-snap-type: x mandatory;
+            scroll-padding-inline: var(--_z-carousel-offset-start) var(--_z-carousel-offset-end);
+            padding-inline: var(--_z-carousel-offset-start) var(--_z-carousel-offset-end);
         }
 
         .carousel__content__shadow-element {
