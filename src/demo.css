@@ -132,4 +132,9 @@ z-carousel.styled > img {
     object-fit: cover;
     height: 100%;
     width: 100%;
+    transition: opacity .3s;
+
+    &[inert] {
+        opacity: .25;
+    }
 }
