@@ -26,6 +26,8 @@ export class ZCarousel extends LitElement {
         super.addEventListener(type, listener as EventListenerOrEventListenerObject, options);
     }
 
+    private readonly _DRAG_THRESHOLD = 5;
+
     /**
      * =========== Dom References
      */
@@ -81,6 +83,11 @@ export class ZCarousel extends LitElement {
 
     @state()
     private _isDragging = false;
+
+    private _dragState = {
+        confirmed: false,
+        totalMovement: 0,
+    };
 
     /*
      * =========== Computed
@@ -147,6 +154,10 @@ export class ZCarousel extends LitElement {
             this._updateSnapPoints();
         }
 
+        if (changedProperties.has('currentPage')) {
+            this._updateSlideInertState();
+        }
+
         super.update(changedProperties);
     }
 
@@ -191,17 +202,23 @@ export class ZCarousel extends LitElement {
     private _onKeyDown(e: KeyboardEvent) {
         if (e.target !== this._contentEl) return;
 
-        if(this.disabled) {
+        if (this.disabled) {
             e.preventDefault();
             return;
         }
 
         if (e.key === 'ArrowLeft') {
-            e.preventDefault();
             this.goToPreviousPage();
-        } else if (e.key === 'ArrowRight') {
             e.preventDefault();
+        } else if (e.key === 'ArrowRight') {
             this.goToNextPage();
+            e.preventDefault();
+        } else if (e.key === 'Home') {
+            this.goToPage();
+            e.preventDefault();
+        } else if (e.key === 'End') {
+            this.goToPage(this._nbPages);
+            e.preventDefault();
         }
     }
 
@@ -220,15 +237,35 @@ export class ZCarousel extends LitElement {
         if (this.disabled) e.preventDefault();
     }
 
+    private _onMouseDown(e: MouseEvent) {
+        // prevent native scroll on wheel click
+        if (this.disabled && e.button === 1) e.preventDefault();
+    }
+
     @eventOptions({ capture: true })
     private _onPointerDown(e: PointerEvent) {
-        if (this.disabled || !this.drag || e.pointerType !== 'mouse') return;
+        if (this.disabled || !this.drag || e.pointerType !== 'mouse' || (e.pointerType === 'mouse' && e.button !== 0)) return;
 
         this._isDragging = true;
+        this._dragState.confirmed = false;
+        this._dragState.totalMovement = 0;
     }
 
     private _onPointerMove(e: PointerEvent) {
         if (!this._isDragging) return;
+
+        this._dragState.totalMovement += Math.abs(e.movementX);
+
+        if (!this._dragState.confirmed && this._dragState.totalMovement < this._DRAG_THRESHOLD) return;
+
+        if (!this._dragState.confirmed) {
+            // capture pointer & confirm drag
+            (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+            this._dragState.confirmed = true;
+        }
+
+        // prevent selecting text while dragging
+        e.preventDefault()
 
         this._contentEl.scrollBy({
             left: -e.movementX,
@@ -236,14 +273,18 @@ export class ZCarousel extends LitElement {
         });
     }
 
-    private _onPointerUp() {
+    private _onPointerUp(e: PointerEvent) {
         if (!this._isDragging) return;
 
         this._isDragging = false;
 
-        // potential smooth pointer release
-        this._onScroll();
-        this._updateScroll('auto');
+        if (this._dragState.confirmed) {
+            (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+
+            // force onScroll to update currentPage + update scroll with the user set behavior (can be smooth)
+            this._onScroll();
+            this._updateScroll('auto');
+        }
     }
 
     private _updateScroll(behavior: ScrollBehavior = 'auto') {
@@ -256,6 +297,29 @@ export class ZCarousel extends LitElement {
         }
 
         this._contentEl.scrollTo({ left: targetElement.offsetLeft - this._offsetStart, behavior });
+    }
+
+    private _updateSnapPoints() {
+        this.slideElements.forEach((el, index) => {
+            if (index % this._perMove === 0) {
+                el.setAttribute('z-carousel-snap-point', '');
+            } else {
+                el.removeAttribute('z-carousel-snap-point');
+            }
+        });
+    }
+
+    private _updateSlideInertState() {
+        const currentSlideStart = (this._currentPage - 1) * this._perMove;
+        const currentSlideEnd = currentSlideStart + this._perPage;
+
+        this.slideElements.forEach((slide, index) => {
+            if (index >= currentSlideStart && index < currentSlideEnd) {
+                slide.removeAttribute('inert');
+            } else {
+                slide.setAttribute('inert', '');
+            }
+        });
     }
 
     goToPreviousPage(behavior: ScrollBehavior = 'auto') {
@@ -288,17 +352,6 @@ export class ZCarousel extends LitElement {
         this._updateScroll(behavior);
     }
 
-
-    private _updateSnapPoints() {
-        this.slideElements.forEach((el, index) => {
-            if (index % this._perMove === 0) {
-                el.setAttribute('z-carousel-snap-point', '');
-            } else {
-                el.removeAttribute('z-carousel-snap-point');
-            }
-        });
-    }
-
     /**
      * =========== Template
      */
@@ -318,15 +371,17 @@ export class ZCarousel extends LitElement {
                 class="carousel"
                 role="toolbar">
                 <div
-                    class="carousel__content"
-                    part="content"
-                    aria-live="polite"
+                    class="carousel__content carousel__content--dragging"
+                    part="content ${this._isDragging ? 'content--dragging': ''}"
+                    aria-grabbed="${this._isDragging}"
+                    aria-live="${this._isDragging ? 'off' : 'polite'}"
                     role="listbox"
-                    style=${this._isDragging ? 'scroll-snap-type: unset' : ''}
+                    tabindex="0"
                     @keydown="${this._onKeyDown}"
                     @wheel="${this._onWheel}"
                     @scroll="${this._debouncedOnScroll}"
                     @touchstart="${this._onTouchStart}"
+                    @mousedown="${this._onMouseDown}"
                     @pointerdown="${this._onPointerDown}"
                     @pointermove="${this._onPointerMove}"
                     @pointerup="${this._onPointerUp}"
@@ -480,6 +535,11 @@ export class ZCarousel extends LitElement {
             scroll-snap-type: x mandatory;
             scroll-padding-inline: var(--_z-carousel-offset-start) var(--_z-carousel-offset-end);
             padding-inline: var(--_z-carousel-offset-start) var(--_z-carousel-offset-end);
+
+            &[aria-grabbed="true"] {
+                scroll-snap-type: unset;
+                cursor: grabbing;
+            }
         }
 
         .carousel__content__shadow-element {
