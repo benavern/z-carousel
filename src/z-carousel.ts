@@ -154,7 +154,7 @@ export class ZCarousel extends LitElement {
             this._updateSnapPoints();
         }
 
-        if (changedProperties.has('currentPage')) {
+        if (changedProperties.has('perPage') || changedProperties.has('perMove') || changedProperties.has('slideElements') || changedProperties.has('currentPage')) {
             this._updateSlideInertState();
         }
 
@@ -245,6 +245,9 @@ export class ZCarousel extends LitElement {
     @eventOptions({ capture: true })
     private _onPointerDown(e: PointerEvent) {
         if (this.disabled || !this.drag || e.pointerType !== 'mouse' || (e.pointerType === 'mouse' && e.button !== 0)) return;
+
+        // prevent selecting text or dragging links while dragging
+        e.preventDefault();
 
         this._isDragging = true;
         this._dragState.confirmed = false;
