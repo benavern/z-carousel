@@ -1,6 +1,6 @@
 {
     "name": "@benavern/z-carousel",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "license": "MIT",
     "publishConfig": {
         "access": "public"
@@ -8,6 +8,7 @@
     "type": "module",
     "main": "dist/z-carousel.js",
     "module": "dist/z-carousel.js",
+    "types": "dist/z-carousel.d.ts",
     "files": [
         "dist"
     ],
