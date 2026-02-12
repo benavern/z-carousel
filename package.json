@@ -8,6 +8,7 @@
     "type": "module",
     "main": "dist/z-carousel.js",
     "module": "dist/z-carousel.js",
+    "types": "dist/z-carousel.d.ts",
     "files": [
         "dist"
     ],
