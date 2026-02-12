@@ -176,6 +176,8 @@ export class ZCarousel extends LitElement {
     }
 
     private _debouncedOnScroll = debounce(this._onScroll.bind(this), 100);
+
+    @eventOptions({ passive: true })
     private _onScroll() {
         const scrollLeft = this._contentEl.scrollLeft + this._offsetStart;
 
@@ -199,6 +201,7 @@ export class ZCarousel extends LitElement {
         }
     }
 
+    @eventOptions({ passive: false })
     private _onKeyDown(e: KeyboardEvent) {
         if (e.target !== this._contentEl) return;
 
@@ -222,6 +225,7 @@ export class ZCarousel extends LitElement {
         }
     }
 
+    @eventOptions({ passive: false })
     private _onWheel(e: WheelEvent) {
         // prevent native scroll on whell horizontal scroll
         if (e.deltaX !== 0) e.preventDefault();
@@ -232,17 +236,19 @@ export class ZCarousel extends LitElement {
         else if (e.deltaX > 0) this.goToNextPage();
     }
 
+    @eventOptions({ passive: false })
     private _onTouchStart(e: TouchEvent) {
         // prevent native scroll on touch devices when disabled
         if (this.disabled) e.preventDefault();
     }
 
+    @eventOptions({ passive: false })
     private _onMouseDown(e: MouseEvent) {
         // prevent native scroll on wheel click
         if (this.disabled && e.button === 1) e.preventDefault();
     }
 
-    @eventOptions({ capture: true })
+    @eventOptions({ capture: true, passive: false })
     private _onPointerDown(e: PointerEvent) {
         if (this.disabled || !this.drag || e.pointerType !== 'mouse' || (e.pointerType === 'mouse' && e.button !== 0)) return;
 
@@ -254,6 +260,7 @@ export class ZCarousel extends LitElement {
         this._dragState.totalMovement = 0;
     }
 
+    @eventOptions({ passive: false })
     private _onPointerMove(e: PointerEvent) {
         if (!this._isDragging) return;
 
@@ -276,6 +283,7 @@ export class ZCarousel extends LitElement {
         });
     }
 
+    @eventOptions({ passive: true })
     private _onPointerUp(e: PointerEvent) {
         if (!this._isDragging) return;
 
