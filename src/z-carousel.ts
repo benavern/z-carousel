@@ -227,7 +227,7 @@ export class ZCarousel extends LitElement {
 
     @eventOptions({ passive: false })
     private _onWheel(e: WheelEvent) {
-        // prevent native scroll on whell horizontal scroll
+        // prevent native scroll on wheel horizontal scroll
         if (e.deltaX !== 0) e.preventDefault();
 
         if (this.disabled || e.target !== this._contentEl && !this.contains(e.target as Node)) return;
